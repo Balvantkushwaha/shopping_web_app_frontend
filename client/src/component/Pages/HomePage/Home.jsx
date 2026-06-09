@@ -2,7 +2,7 @@ import styles from "./Home.module.css";
 
 function Home() {
   const products = [
-    {
+    {   
       id: 1,
       name: "Wireless Headphones",
       price: "₹1,999",
@@ -31,7 +31,7 @@ function Home() {
   return (
     <div className={styles.container}>
       <section className={styles.hero}>
-        <h1>Welcome to BVK Shop</h1>
+        <h1>Welcome to Shopping Shop</h1>
         <p>Discover amazing products at the best prices.</p>
         <button className={styles.shopBtn}>Shop Now</button>
       </section>
