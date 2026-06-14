@@ -26,7 +26,7 @@
 
 .mainImage {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio:1;
   overflow: hidden;
   border-radius: 8px;
 }

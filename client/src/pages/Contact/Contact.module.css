@@ -1,0 +1,291 @@
+.contactPage {
+  background: #000000;
+  min-height: 100vh;
+}
+
+.hero {
+  background: linear-gradient(135deg, #111111 0%, #000000 100%);
+  padding: 4rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid #222222;
+}
+
+.hero h1 {
+  color: #ffffff;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  color: #999999;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.infoCard {
+  background: #111111;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.infoCard:hover {
+  transform: translateY(-5px);
+}
+
+.iconWrapper {
+  width: 50px;
+  height: 50px;
+  background: #222222;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: #ffffff;
+}
+
+.infoCard h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.infoCard p {
+  color: #999999;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.infoBtn {
+  background: none;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.infoBtn:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+.formSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.formContainer {
+  background: #111111;
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.formContainer h2,
+.mapContainer h2 {
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.formGroup input,
+.formGroup textarea {
+  background: #222222;
+  border: 1px solid #333333;
+  color: #ffffff;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #666666;
+}
+
+.submitBtn {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.submitBtn:hover {
+  background: #dddddd;
+}
+
+.successMsg {
+  background: #00ff0022;
+  color: #00ff00;
+  padding: 0.75rem;
+  border-radius: 4px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.mapContainer {
+  background: #111111;
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.map {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.socialLinks {
+  text-align: center;
+}
+
+.socialLinks h3 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.socialIcon {
+  width: 40px;
+  height: 40px;
+  background: #222222;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.socialIcon:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-3px);
+}
+
+.faqSection {
+  margin-top: 3rem;
+}
+
+.faqSection h2 {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.faqItem {
+  background: #111111;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.faqItem h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.faqItem p {
+  color: #999999;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 2rem 1rem;
+  }
+  
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+  
+  .container {
+    padding: 2rem 1rem;
+  }
+  
+  .formSection {
+    grid-template-columns: 1fr;
+  }
+  
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .infoGrid {
+    gap: 1rem;
+  }
+}

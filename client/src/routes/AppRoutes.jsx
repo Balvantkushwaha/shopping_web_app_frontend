@@ -10,6 +10,10 @@ import Search from '../pages/Search/Search';
 import ProductDetails from '../pages/ProductDetails/ProductDetails';
 import Cart from '../pages/Cart/Cart';
 import Checkout from '../pages/Checkout/Checkout';
+import Wishlist from '../pages/Wishlist/Wishlist';
+import About from '../pages/About/About';
+import Contact from '../pages/Contact/Contact';
+import NotFound from '../pages/NotFound/NotFound';
 import AdminLogin from '../pages/AdminLogin/AdminLogin';
 import AdminDashboard from '../pages/AdminDashboard/AdminDashboard';
 
@@ -25,8 +29,12 @@ const AppRoutes = () => {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminDashboard />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
         <BottomNavigation />
