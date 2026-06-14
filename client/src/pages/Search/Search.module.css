@@ -1,0 +1,132 @@
+.searchPage {
+  background: #000000;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.searchHeader h1 {
+  color: #ffffff;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #111111;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.searchBox svg {
+  color: #666666;
+}
+
+.searchBox input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  color: #666666;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.searchBtn {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.searchBtn:hover {
+  background: #dddddd;
+}
+
+.filters {
+  margin-bottom: 2rem;
+}
+
+.filters select {
+  background: #111111;
+  border: 1px solid #222222;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.results {
+  margin-top: 2rem;
+}
+
+.resultCount {
+  color: #999999;
+  margin-bottom: 1rem;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.noResults {
+  text-align: center;
+  padding: 4rem;
+}
+
+.noResults p {
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.noResults button {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .searchPage {
+    padding: 1rem;
+  }
+  
+  .searchHeader h1 {
+    font-size: 1.5rem;
+  }
+  
+  .searchBox {
+    flex-wrap: wrap;
+  }
+  
+  .searchBtn {
+    width: 100%;
+  }
+  
+  .productsGrid {
+    gap: 1rem;
+  }
+}

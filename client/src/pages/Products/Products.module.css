@@ -1,0 +1,123 @@
+.productsPage {
+  background: #000000;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  color: #ffffff;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.filterToggle {
+  background: none;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: none;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.filters {
+  background: #111111;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.searchBar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #222222;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  gap: 0.5rem;
+  color: #ffffff;
+}
+
+.searchBar input {
+  background: none;
+  border: none;
+  color: #ffffff;
+  outline: none;
+  flex: 1;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterGroup label {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.filterGroup select {
+  background: #222222;
+  border: none;
+  color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.noResults {
+  text-align: center;
+  padding: 4rem;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .productsPage {
+    padding: 1rem;
+  }
+  
+  .filterToggle {
+    display: flex;
+  }
+  
+  .filters {
+    display: none;
+    flex-direction: column;
+  }
+  
+  .filters.active {
+    display: flex;
+  }
+  
+  .searchBar {
+    width: 100%;
+  }
+  
+  .productsGrid {
+    gap: 1rem;
+  }
+}
