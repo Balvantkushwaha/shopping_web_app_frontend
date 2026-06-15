@@ -120,7 +120,7 @@
   }
   
   .bottom {
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
     text-align: center;
   }

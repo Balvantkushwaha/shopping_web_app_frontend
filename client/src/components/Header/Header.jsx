@@ -41,10 +41,7 @@ const Header = () => {
             <button onClick={() => navigate('/search')} className={styles.iconBtn}>
               <Search size={20} />
             </button>
-            <button onClick={() => navigate('/wishlist')} className={styles.iconBtn}>
-              <Heart size={20} />
-              {wishlistCount > 0 && <span className={styles.badge}>{wishlistCount}</span>}
-            </button>
+            
             <button onClick={() => navigate('/cart')} className={styles.iconBtn}>
               <ShoppingCart size={20} />
               {cartCount > 0 && <span className={styles.badge}>{cartCount}</span>}

@@ -134,13 +134,7 @@ const ProductDetails = () => {
 
             {/* Action Buttons */}
             <div className={styles.actions}>
-              <button 
-                className={styles.wishlistBtn}
-                onClick={() => dispatch(toggleWishlist(product))}
-              >
-                <Heart size={20} fill={isInWishlist ? '#ffffff' : 'none'} />
-                {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
-              </button>
+             
               <button className={styles.cartBtn} onClick={handleAddToCart}>
                 <ShoppingCart size={20} />
                 Add to Cart

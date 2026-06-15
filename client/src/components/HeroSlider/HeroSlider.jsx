@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -10,7 +10,7 @@ const HeroSlider = () => {
   return (
     <div className={styles.sliderContainer}>
       <Swiper
-        modules={[Autoplay, Pagination, Navigation]}
+        modules={[Autoplay, Pagination]}
         spaceBetween={0}
         slidesPerView={1}
         autoplay={{
@@ -18,7 +18,7 @@ const HeroSlider = () => {
           disableOnInteraction: false,
         }}
         pagination={{ clickable: true }}
-        navigation
+        // navigation
         className={styles.heroSwiper}
       >
         {heroSlides.map((slide) => (

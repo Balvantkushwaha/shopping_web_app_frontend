@@ -10,7 +10,7 @@ import Search from '../pages/Search/Search';
 import ProductDetails from '../pages/ProductDetails/ProductDetails';
 import Cart from '../pages/Cart/Cart';
 import Checkout from '../pages/Checkout/Checkout';
-import Wishlist from '../pages/Wishlist/Wishlist';
+
 import About from '../pages/About/About';
 import Contact from '../pages/Contact/Contact';
 import NotFound from '../pages/NotFound/NotFound';
@@ -28,8 +28,7 @@ const AppRoutes = () => {
           <Route path="/search" element={<Search />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/checkout" element={<Checkout />} />         
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin/login" element={<AdminLogin />} />

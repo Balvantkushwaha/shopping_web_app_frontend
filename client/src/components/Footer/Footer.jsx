@@ -1,11 +1,6 @@
-import { Send } from 'lucide-react';
-import {
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaYoutube,
-} from 'react-icons/fa';
-import styles from './Footer.module.css';
+import { Send } from "lucide-react";
+import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
+import styles from "./Footer.module.css";
 
 const Footer = () => {
   return (
@@ -51,29 +46,7 @@ const Footer = () => {
                 <a href="/contact">Contact Us</a>
               </li>
               <li>
-                <a href="/size-guide">Size Guide</a>
-              </li>
-              <li>
-                <a href="/faq">FAQs</a>
-              </li>
-              <li>
-                <a href="/returns">Returns Policy</a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Customer Support */}
-          <div className={styles.section}>
-            <h3>Customer Support</h3>
-            <ul>
-              <li>
                 <a href="/track-order">Track Order</a>
-              </li>
-              <li>
-                <a href="/shipping">Shipping Information</a>
-              </li>
-              <li>
-                <a href="/payment">Payment Options</a>
               </li>
               <li>
                 <a href="/terms">Terms & Conditions</a>
@@ -81,27 +54,14 @@ const Footer = () => {
               <li>
                 <a href="/privacy">Privacy Policy</a>
               </li>
+              
+              <li>
+                <a href="/faq">FAQs</a>
+              </li>
+              <li>
+                <a href="/returns">Returns Policy</a>
+              </li>
             </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div className={styles.section}>
-            <h3>Newsletter</h3>
-            <p>
-              Subscribe to receive updates about new arrivals, exclusive offers,
-              and seasonal collections.
-            </p>
-
-            <div className={styles.newsletter}>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                aria-label="Email Address"
-              />
-              <button type="button" aria-label="Subscribe">
-                <Send size={18} />
-              </button>
-            </div>
           </div>
         </div>
 
@@ -111,25 +71,6 @@ const Footer = () => {
             <p>
               © {new Date().getFullYear()} BLACK STUDIO. All Rights Reserved.
             </p>
-          </div>
-
-          <div className={styles.payment}>
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/196/196578.png"
-              alt="Visa"
-            />
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/196/196561.png"
-              alt="Mastercard"
-            />
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/196/196539.png"
-              alt="PayPal"
-            />
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/196/196566.png"
-              alt="American Express"
-            />
           </div>
         </div>
       </div>
