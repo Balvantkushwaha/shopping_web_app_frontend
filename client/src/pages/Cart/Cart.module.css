@@ -25,12 +25,13 @@
   background: #111111;
   border-radius: 8px;
   padding: 1.5rem;
+
 }
 
 .cartItem {
   display: grid;
   grid-template-columns: 100px 1fr auto;
-  gap: 1rem;
+  gap: 2rem;
   padding: 1rem 0;
   border-bottom: 1px solid #222222;
 }
