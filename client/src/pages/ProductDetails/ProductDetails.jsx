@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Heart, ShoppingCart, Minus, Plus } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { toggleWishlist } from '../../redux/slices/wishlistSlice';
+import { ShoppingCart, Minus, Plus } from 'lucide-react';
+import { useAppDispatch} from '../../redux/hooks';
 import { addToCart } from '../../redux/slices/cartSlice';
 import { getProductById } from '../../data/products';
 import styles from './ProductDetails.module.css';
@@ -12,7 +11,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const product = getProductById(id);
-  const wishlist = useAppSelector(state => state.wishlist);
+
   
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -23,7 +22,6 @@ const ProductDetails = () => {
     return <div className={styles.notFound}>Product not found</div>;
   }
 
-  const isInWishlist = wishlist.some(item => item.id === product.id);
   const discountedPrice = product.discount > 0 
     ? product.price - (product.price * product.discount / 100)
     : product.price;
@@ -70,10 +68,10 @@ const ProductDetails = () => {
             <h1 className={styles.name}>{product.name}</h1>
             
             <div className={styles.priceSection}>
-              <span className={styles.currentPrice}>${discountedPrice.toFixed(2)}</span>
+              <span className={styles.currentPrice}>₹{discountedPrice.toFixed(2)}</span>
               {product.discount > 0 && (
                 <>
-                  <span className={styles.originalPrice}>${product.price.toFixed(2)}</span>
+                  <span className={styles.originalPrice}>₹{product.price.toFixed(2)}</span>
                   <span className={styles.discount}>-{product.discount}%</span>
                 </>
               )}

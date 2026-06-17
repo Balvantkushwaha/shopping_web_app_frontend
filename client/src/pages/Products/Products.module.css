@@ -85,8 +85,9 @@
 
 .productsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 2fr));
   gap: 2rem;
+  /* background: #eb1616; */
 }
 
 .noResults {
@@ -106,7 +107,7 @@
   
   .filters {
     display: none;
-    flex-direction: column;
+    flex-direction: row;
   }
   
   .filters.active {
@@ -118,6 +119,7 @@
   }
   
   .productsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 2fr));
     gap: 1rem;
   }
 }

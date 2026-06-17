@@ -33,7 +33,7 @@ const Checkout = () => {
     if (mobileNumber.length === 10) {
       const dummyOtp = '123456';
       setSentOtp(dummyOtp);
-      alert(`OTP sent: ${dummyOtp} (Demo)`);
+      alert(`OTP sent: ₹{dummyOtp} (Demo)`);
     } else {
       alert('Please enter a valid 10-digit mobile number');
     }
@@ -229,7 +229,7 @@ const Checkout = () => {
                     <span className={styles.orderItemName}>{item.name}</span>
                     <span className={styles.orderItemQty}>x{item.quantity}</span>
                   </div>
-                  <span>${(item.price * item.quantity).toFixed(2)}</span>
+                  <span>₹{(item.price * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>
@@ -237,15 +237,15 @@ const Checkout = () => {
             <div className={styles.summaryDetails}>
               <div className={styles.summaryRow}>
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>₹{subtotal.toFixed(2)}</span>
               </div>
               <div className={styles.summaryRow}>
                 <span>Discount (10%)</span>
-                <span>-${discount.toFixed(2)}</span>
+                <span>-₹{discount.toFixed(2)}</span>
               </div>
-              <div className={`${styles.summaryRow} ${styles.total}`}>
+              <div className={`₹{styles.summaryRow} ₹{styles.total}`}>
                 <span>Total</span>
-                <span>${finalTotal.toFixed(2)}</span>
+                <span>₹{finalTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>

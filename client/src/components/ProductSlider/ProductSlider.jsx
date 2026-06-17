@@ -33,23 +33,23 @@ const ProductSlider = ({ title, products, seeAllLink }) => {
           delay: 4000,
           disableOnInteraction: false,
         }}
-        // breakpoints={{
-        //   0: {
-        //     slidesPerView: 2,
-        //   },
-        //   480: {
-        //     slidesPerView: 3,
-        //   },
-        //   768: {
-        //     slidesPerView: 3,
-        //   },
-        //   1024: {
-        //     slidesPerView: 4,
-        //   },
-        //   1400: {
-        //     slidesPerView: 6,
-        //   },
-        // }}
+        breakpoints={{
+          0: {
+            slidesPerView: 2,
+          },
+          480: {
+            slidesPerView: 3,
+          },
+          768: {
+            slidesPerView: 3,
+          },
+          1024: {
+            slidesPerView: 4,
+          },
+          1400: {
+            slidesPerView: 6,
+          },
+        }}
         className={styles.productSwiper}
       >
         {products.map((product) => (

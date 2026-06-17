@@ -41,7 +41,7 @@ const Cart = () => {
                 
                 <div className={styles.itemDetails}>
                   <h3>{item.name}</h3>
-                  <p className={styles.itemPrice}>${item.price.toFixed(2)}</p>
+                  <p className={styles.itemPrice}>₹{item.price.toFixed(2)}</p>
                   
                   <div className={styles.itemActions}>
                     <div className={styles.quantity}>
@@ -65,7 +65,7 @@ const Cart = () => {
                 </div>
                 
                 <div className={styles.itemTotal}>
-                  <p>${(item.price * item.quantity).toFixed(2)}</p>
+                  <p>₹{(item.price * item.quantity).toFixed(2)}</p>
                 </div>
               </div>
             ))}
@@ -83,15 +83,15 @@ const Cart = () => {
             <div className={styles.summaryDetails}>
               <div className={styles.summaryRow}>
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>₹{subtotal.toFixed(2)}</span>
               </div>
               <div className={styles.summaryRow}>
                 <span>Discount (10%)</span>
-                <span>-${discount.toFixed(2)}</span>
+                <span>-₹{discount.toFixed(2)}</span>
               </div>
-              <div className={`${styles.summaryRow} ${styles.total}`}>
+              <div className={`${styles.summaryRow} ₹{styles.total}`}>
                 <span>Total</span>
-                <span>${finalTotal.toFixed(2)}</span>
+                <span>₹{finalTotal.toFixed(2)}</span>
               </div>
             </div>
             <button 
