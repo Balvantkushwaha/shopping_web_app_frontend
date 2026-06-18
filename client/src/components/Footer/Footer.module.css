@@ -101,6 +101,11 @@
   color: #666666;
   font-size: 0.85rem;
 }
+.copyright a {
+  color: #666666;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
 
 .payment {
   display: flex;

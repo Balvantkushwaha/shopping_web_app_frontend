@@ -1,4 +1,4 @@
-.adminLoginPage {
+/* .adminLoginPage {
   background: #000000;
   min-height: 100vh;
   display: flex;
@@ -91,5 +91,348 @@
 @media (max-width: 768px) {
   .loginBox {
     padding: 1.5rem;
+  }
+} */
+
+
+
+
+
+/* AdminLogin.module.css */
+
+.adminLoginPage {
+  min-height: 100vh;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 600px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  display: flex;
+  overflow: hidden;
+}
+
+/* Left Side - Image */
+.imageSide {
+  flex: 1;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.imageSide::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.imageSideContent {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.imageSideContent .brandIcon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.imageSideContent .brandIcon svg {
+  color: #ffffff;
+}
+
+.imageSideContent h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.imageSideContent h2 span {
+  color: #64b5f6;
+}
+
+.imageSideContent p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  max-width: 400px;
+  margin-bottom: 2rem;
+}
+
+.imageSideContent .features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.imageSideContent .features .featureItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+}
+
+.imageSideContent .features .featureItem svg {
+  color: #64b5f6;
+}
+
+.imageSideContent .adminBadge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 2rem;
+  align-self: flex-start;
+}
+
+/* Right Side - Login Form */
+.loginBox {
+  flex: 1;
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.logo svg {
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+}
+
+.logo h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.25rem 0;
+}
+
+.logo p {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.form {
+  max-width: 400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.formGroup label svg {
+  color: #6b7280;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+  color: #1a1a2e;
+  outline: none;
+}
+
+.formGroup input:focus {
+  border-color: #1a1a2e;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(26, 26, 46, 0.05);
+}
+
+.formGroup input::placeholder {
+  color: #9ca3af;
+}
+
+.sendOtpBtn,
+.verifyBtn {
+  width: 100%;
+  padding: 0.875rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.sendOtpBtn {
+  background: #1a1a2e;
+  color: #ffffff;
+}
+
+.sendOtpBtn:hover {
+  background: #0f0f1a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 26, 46, 0.2);
+}
+
+.verifyBtn {
+  background: #64b5f6;
+  color: #ffffff;
+}
+
+.verifyBtn:hover {
+  background: #42a5f5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(100, 181, 246, 0.3);
+}
+
+.sendOtpBtn:active,
+.verifyBtn:active {
+  transform: translateY(0);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider span {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .container {
+    min-height: 500px;
+  }
+
+  .imageSide {
+    padding: 3rem 2rem;
+  }
+
+  .loginBox {
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .adminLoginPage {
+    padding: 1rem;
+  }
+
+  .container {
+    flex-direction: column;
+    min-height: auto;
+    border-radius: 16px;
+  }
+
+  .imageSide {
+    padding: 2.5rem 2rem;
+    min-height: 250px;
+  }
+
+  .imageSideContent h2 {
+    font-size: 1.75rem;
+  }
+
+  .imageSideContent p {
+    font-size: 0.95rem;
+  }
+
+  .imageSideContent .features .featureItem {
+    font-size: 0.85rem;
+  }
+
+  .loginBox {
+    padding: 2.5rem 2rem;
+  }
+
+  .logo h1 {
+    font-size: 1.5rem;
+  }
+
+  .form {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .imageSide {
+    padding: 2rem 1.5rem;
+    min-height: 200px;
+  }
+
+  .imageSideContent h2 {
+    font-size: 1.5rem;
+  }
+
+  .imageSideContent .brandIcon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .loginBox {
+    padding: 2rem 1.5rem;
+  }
+
+  .formGroup input {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9rem;
+  }
+
+  .sendOtpBtn,
+  .verifyBtn {
+    padding: 0.75rem;
+    font-size: 0.9rem;
   }
 }

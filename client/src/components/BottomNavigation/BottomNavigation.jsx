@@ -13,7 +13,7 @@ const BottomNavigation = () => {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Grid, label: 'Categories', path: '/products' },
     { icon: ShoppingCart, label: 'Cart', path: '/cart', badge: cartCount },
-    { icon: User, label: 'Account', path: '/account' },
+    // { icon: User, label: 'Account', path: '/account' },
   ];
 
   return (

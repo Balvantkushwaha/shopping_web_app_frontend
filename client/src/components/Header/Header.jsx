@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { Search, ShoppingCart, Menu} from 'lucide-react';
 import { useAppSelector } from '../../redux/hooks';
 import styles from './Header.module.css';
 import MobileMenu from './MobileMenu';

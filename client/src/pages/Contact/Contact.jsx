@@ -162,30 +162,7 @@ const Contact = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* FAQ Section */}
-        <div className={styles.faqSection}>
-          <h2>Frequently Asked Questions</h2>
-          <div className={styles.faqGrid}>
-            <div className={styles.faqItem}>
-              <h3>How long does shipping take?</h3>
-              <p>Standard shipping takes 3-5 business days. Express shipping delivers in 1-2 business days.</p>
-            </div>
-            <div className={styles.faqItem}>
-              <h3>What is your return policy?</h3>
-              <p>We offer 30-day easy returns. Items must be unused and in original packaging.</p>
-            </div>
-            <div className={styles.faqItem}>
-              <h3>Do you offer international shipping?</h3>
-              <p>Yes, we ship worldwide. Shipping charges and delivery times vary by location.</p>
-            </div>
-            <div className={styles.faqItem}>
-              <h3>How can I track my order?</h3>
-              <p>You'll receive a tracking link via email once your order is shipped.</p>
-            </div>
-          </div>
-        </div>
+        </div>        
       </div>
     </div>
   );

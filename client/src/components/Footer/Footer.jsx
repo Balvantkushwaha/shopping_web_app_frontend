@@ -21,9 +21,9 @@ const Footer = () => {
                 <FaFacebook size={18} />
               </a>
 
-              <a href="#" aria-label="Twitter">
+              {/* <a href="#" aria-label="Twitter">
                 <FaTwitter size={18} />
-              </a>
+              </a> */}
 
               <a href="#" aria-label="Instagram">
                 <FaInstagram size={18} />
@@ -47,13 +47,7 @@ const Footer = () => {
               </li>
               <li>
                 <a href="/track-order">Track Order</a>
-              </li>
-              <li>
-                <a href="/terms">Terms & Conditions</a>
-              </li>
-              <li>
-                <a href="/privacy">Privacy Policy</a>
-              </li>
+              </li>              
               
               <li>
                 <a href="/faq">FAQs</a>
@@ -69,8 +63,9 @@ const Footer = () => {
         <div className={styles.bottom}>
           <div className={styles.copyright}>
             <p>
-              © {new Date().getFullYear()} BLACK STUDIO. All Rights Reserved.
+              © {new Date().getFullYear()} BLACK STUDIO. All Rights Reserved.  <a href="/privacy">Privacy Policy</a>
             </p>
+              
           </div>
         </div>
       </div>

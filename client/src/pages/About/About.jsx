@@ -9,12 +9,7 @@ const About = () => {
     { icon: Clock, title: '24/7 Support', description: 'Dedicated customer service team' },
   ];
 
-  const team = [
-    { name: 'Rajesh Kumar', role: 'Founder & CEO', image: 'https://randomuser.me/api/portraits/men/1.jpg' },
-    { name: 'Priya Sharma', role: 'Creative Director', image: 'https://randomuser.me/api/portraits/women/2.jpg' },
-    { name: 'Amit Patel', role: 'Head of Design', image: 'https://randomuser.me/api/portraits/men/3.jpg' },
-    { name: 'Neha Singh', role: 'Marketing Lead', image: 'https://randomuser.me/api/portraits/women/4.jpg' },
-  ];
+ 
 
   return (
     <div className={styles.aboutPage}>
@@ -69,63 +64,7 @@ const About = () => {
               );
             })}
           </div>
-        </div>
-
-        {/* Our Values */}
-        <div className={styles.valuesSection}>
-          <h2>Our Core Values</h2>
-          <div className={styles.valuesGrid}>
-            <div className={styles.valueCard}>
-              <Heart size={40} />
-              <h3>Passion</h3>
-              <p>We pour our hearts into every piece we create</p>
-            </div>
-            <div className={styles.valueCard}>
-              <Star size={40} />
-              <h3>Excellence</h3>
-              <p>We strive for perfection in everything we do</p>
-            </div>
-            <div className={styles.valueCard}>
-              <Shield size={40} />
-              <h3>Integrity</h3>
-              <p>We believe in honest and transparent business</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Team Section */}
-        <div className={styles.teamSection}>
-          <h2>Meet Our Team</h2>
-          <div className={styles.teamGrid}>
-            {team.map((member, index) => (
-              <div key={index} className={styles.teamCard}>
-                <img src={member.image} alt={member.name} />
-                <h3>{member.name}</h3>
-                <p>{member.role}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className={styles.statsSection}>
-          <div className={styles.statItem}>
-            <h3>50K+</h3>
-            <p>Happy Customers</p>
-          </div>
-          <div className={styles.statItem}>
-            <h3>100K+</h3>
-            <p>Products Sold</p>
-          </div>
-          <div className={styles.statItem}>
-            <h3>4.8</h3>
-            <p>Customer Rating</p>
-          </div>
-          <div className={styles.statItem}>
-            <h3>25+</h3>
-            <p>Cities Served</p>
-          </div>
-        </div>
+        </div>   
       </div>
     </div>
   );

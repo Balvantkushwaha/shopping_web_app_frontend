@@ -79,7 +79,7 @@ const Search = () => {
           </div>
         </div>
         
-        <div className={styles.filters}>
+        {/* <div className={styles.filters}>
           <select 
             value={selectedCategory} 
             onChange={(e) => {
@@ -92,7 +92,7 @@ const Search = () => {
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
-        </div>
+        </div> */}
         
         <div className={styles.results}>
           <p className={styles.resultCount}>Found {searchResults.length} products</p>
