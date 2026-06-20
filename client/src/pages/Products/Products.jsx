@@ -4,7 +4,7 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import { products } from '../../data/products';
 import { Search, Filter } from 'lucide-react';
 import styles from './Products.module.css';
-
+  
 const Products = () => {
   const [searchParams] = useSearchParams();
   const [filteredProducts, setFilteredProducts] = useState(products);

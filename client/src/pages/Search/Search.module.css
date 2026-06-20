@@ -1,5 +1,7 @@
+/* SearchPage.module.css - Light Mode (Only color changes) */
+
 .searchPage {
-  background: #000000;
+  background: #f8f9fa; /* Changed from #000000 */
   min-height: 100vh;
   padding: 2rem;
 }
@@ -10,7 +12,7 @@
 }
 
 .searchHeader h1 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 2rem;
   margin-bottom: 1.5rem;
 }
@@ -19,36 +21,46 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #111111;
+  background: #ffffff; /* Changed from #111111 */
   padding: 0.5rem 0.5rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb; /* Added border */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04); /* Added subtle shadow */
 }
 
 .searchBox svg {
-  color: #666666;
+  color: #9ca3af; /* Changed from #666666 */
 }
 
 .searchBox input {
   flex: 1;
   background: none;
   border: none;
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 1rem;
   outline: none;
+}
+
+.searchBox input::placeholder {
+  color: #9ca3af; /* Added placeholder color */
 }
 
 .clearBtn {
   background: none;
   border: none;
-  color: #666666;
+  color: #9ca3af; /* Changed from #666666 */
   cursor: pointer;
   padding: 0.25rem;
 }
 
+.clearBtn:hover {
+  color: #4b5563; /* Added hover state */
+}
+
 .searchBtn {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -58,7 +70,7 @@
 }
 
 .searchBtn:hover {
-  background: #dddddd;
+  background: #0f0f1a; /* Changed from #dddddd */
 }
 
 .filters {
@@ -66,12 +78,18 @@
 }
 
 .filters select {
-  background: #111111;
-  border: 1px solid #222222;
-  color: #ffffff;
+  background: #ffffff; /* Changed from #111111 */
+  border: 1px solid #e5e7eb; /* Changed from #222222 */
+  color: #1a1a2e; /* Changed from #ffffff */
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.filters select:focus {
+  outline: none;
+  border-color: #1a1a2e;
+  box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.05);
 }
 
 .results {
@@ -79,7 +97,7 @@
 }
 
 .resultCount {
-  color: #999999;
+  color: #6b7280; /* Changed from #999999 */
   margin-bottom: 1rem;
 }
 
@@ -89,18 +107,23 @@
 }
 
 .noResults p {
-  color: #ffffff;
+  color: #4b5563; /* Changed from #ffffff */
   margin-bottom: 1rem;
 }
 
 .noResults button {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.noResults button:hover {
+  background: #0f0f1a;
 }
 
 @media (max-width: 768px) {
@@ -111,10 +134,7 @@
   .searchHeader h1 {
     font-size: 1.5rem;
   } 
-  
 }
-
-
 
 .productsGrid {
   display: flex;

@@ -19,19 +19,21 @@ const Home = () => {
       <CategorySection categories={categories} />
       
       <div className={styles.container}>
-        <ProductSlider 
+        {/* <ProductSlider 
           title="Recommended For You" 
           products={products.slice(0, 8)} 
-        />
+        /> */}
         
         <ProductSlider 
-          title="Popular Products" 
+          title="Best Selling Products" 
           products={popularProducts.slice(0, 10)} 
+          seeAllLink="/products?category=T-Shirts"
         />
         
         <ProductSlider 
           title="New Arrivals" 
           products={newArrivals.slice(0, 10)} 
+          seeAllLink="/products?category=T-Shirts"
         />
         
         <ProductSlider 

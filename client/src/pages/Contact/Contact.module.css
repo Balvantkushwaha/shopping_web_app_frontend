@@ -1,23 +1,25 @@
+/* ContactPage.module.css - Light Mode (Only color changes) */
+
 .contactPage {
-  background: #000000;
+  background: #f8f9fa; /* Changed from #000000 */
   min-height: 100vh;
 }
 
 .hero {
-  background: linear-gradient(135deg, #111111 0%, #000000 100%);
+  background: linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%); /* Changed from dark */
   padding: 4rem 2rem;
   text-align: center;
-  border-bottom: 1px solid #222222;
+  border-bottom: 1px solid #e5e7eb; /* Changed from #222222 */
 }
 
 .hero h1 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
 .hero p {
-  color: #999999;
+  color: #6b7280; /* Changed from #999999 */
   max-width: 600px;
   margin: 0 auto;
 }
@@ -36,44 +38,47 @@
 }
 
 .infoCard {
-  background: #111111;
+  background: #ffffff; /* Changed from #111111 */
   padding: 1.5rem;
   border-radius: 12px;
   text-align: center;
   transition: transform 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
 }
 
 .infoCard:hover {
   transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .iconWrapper {
   width: 50px;
   height: 50px;
-  background: #222222;
+  background: #f3f4f6; /* Changed from #222222 */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
 }
 
 .infoCard h3 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   margin-bottom: 0.5rem;
 }
 
 .infoCard p {
-  color: #999999;
+  color: #6b7280; /* Changed from #999999 */
   margin-bottom: 1rem;
   font-size: 0.9rem;
 }
 
 .infoBtn {
   background: none;
-  border: 1px solid #ffffff;
-  color: #ffffff;
+  border: 1px solid #1a1a2e; /* Changed from #ffffff */
+  color: #1a1a2e; /* Changed from #ffffff */
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -81,8 +86,8 @@
 }
 
 .infoBtn:hover {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
 }
 
 .formSection {
@@ -93,14 +98,16 @@
 }
 
 .formContainer {
-  background: #111111;
+  background: #ffffff; /* Changed from #111111 */
   padding: 2rem;
   border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
 }
 
 .formContainer h2,
 .mapContainer h2 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   margin-bottom: 1.5rem;
 }
 
@@ -122,30 +129,39 @@
 }
 
 .formGroup label {
-  color: #ffffff;
+  color: #4b5563; /* Changed from #ffffff */
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .formGroup input,
 .formGroup textarea {
-  background: #222222;
-  border: 1px solid #333333;
-  color: #ffffff;
+  background: #f9fafb; /* Changed from #222222 */
+  border: 1px solid #e5e7eb; /* Changed from #333333 */
+  color: #1a1a2e; /* Changed from #ffffff */
   padding: 0.75rem;
   border-radius: 4px;
   font-size: 0.9rem;
+  transition: all 0.2s ease;
 }
 
 .formGroup input:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: #666666;
+  border-color: #1a1a2e; /* Changed from #666666 */
+  box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.05);
+  background: #ffffff;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: #9ca3af;
 }
 
 .submitBtn {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
   border: none;
   padding: 0.75rem;
   border-radius: 4px;
@@ -160,12 +176,12 @@
 }
 
 .submitBtn:hover {
-  background: #dddddd;
+  background: #0f0f1a; /* Changed from #dddddd */
 }
 
 .successMsg {
-  background: #00ff0022;
-  color: #00ff00;
+  background: #dcfce7; /* Changed from #00ff0022 */
+  color: #16a34a; /* Changed from #00ff00 */
   padding: 0.75rem;
   border-radius: 4px;
   text-align: center;
@@ -173,9 +189,11 @@
 }
 
 .mapContainer {
-  background: #111111;
+  background: #ffffff; /* Changed from #111111 */
   padding: 2rem;
   border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
 }
 
 .map {
@@ -189,7 +207,7 @@
 }
 
 .socialLinks h3 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   margin-bottom: 1rem;
 }
 
@@ -202,21 +220,31 @@
 .socialIcon {
   width: 40px;
   height: 40px;
-  background: #222222;
+  background: #f3f4f6; /* Changed from #222222 */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   transition: all 0.3s ease;
 }
 
 .socialIcon:hover {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
   transform: translateY(-3px);
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 @media (max-width: 768px) {
   .hero {
@@ -238,7 +266,6 @@
   .formRow {
     grid-template-columns: 1fr;
   } 
-  
   
   .infoGrid {
     gap: 1rem;

@@ -1,5 +1,7 @@
+/* ProductsPage.module.css - Light Mode (Only color changes) */
+
 .productsPage {
-  background: #000000;
+  background: #f8f9fa; /* Changed from #000000 */
   min-height: 100vh;
   padding: 2rem;
 }
@@ -17,15 +19,15 @@
 }
 
 .header h1 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 2rem;
   margin: 0;
 }
 
 .filterToggle {
   background: none;
-  border: 1px solid #ffffff;
-  color: #ffffff;
+  border: 1px solid #d1d5db; /* Changed from #ffffff */
+  color: #374151; /* Changed from #ffffff */
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -35,32 +37,39 @@
 }
 
 .filters {
-  background: #111111;
+  background: #ffffff; /* Changed from #111111 */
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); /* Added subtle shadow */
+  border: 1px solid #f0f0f0; /* Added light border */
 }
 
 .searchBar {
   flex: 1;
   display: flex;
   align-items: center;
-  background: #222222;
+  background: #f3f4f6; /* Changed from #222222 */
   padding: 0.5rem 1rem;
   border-radius: 4px;
   gap: 0.5rem;
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
+  border: 1px solid #e5e7eb; /* Added border */
 }
 
 .searchBar input {
   background: none;
   border: none;
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   outline: none;
   flex: 1;
+}
+
+.searchBar input::placeholder {
+  color: #9ca3af; /* Added placeholder color */
 }
 
 .filterGroup {
@@ -70,14 +79,14 @@
 }
 
 .filterGroup label {
-  color: #ffffff;
+  color: #4b5563; /* Changed from #ffffff */
   font-size: 0.9rem;
 }
 
 .filterGroup select {
-  background: #222222;
-  border: none;
-  color: #ffffff;
+  background: #f3f4f6; /* Changed from #222222 */
+  border: 1px solid #e5e7eb; /* Added border */
+  color: #1a1a2e; /* Changed from #ffffff */
   padding: 0.5rem;
   border-radius: 4px;
   cursor: pointer;
@@ -98,7 +107,7 @@
 .noResults {
   text-align: center;
   padding: 4rem;
-  color: #ffffff;
+  color: #4b5563; /* Changed from #ffffff */
 }
 
 /* Large Tablet / Small Laptop */

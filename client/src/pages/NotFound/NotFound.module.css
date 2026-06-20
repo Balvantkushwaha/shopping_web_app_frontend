@@ -1,5 +1,7 @@
+/* NotFoundPage.module.css - Light Mode (Only color changes) */
+
 .notFoundPage {
-  background: #000000;
+  background: #f8f9fa; /* Changed from #000000 */
   min-height: 80vh;
   display: flex;
   align-items: center;
@@ -22,12 +24,12 @@
 }
 
 .errorCode span {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   animation: float 3s ease-in-out infinite;
 }
 
 .errorCode .zero {
-  color: #333333;
+  color: #d1d5db; /* Changed from #333333 */
   animation-delay: 0.2s;
 }
 
@@ -41,13 +43,13 @@
 }
 
 .container h1 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 2rem;
   margin-bottom: 1rem;
 }
 
 .container p {
-  color: #999999;
+  color: #6b7280; /* Changed from #999999 */
   margin-bottom: 2rem;
 }
 
@@ -75,43 +77,44 @@
 }
 
 .backBtn {
-  background: #222222;
-  color: #ffffff;
+  background: #e5e7eb; /* Changed from #222222 */
+  color: #1a1a2e; /* Changed from #ffffff */
 }
 
 .backBtn:hover {
-  background: #333333;
+  background: #d1d5db; /* Changed from #333333 */
   transform: translateY(-2px);
 }
 
 .homeBtn {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
 }
 
 .homeBtn:hover {
-  background: #dddddd;
+  background: #0f0f1a; /* Changed from #dddddd */
   transform: translateY(-2px);
 }
 
 .shopBtn {
-  background: #333333;
-  color: #ffffff;
+  background: #f3f4f6; /* Changed from #333333 */
+  color: #1a1a2e; /* Changed from #ffffff */
+  border: 1px solid #e5e7eb; /* Added border */
 }
 
 .shopBtn:hover {
-  background: #444444;
+  background: #e5e7eb; /* Changed from #444444 */
   transform: translateY(-2px);
 }
 
 .suggestions {
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #222222;
+  border-top: 1px solid #e5e7eb; /* Changed from #222222 */
 }
 
 .suggestions h3 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -125,8 +128,8 @@
 
 .suggestionLinks button {
   background: none;
-  border: 1px solid #333333;
-  color: #cccccc;
+  border: 1px solid #e5e7eb; /* Changed from #333333 */
+  color: #4b5563; /* Changed from #cccccc */
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -134,14 +137,14 @@
 }
 
 .suggestionLinks button:hover {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
+  border-color: #1a1a2e; /* Changed from #ffffff */
 }
 
 .illustration {
   margin-top: 3rem;
-  opacity: 0.3;
+  opacity: 0.2; /* Changed from 0.3 */
 }
 
 @media (max-width: 768px) {

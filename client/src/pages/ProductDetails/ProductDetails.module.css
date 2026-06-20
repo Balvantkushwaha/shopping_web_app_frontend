@@ -1,5 +1,7 @@
+/* ProductDetails.module.css - Light Mode (Only color changes) */
+
 .detailsPage {
-  background: #000000;
+  background: #f8f9fa; /* Changed from #000000 */
   min-height: 100vh;
   padding: 2rem;
 }
@@ -13,9 +15,11 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  background: #111111;
+  background: #ffffff; /* Changed from #111111 */
   border-radius: 12px;
   padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); /* Added subtle shadow */
+  border: 1px solid #f0f0f0; /* Added light border */
 }
 
 .imageGallery {
@@ -29,6 +33,7 @@
   aspect-ratio:1;
   overflow: hidden;
   border-radius: 8px;
+  background: #f3f4f6; /* Added background for empty state */
 }
 
 .mainImage img {
@@ -50,11 +55,12 @@
   cursor: pointer;
   opacity: 0.6;
   transition: opacity 0.3s ease;
+  border: 2px solid transparent;
 }
 
 .thumbnail.active {
   opacity: 1;
-  border: 2px solid #ffffff;
+  border: 2px solid #1a1a2e; /* Changed from #ffffff */
 }
 
 .thumbnail img {
@@ -70,7 +76,7 @@
 }
 
 .name {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 2rem;
   margin: 0;
 }
@@ -82,32 +88,33 @@
 }
 
 .currentPrice {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 1.5rem;
   font-weight: 600;
 }
 
 .originalPrice {
-  color: #666666;
+  color: #9ca3af; /* Changed from #666666 */
   text-decoration: line-through;
   font-size: 1.2rem;
 }
 
 .discount {
-  color: #ff4444;
+  color: #ef4444; /* Changed from #ff4444 */
   font-size: 1.2rem;
   font-weight: 600;
 }
 
 .description {
-  color: #cccccc;
+  color: #4b5563; /* Changed from #cccccc */
   line-height: 1.6;
 }
 
 .section h3 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   margin-bottom: 1rem;
   font-size: 1rem;
+  font-weight: 600;
 }
 
 .sizes {
@@ -117,9 +124,9 @@
 }
 
 .sizeBtn {
-  background: #222222;
-  border: 1px solid #333333;
-  color: #ffffff;
+  background: #f3f4f6; /* Changed from #222222 */
+  border: 1px solid #e5e7eb; /* Changed from #333333 */
+  color: #1a1a2e; /* Changed from #ffffff */
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -128,8 +135,9 @@
 
 .sizeBtn:hover,
 .sizeBtn.active {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
+  border-color: #1a1a2e;
 }
 
 .colors {
@@ -141,14 +149,14 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 2px solid #e5e7eb; /* Changed from transparent */
   cursor: pointer;
   transition: all 0.3s ease;
   text-indent: -9999px;
 }
 
 .colorBtn.active {
-  border-color: #ffffff;
+  border-color: #1a1a2e; /* Changed from #ffffff */
   transform: scale(1.1);
 }
 
@@ -159,9 +167,9 @@
 }
 
 .quantity button {
-  background: #222222;
-  border: none;
-  color: #ffffff;
+  background: #f3f4f6; /* Changed from #222222 */
+  border: 1px solid #e5e7eb; /* Added border */
+  color: #1a1a2e; /* Changed from #ffffff */
   width: 32px;
   height: 32px;
   border-radius: 4px;
@@ -169,10 +177,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.quantity button:hover {
+  background: #e5e7eb;
 }
 
 .quantity span {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 1.2rem;
   min-width: 40px;
   text-align: center;
@@ -202,37 +215,39 @@
 
 .wishlistBtn {
   background: transparent;
-  border: 1px solid #ffffff;
-  color: #ffffff;
+  border: 1px solid #d1d5db; /* Changed from #ffffff */
+  color: #4b5563; /* Changed from #ffffff */
 }
 
 .wishlistBtn:hover {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
+  border-color: #1a1a2e;
 }
 
 .cartBtn {
-  background: #333333;
-  color: #ffffff;
+  background: #f3f4f6; /* Changed from #333333 */
+  color: #1a1a2e; /* Changed from #ffffff */
+  border: 1px solid #e5e7eb;
 }
 
 .cartBtn:hover {
-  background: #444444;
+  background: #e5e7eb; /* Changed from #444444 */
 }
 
 .buyBtn {
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
 }
 
 .buyBtn:hover {
-  background: #dddddd;
+  background: #0f0f1a; /* Changed from #dddddd */
 }
 
 .notFound {
   text-align: center;
   padding: 4rem;
-  color: #ffffff;
+  color: #4b5563; /* Changed from #ffffff */
   font-size: 1.5rem;
 }
 
