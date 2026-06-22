@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { clearCart } from '../../redux/slices/cartSlice';
 import { setCustomer, setOtpVerified } from '../../redux/slices/authSlice';
-import { Phone, Mail, MapPin, Building, Lock, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Lock, CheckCircle } from 'lucide-react';
 import styles from './Checkout.module.css';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { items, totalAmount } = useAppSelector(state => state.cart);
-  const { otpVerified } = useAppSelector(state => state.auth);
+  // const { otpVerified } = useAppSelector(state => state.auth);
   
   const [step, setStep] = useState(1);
   const [mobileNumber, setMobileNumber] = useState('');

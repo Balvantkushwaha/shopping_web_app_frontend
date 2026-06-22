@@ -1,35 +1,8 @@
-import { RefreshCw, Shield, Clock, Truck, CreditCard, FileText, CheckCircle, AlertCircle, Package, Phone, Mail } from 'lucide-react';
+import { RefreshCw, Shield, Clock, CheckCircle, AlertCircle,  Phone, Mail } from 'lucide-react';
 import styles from './ReturnPolicy.module.css';
 
 const ReturnPolicy = () => {
-  const policySteps = [
-    {
-      icon: FileText,
-      title: 'Initiate Return',
-      description: 'Log in to your account, go to "My Orders", select the order and items you wish to return, and fill out the return request form.'
-    },
-    {
-      icon: Package,
-      title: 'Pack Your Items',
-      description: 'Pack the items securely in their original packaging with all tags attached. Include the return slip provided in your package.'
-    },
-    {
-      icon: Truck,
-      title: 'Ship It Back',
-      description: 'Use the pre-paid return label provided. Drop off the package at your nearest courier service or schedule a pickup.'
-    },
-    {
-      icon: CheckCircle,
-      title: 'Quality Check',
-      description: 'Our team will inspect the returned items to ensure they meet our return policy criteria.'
-    },
-    {
-      icon: CreditCard,
-      title: 'Refund Processed',
-      description: 'Once approved, your refund will be processed within 3-5 business days to your original payment method.'
-    }
-  ];
-
+ 
   return (
     <div className={styles.returnPolicyPage}>
       {/* Hero Section */}

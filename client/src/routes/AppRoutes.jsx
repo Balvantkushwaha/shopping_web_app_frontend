@@ -13,7 +13,6 @@ import Contact from "../pages/Contact/Contact";
 import NotFound from "../pages/NotFound/NotFound";
 
 import AdminLogin from "../pages/AdminLogin/AdminLogin";
-import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
 import PublicLayout from "../components/PublicLayout";
 import ScrollToTop from "../components/ScrollToTop";
 
@@ -21,6 +20,7 @@ import ReturnPolicy from "../pages/ReturnPolicy/ReturnPolicy";
 import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
 import FAQ from "../pages/FAQ/FAQ";
 import MyOrders from "../pages/MyOrders/MyOrders";
+import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
 
 const AppRoutes = () => {
   return (
@@ -35,7 +35,7 @@ const AppRoutes = () => {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/product/:slug" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/about" element={<About />} />
@@ -49,7 +49,8 @@ const AppRoutes = () => {
           {/* Admin Routes */}
           <Route >
             <Route path="/adminlogin" element={<AdminLogin />} />
-            <Route path="/admindashboard" element={<AdminDashboard />} />
+            <Route path="/dashboard" element={<AdminDashboard/>} />           
+
           </Route>
 
           <Route path="*" element={<NotFound />} />

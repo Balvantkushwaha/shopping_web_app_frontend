@@ -6,10 +6,10 @@ import BottomNavigation from "./BottomNavigation/BottomNavigation";
 const PublicLayout = () => {
   return (
     <>
-      <Header/>
-      <Outlet/>
-      <Footer/>
-      <BottomNavigation/>
+      <Header />
+      <Outlet />
+      <Footer />
+      <BottomNavigation />
     </>
   );
 };

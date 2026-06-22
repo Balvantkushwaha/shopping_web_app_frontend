@@ -1,5 +1,7 @@
+/* CheckoutPage.module.css - Light Mode (Only color changes) */
+
 .checkoutPage {
-  background: #000000;
+  background: #f8f9fa; /* Changed from #000000 */
   min-height: 100vh;
   padding: 2rem;
 }
@@ -10,7 +12,7 @@
 }
 
 .title {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 2rem;
   margin-bottom: 2rem;
 }
@@ -22,13 +24,15 @@
 }
 
 .checkoutForm {
-  background: #111111;
+  background: #ffffff; /* Changed from #111111 */
   border-radius: 8px;
   padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
 }
 
 .step h2 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -48,34 +52,43 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #ffffff;
+  color: #4b5563; /* Changed from #ffffff */
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .formGroup input,
 .formGroup textarea {
   width: 100%;
-  background: #222222;
-  border: 1px solid #333333;
-  color: #ffffff;
+  background: #f9fafb; /* Changed from #222222 */
+  border: 1px solid #e5e7eb; /* Changed from #333333 */
+  color: #1a1a2e; /* Changed from #ffffff */
   padding: 0.75rem;
   border-radius: 4px;
   font-size: 0.9rem;
+  transition: all 0.2s ease;
 }
 
 .formGroup input:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: #666666;
+  border-color: #1a1a2e; /* Changed from #666666 */
+  box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.05);
+  background: #ffffff;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: #9ca3af;
 }
 
 .sendOtpBtn,
 .verifyBtn,
 .placeOrderBtn {
   width: 100%;
-  background: #ffffff;
-  color: #000000;
+  background: #1a1a2e; /* Changed from #ffffff */
+  color: #ffffff; /* Changed from #000000 */
   border: none;
   padding: 0.75rem;
   border-radius: 4px;
@@ -89,20 +102,26 @@
 .sendOtpBtn:hover,
 .verifyBtn:hover,
 .placeOrderBtn:hover {
-  background: #dddddd;
+  background: #0f0f1a; /* Changed from #dddddd */
+}
+
+.otpSection {
+  margin-top: 1rem;
 }
 
 .orderSummary {
-  background: #111111;
+  background: #ffffff; /* Changed from #111111 */
   border-radius: 8px;
   padding: 1.5rem;
   height: fit-content;
   position: sticky;
   top: 100px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0f0f0;
 }
 
 .orderSummary h2 {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -113,12 +132,26 @@
   overflow-y: auto;
 }
 
+.orderItems::-webkit-scrollbar {
+  width: 4px;
+}
+
+.orderItems::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 2px;
+}
+
+.orderItems::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
 .orderItem {
   display: flex;
   justify-content: space-between;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #222222;
-  color: #cccccc;
+  border-bottom: 1px solid #f0f0f0; /* Changed from #222222 */
+  color: #6b7280; /* Changed from #cccccc */
 }
 
 .orderItemInfo {
@@ -127,15 +160,20 @@
 }
 
 .orderItemName {
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
 }
 
 .orderItemQty {
-  color: #666666;
+  color: #9ca3af; /* Changed from #666666 */
+}
+
+.orderItemPrice {
+  color: #1a1a2e;
+  font-weight: 500;
 }
 
 .summaryDetails {
-  border-top: 1px solid #222222;
+  border-top: 1px solid #e5e7eb; /* Changed from #222222 */
   padding-top: 1rem;
 }
 
@@ -143,16 +181,28 @@
   display: flex;
   justify-content: space-between;
   padding: 0.75rem 0;
-  color: #cccccc;
+  color: #4b5563; /* Changed from #cccccc */
 }
 
 .summaryRow.total {
-  border-top: 1px solid #222222;
+  border-top: 1px solid #e5e7eb; /* Changed from #222222 */
   margin-top: 0.5rem;
   padding-top: 1rem;
   font-weight: 600;
-  color: #ffffff;
+  color: #1a1a2e; /* Changed from #ffffff */
   font-size: 1.1rem;
+}
+
+.otpNote {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.otpNote span {
+  color: #1a1a2e;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {

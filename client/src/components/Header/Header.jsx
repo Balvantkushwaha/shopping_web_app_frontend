@@ -8,11 +8,11 @@ import MobileMenu from './MobileMenu';
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const cartItems = useAppSelector(state => state.cart.items);
-  const wishlistItems = useAppSelector(state => state.wishlist);
+  // const wishlistItems = useAppSelector(state => state.wishlist);
   const navigate = useNavigate();
 
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-  const wishlistCount = wishlistItems.length;
+  // const wishlistCount = wishlistItems.length;
 
   return (
     <>

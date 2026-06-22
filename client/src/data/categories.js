@@ -2,9 +2,12 @@ export const categories = [
   { id: 1, name: "T-Shirts", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400", count: 45 },
   { id: 2, name: "Shirts", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400", count: 32 },
   { id: 3, name: "Jeans", image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400", count: 28 },
-  // { id: 4, name: "Jackets", image: "https://images.unsplash.com/photo-1551028719-00167b16eac1?w=400", count: 18 },
-  { id: 4, name: "Boys Wear", image: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=400", count: 24 },
-  // { id: 6, name: "Hoodies", image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400", count: 15 }
+  {
+    id: 4,
+    name: "Lower",
+    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200",
+    count: 24
+  }
 ];
 
 export const heroSlides = [
@@ -18,7 +21,7 @@ export const heroSlides = [
   {
     id: 2,
     title: "New Arrivals",
-    subtitle: "Fresh Collection 2024",
+    subtitle: "Fresh Collection 2026",
     image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200",
     cta: "Shop Now"
   },
