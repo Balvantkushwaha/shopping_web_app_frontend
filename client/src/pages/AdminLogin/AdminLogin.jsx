@@ -124,7 +124,7 @@ const AdminLogin = () => {
   const handleVerifyOtp = () => {
     if (otp === sentOtp) {
       dispatch(adminLogin());
-      navigate('/admindashboard');
+      navigate('/dashboard');
     } else {
       alert('Invalid OTP');
     }

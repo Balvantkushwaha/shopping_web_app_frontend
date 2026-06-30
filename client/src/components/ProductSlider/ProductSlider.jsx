@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+// import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import styles from "./ProductSlider.module.css";
@@ -14,28 +14,15 @@ const ProductSlider = ({ title, products, seeAllLink }) => {
       <div className={styles.header}>
         <h2 className={styles.title}>{title}</h2>
         {seeAllLink && <button className={styles.seeAllBtn} onClick={() => navigate(seeAllLink)}>See All</button>}
-      </div>
-      {/* <Swiper
-        modules={[Autoplay]}
-        spaceBetween={20}
-        slidesPerView={1}
-        // navigation
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
-        breakpoints={{
-          640: { slidesPerView: 2 },
-          768: { slidesPerView: 3 },
-          1024: { slidesPerView: 4 },
-        }}
-        className={styles.productSwiper}
-      > */}
+      </div>   
 
       <Swiper
-        modules={[Autoplay]}
+        // modules={[Autoplay]}
         spaceBetween={10}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
-        }}
+        // autoplay={{
+        //   delay: 4000,
+        //   disableOnInteraction: false,
+        // }}
         breakpoints={{
           0: {
             slidesPerView: 1,

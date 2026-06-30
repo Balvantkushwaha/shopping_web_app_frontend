@@ -285,9 +285,9 @@
   text-decoration: line-through;
 }
 
-.discount {
+.discountAmount {
   font-size: 16px;
-  color: #e74c3c;
+  color: #258c0b;
   font-weight: 600;
 }
 

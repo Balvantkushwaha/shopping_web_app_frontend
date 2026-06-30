@@ -1,25 +1,28 @@
 import styles from "./ProductSection.module.css";
 import { useState, useEffect } from "react";
 import ProductForm from "./ProductForm/ProductForm";
+import ProductView from "./ProductView/ProductView";
 import api from "../../../../../api/axios";
+import { FaEdit, FaTrash, FaEye, FaPlus } from "react-icons/fa";
 
 const ProductSection = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showView, setShowView] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [viewingProduct, setViewingProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
-  // console.log("api:",api)
+
   // Fetch all products
   const fetchProducts = async (page = 1) => {
     setLoading(true);
     setError(null);
     try {
       const response = await api.get(`/product?page=${page}&limit=10`);
-      // console.log("Fetch Products Response:", response.data);
       if (response.data.success) {
         setProducts(response.data.data);
         setTotalPages(response.data.pagination.pages);
@@ -37,8 +40,6 @@ const ProductSection = () => {
       setLoading(false);
     }
   };
-
-
 
   // Delete product with confirmation
   const handleDelete = async (id, name) => {
@@ -73,10 +74,22 @@ const ProductSection = () => {
     setShowForm(true);
   };
 
+  // View product - open view modal
+  const handleView = (product) => {
+    setViewingProduct(product);
+    setShowView(true);
+  };
+
   // Close form
   const handleCloseForm = () => {
     setShowForm(false);
     setEditingProduct(null);
+  };
+
+  // Close view
+  const handleCloseView = () => {
+    setShowView(false);
+    setViewingProduct(null);
   };
 
   // Handle form submit (create/update)
@@ -113,7 +126,6 @@ const ProductSection = () => {
         }
       }
     } catch (err) {
-      
       const errorMsg = err.response?.data?.message || "Network error. Please try again.";
       alert("Error submitting form: " + errorMsg);
       setError(errorMsg);
@@ -163,7 +175,7 @@ const ProductSection = () => {
           onClick={() => setShowForm(true)}
           disabled={loading}
         >
-          + Add Product
+          <FaPlus /> Add Product
         </button>
       </div>
 
@@ -183,12 +195,11 @@ const ProductSection = () => {
         </div>
       )}
 
-      {/* Product Table */}
+      {/* Desktop Table View */}
       <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
             <tr>
-              {/* <th>ID</th> */}
               <th>Product</th>
               <th>Category</th>
               <th>Price</th>
@@ -203,7 +214,6 @@ const ProductSection = () => {
             {products.length > 0 ? (
               products.map((product) => (
                 <tr key={product._id}>
-                  {/* <td>#{product.product_id || product._id.slice(-6)}</td> */}
                   <td>
                     <div className={styles.productInfo}>
                       {product.coverImage && (
@@ -233,32 +243,126 @@ const ProductSection = () => {
                     </span>
                   </td>
                   <td>
-                    <button 
-                      className={styles.editBtn}
-                      onClick={() => handleEdit(product)}
-                      disabled={loading}
-                    >
-                      ✏️ Edit
-                    </button>
-                    <button 
-                      className={styles.deleteBtn}
-                      onClick={() => handleDelete(product._id, product.name)}
-                      disabled={loading}
-                    >
-                      🗑️ Delete
-                    </button>
+                    <div className={styles.actionButtons}>
+                      <button 
+                        className={styles.viewBtn}
+                        onClick={() => handleView(product)}
+                        disabled={loading}
+                        title="View Product"
+                      >
+                        <FaEye />
+                      </button>
+                      <button 
+                        className={styles.editBtn}
+                        onClick={() => handleEdit(product)}
+                        disabled={loading}
+                        title="Edit Product"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button 
+                        className={styles.deleteBtn}
+                        onClick={() => handleDelete(product._id, product.name)}
+                        disabled={loading}
+                        title="Delete Product"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="9" className={styles.noData}>
+                <td colSpan="8" className={styles.noData}>
                   {loading ? "Loading..." : "No products found"}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className={styles.mobileCardContainer}>
+        {products.length > 0 ? (
+          products.map((product) => (
+            <div key={product._id} className={styles.productCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.productInfo}>
+                  {product.coverImage && (
+                    <img 
+                      src={product.coverImage} 
+                      alt={product.name}
+                      className={styles.productImage}
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
+                      }}
+                    />
+                  )}
+                  <div>
+                    <div className={styles.productName}>{product.name}</div>
+                    <div className={styles.productBrand}>{product.brand}</div>
+                  </div>
+                </div>
+                <span className={`${styles.status} ${getStatusClass(product.stockQuantity || 0)}`}>
+                  {getStatusText(product.stockQuantity || 0)}
+                </span>
+              </div>
+              
+              <div className={styles.cardDetails}>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Category:</span>
+                  <span>{product.category}</span>
+                </div>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Price:</span>
+                  <span>₹{product.price?.toFixed(2) || '0.00'}</span>
+                </div>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Discount:</span>
+                  <span>{product.discount || 0}%</span>
+                </div>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Final Price:</span>
+                  <span>₹{(product.finalPrice || product.price || 0).toFixed(2)}</span>
+                </div>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Stock:</span>
+                  <span>{product.stockQuantity || product.sizes?.reduce((sum, s) => sum + s.stock, 0) || 0}</span>
+                </div>
+              </div>
+
+              <div className={styles.cardActions}>
+                <button 
+                  className={styles.viewBtn}
+                  onClick={() => handleView(product)}
+                  disabled={loading}
+                >
+                  <FaEye /> View
+                </button>
+                <button 
+                  className={styles.editBtn}
+                  onClick={() => handleEdit(product)}
+                  disabled={loading}
+                >
+                  <FaEdit /> Edit
+                </button>
+                <button 
+                  className={styles.deleteBtn}
+                  onClick={() => handleDelete(product._id, product.name)}
+                  disabled={loading}
+                >
+                  <FaTrash /> Delete
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className={styles.noData}>
+            {loading ? "Loading..." : "No products found"}
+          </div>
+        )}
       </div>
 
       {/* Pagination */}
@@ -289,6 +393,14 @@ const ProductSection = () => {
           onSubmit={handleFormSubmit}
           onClose={handleCloseForm}
           loading={loading}
+        />
+      )}
+
+      {/* Product View Modal */}
+      {showView && viewingProduct && (
+        <ProductView
+          product={viewingProduct}
+          onClose={handleCloseView}
         />
       )}
     </div>
