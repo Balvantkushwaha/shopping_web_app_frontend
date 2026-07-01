@@ -4,12 +4,7 @@ import {
   FiBox, 
   FiShoppingCart, 
   FiSettings,
-  FiUsers,
-  FiTrendingUp,
-  FiHome,
-  FiGrid,
-  FiFileText,
-  FiBell,
+  FiGrid,  
   FiUser
 } from "react-icons/fi";
 

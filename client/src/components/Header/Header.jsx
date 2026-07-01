@@ -29,9 +29,9 @@ const Header = () => {
           {/* Center - Navigation (Desktop) */}
           <nav className={styles.nav}>
             <Link to="/">Home</Link>
-            <Link to="/products">Categories</Link>
-            <Link to="/products?filter=new">New Arrivals</Link>
-            <Link to="/products?filter=popular">Popular Products</Link>
+            <Link to="/search">Categories</Link>
+            <Link to="/search?isNewArrival=true">New Arrivals</Link>
+            <Link to="/search?isPopular=true">Popular Products</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
           </nav>

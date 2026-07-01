@@ -102,7 +102,7 @@ const ProductSection = () => {
       
       if (editingProduct) {
         // Update existing product
-        response = await api.put(`/product/${editingProduct._id}`, formData);
+        const response = await api.put(`/product/${editingProduct._id}`, formData);
         
         if (response.data.success) {
           alert("Product updated successfully!");
@@ -221,9 +221,9 @@ const ProductSection = () => {
                           src={product.coverImage} 
                           alt={product.name}
                           className={styles.productImage}
-                          onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
-                          }}
+                          // onError={(e) => {
+                          //   e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
+                          // }}
                         />
                       )}
                       <div>
@@ -295,9 +295,9 @@ const ProductSection = () => {
                       src={product.coverImage} 
                       alt={product.name}
                       className={styles.productImage}
-                      onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
-                      }}
+                      // onError={(e) => {
+                      //   e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
+                      // }}
                     />
                   )}
                   <div>

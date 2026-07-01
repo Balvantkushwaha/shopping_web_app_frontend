@@ -1,5 +1,5 @@
 // hooks/useProducts.js
-import { useState, useEffect, useCallback } from 'react';
+import { useState,  useCallback } from 'react';
 import productService from '../services/productService';
 
 const useProducts = () => {

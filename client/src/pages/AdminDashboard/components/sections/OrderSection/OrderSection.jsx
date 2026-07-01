@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from "./OrderSection.module.css";
+import OrderDetailsModal from './OrderDetailsModal';
 import api from '../../../../../api/axios';
 
 const OrderSection = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
@@ -26,10 +30,8 @@ const OrderSection = () => {
     setError(null);
     
     try {
-      // Build query string
       let queryString = `?page=${pagination.page}&&limit=${pagination.limit}`;
       
-      // Add filters if they exist
       if (filters.payment_method) {
         queryString += `&&payment_method=${filters.payment_method}`;
       }
@@ -40,9 +42,8 @@ const OrderSection = () => {
         queryString += `&&order_status=${filters.order_status}`;
       }
 
-      const response = await api.get(`/order/${queryString}`);
+      const response = await api.get(`order/${queryString}`);
       
-      // Check if the response has the expected structure
       if (response.data.success && response.data.data) {
         setOrders(response.data.data.orders || []);
         setPagination({
@@ -72,7 +73,6 @@ const OrderSection = () => {
       ...prev,
       [filterType]: value
     }));
-    // Reset to page 1 when filter changes
     setPagination(prev => ({
       ...prev,
       page: 1
@@ -145,12 +145,24 @@ const OrderSection = () => {
     return 'Guest';
   };
 
-  // Get customer email
-  const getCustomerEmail = (order) => {
-    if (order.shippingAddress && order.shippingAddress.email) {
-      return order.shippingAddress.email;
+  // Get customer phone
+  const getCustomerPhone = (order) => {
+    if (order.shippingAddress && order.shippingAddress.phone) {
+      return order.shippingAddress.phone;
     }
-    return order.guest_mobile_no || 'No email';
+    return order.guest_mobile_no || 'N/A';
+  };
+
+  // View Order Details
+  const handleViewOrder = (order) => {
+    setSelectedOrder(order);
+    setShowModal(true);
+  };
+
+  // Close Modal
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedOrder(null);
   };
 
   return (
@@ -163,7 +175,7 @@ const OrderSection = () => {
       </div>
 
       {/* Filter Section */}
-      <div className={styles.filters}>
+      {/* <div className={styles.filters}>
         <div className={styles.filterGroup}>
           <label>Payment Method</label>
           <select
@@ -208,7 +220,7 @@ const OrderSection = () => {
         <button className={styles.clearBtn} onClick={clearFilters}>
           Clear Filters
         </button>
-      </div>
+      </div> */}
 
       {/* Error Message */}
       {error && (
@@ -233,14 +245,14 @@ const OrderSection = () => {
               <thead>
                 <tr>
                   <th>Order ID</th>
-                  <th>Customer</th>
+                  <th>Customer Name</th>
+                  <th>Mobile</th>
                   <th>Items</th>
                   <th>Total Amount</th>
-                  <th>Payment Method</th>
-                  <th>Payment Status</th>
-                  <th>Order Status</th>
-                  <th>Date</th>
-                  <th>Actions</th>
+                  {/* <th>Payment Status</th>
+                  <th>Order Status</th> */}
+                  <th>Order Date</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -259,51 +271,20 @@ const OrderSection = () => {
                       <td>
                         <div className={styles.customerInfo}>
                           <strong>{getCustomerName(order)}</strong>
-                          <br />
-                          <small>{getCustomerEmail(order)}</small>
-                          {order.guest_mobile_no && (
-                            // <br />
-                            <small>Phone: {order.guest_mobile_no}</small>
-                          )}
                         </div>
                       </td>
+                      <td>{getCustomerPhone(order)}</td>
                       <td>
                         <div className={styles.itemsInfo}>
-                          {order.items && order.items.length > 0 ? (
-                            <>
-                              <span>{order.items.length} item(s)</span>
-                              <br />
-                              <small>{order.items[0]?.product_name}</small>
-                              {order.items.length > 1 && (
-                                <small> +{order.items.length - 1} more</small>
-                              )}
-                            </>
-                          ) : (
-                            'N/A'
-                          )}
+                          <span>{order.items?.length || 0} items</span>
                         </div>
                       </td>
                       <td>
                         <div className={styles.amountInfo}>
                           <strong>₹{order.final_payable_amount?.toFixed(2) || '0.00'}</strong>
-                          {order.total_discount > 0 && (
-                            // <br />
-                            <small className={styles.discount}>
-                              Discount: ₹{order.total_discount.toFixed(2)}
-                            </small>
-                          )}
-                          {order.shipping_charge > 0 && (
-                            // <br />
-                            <small>Shipping: ₹{order.shipping_charge.toFixed(2)}</small>
-                          )}
                         </div>
                       </td>
-                      <td>
-                        <span className={`${styles.paymentMethod} ${order.payment_method === 'ONLINE' ? styles.online : styles.cod}`}>
-                          {order.payment_method || 'N/A'}
-                        </span>
-                      </td>
-                      <td>
+                      {/* <td>
                         <span 
                           className={styles.statusBadge}
                           style={{ 
@@ -324,14 +305,14 @@ const OrderSection = () => {
                         >
                           {order.order_status || 'N/A'}
                         </span>
-                      </td>
+                      </td> */}
                       <td>{formatDate(order.createdAt)}</td>
                       <td>
-                        <button className={styles.viewBtn}>
-                          View
-                        </button>
-                        <button className={styles.updateBtn}>
-                          Update
+                        <button 
+                          className={styles.viewBtn}
+                          onClick={() => handleViewOrder(order)}
+                        >
+                          View Order
                         </button>
                       </td>
                     </tr>
@@ -366,6 +347,16 @@ const OrderSection = () => {
             </div>
           )}
         </>
+      )}
+
+      {/* View Order Modal */}
+      {showModal && selectedOrder && (
+        <OrderDetailsModal 
+          order={selectedOrder} 
+          onClose={handleCloseModal}
+          getStatusBadge={getStatusBadge}
+          formatDate={formatDate}
+        />
       )}
     </div>
   );

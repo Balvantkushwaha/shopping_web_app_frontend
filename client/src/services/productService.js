@@ -42,8 +42,8 @@ const productService = {
     try {
       // Using filter API with isNew flag
       const response = await api.get(`/product/filter/all`, {
-        params: {
-          isNew: true,
+        params: {          
+          isNewArrival: true,
           page,
           limit
         }

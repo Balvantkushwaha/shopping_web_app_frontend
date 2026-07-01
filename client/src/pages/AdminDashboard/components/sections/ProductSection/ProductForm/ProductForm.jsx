@@ -33,7 +33,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
   const subCategories = ["Casual", "Formal", "Sports", "Party", "Western", "Traditional"];
   const genders = ["Men", "Women", "Boys", "Girls", "Unisex"];
   const fits = ["Regular", "Slim", "Oversized", "Relaxed", "Skinny"];
-  const sizeOptions = ["S", "M", "L", "XL", "XXL", "XXXL"];
+  const sizeOptions = ["S", "M", "L", "XL", "XXL", "28","30","32","34"];
 
   // Populate form if editing
   useEffect(() => {

@@ -12,7 +12,7 @@ const CategorySection = ({ categories }) => {
           <div 
             key={category.id} 
             className={styles.categoryCard}
-            onClick={() => navigate(`/products?category=${category.name}`)}
+            onClick={() => navigate(`/search?category=${category.name}`)}
           >
             <div 
               className={styles.categoryImage}

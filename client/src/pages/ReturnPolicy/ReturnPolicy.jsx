@@ -1,4 +1,4 @@
-import { RefreshCw, Shield, Clock, CheckCircle, AlertCircle,  Phone, Mail } from 'lucide-react';
+import { RefreshCw, Shield, Clock, CheckCircle, AlertCircle} from 'lucide-react';
 import styles from './ReturnPolicy.module.css';
 
 const ReturnPolicy = () => {
@@ -153,7 +153,7 @@ const ReturnPolicy = () => {
         </div>
 
         {/* Contact Support */}
-        <div className={styles.supportSection}>
+        {/* <div className={styles.supportSection}>
           <h2>Need Help With Returns?</h2>
           <p>Our customer support team is here to assist you with any questions about returns or exchanges.</p>
           <div className={styles.supportButtons}>
@@ -172,7 +172,7 @@ const ReturnPolicy = () => {
               Live Chat
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

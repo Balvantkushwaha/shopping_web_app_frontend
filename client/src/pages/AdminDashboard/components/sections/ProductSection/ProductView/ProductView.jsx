@@ -32,9 +32,9 @@ const ProductView = ({ product, onClose }) => {
                 src={product.coverImage} 
                 alt={product.name}
                 className={styles.productImage}
-                onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/300x300?text=No+Image';
-                }}
+                // onError={(e) => {
+                //   e.target.src = 'https://via.placeholder.com/300x300?text=No+Image';
+                // }}
               />
             ) : (
               <div className={styles.noImage}>No Image Available</div>

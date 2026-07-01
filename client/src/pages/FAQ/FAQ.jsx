@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, HelpCircle, ShoppingBag, Truck, RefreshCw, CreditCard, Shield, User, Package } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle, ShoppingBag, Truck, RefreshCw} from 'lucide-react';
 import styles from './FAQ.module.css';
 
 const FAQ = () => {
@@ -140,7 +140,7 @@ const FAQ = () => {
         })}
 
         {/* Still Need Help */}
-        <div className={styles.helpSection}>
+        {/* <div className={styles.helpSection}>
           <h2>Still Need Help?</h2>
           <p>Our customer support team is here to assist you. Contact us through any of the channels below.</p>
           <div className={styles.helpButtons}>
@@ -162,7 +162,7 @@ const FAQ = () => {
               Call Us
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

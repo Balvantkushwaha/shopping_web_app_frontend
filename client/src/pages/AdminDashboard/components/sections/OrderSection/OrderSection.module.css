@@ -1,9 +1,11 @@
+/* Main Container */
 .orderSection {
   padding: 24px;
   background: #f5f7fa;
   min-height: 100vh;
 }
 
+/* Header */
 .header {
   display: flex;
   justify-content: space-between;
@@ -162,7 +164,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
-  min-width: 1200px;
+  min-width: 1100px;
 }
 
 .orderTable thead {
@@ -170,7 +172,7 @@
 }
 
 .orderTable th {
-  padding: 16px 18px;
+  padding: 14px 16px;
   text-align: left;
   font-weight: 600;
   color: #555;
@@ -182,7 +184,7 @@
 }
 
 .orderTable td {
-  padding: 16px 18px;
+  padding: 14px 16px;
   border-bottom: 1px solid #e9ecef;
   vertical-align: middle;
 }
@@ -216,13 +218,6 @@
   font-size: 14px;
 }
 
-.customerInfo small {
-  display: block;
-  color: #666;
-  margin-top: 2px;
-  font-size: 12px;
-}
-
 /* Items Info */
 .itemsInfo {
   font-size: 13px;
@@ -233,29 +228,11 @@
   color: #333;
 }
 
-.itemsInfo small {
-  color: #666;
-  display: block;
-  margin-top: 2px;
-  font-size: 12px;
-}
-
 /* Amount Info */
 .amountInfo strong {
   color: #2e7d32;
   font-size: 16px;
   font-weight: 600;
-}
-
-.amountInfo small {
-  display: block;
-  margin-top: 2px;
-  font-size: 12px;
-}
-
-.discount {
-  color: #f44336 !important;
-  font-weight: 500;
 }
 
 /* No Orders */
@@ -264,26 +241,6 @@
   padding: 60px !important;
   color: #999;
   font-size: 16px;
-}
-
-/* Payment Method */
-.paymentMethod {
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  display: inline-block;
-  text-transform: uppercase;
-}
-
-.online {
-  background: #e3f2fd;
-  color: #1976d2;
-}
-
-.cod {
-  background: #fff3e0;
-  color: #e65100;
 }
 
 /* Status Badge */
@@ -297,20 +254,15 @@
   letter-spacing: 0.3px;
 }
 
-/* Action Buttons */
-.viewBtn,
-.updateBtn {
-  padding: 6px 16px;
-  margin: 0 4px;
+/* View Button */
+.viewBtn {
+  padding: 6px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 500;
   transition: all 0.3s ease;
-}
-
-.viewBtn {
   background: #2196f3;
   color: white;
 }
@@ -321,19 +273,7 @@
   box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
 }
 
-.updateBtn {
-  background: #ff9800;
-  color: white;
-}
-
-.updateBtn:hover {
-  background: #f57c00;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
-}
-
-.viewBtn:active,
-.updateBtn:active {
+.viewBtn:active {
   transform: translateY(0);
 }
 
@@ -436,9 +376,8 @@
     font-size: 14px;
   }
 
-  .viewBtn,
-  .updateBtn {
-    padding: 4px 12px;
+  .viewBtn {
+    padding: 4px 14px;
     font-size: 11px;
   }
 
@@ -456,6 +395,11 @@
   .stats {
     font-size: 13px;
     padding: 6px 16px;
+  }
+
+  .statusBadge {
+    font-size: 10px;
+    padding: 3px 10px;
   }
 }
 
@@ -482,27 +426,28 @@
     font-size: 13px;
   }
 
-  .orderTable th,
-  .orderTable td {
-    padding: 8px 10px;
-    font-size: 11px;
-  }
-
   .orderTable {
+    font-size: 11px;
     min-width: 700px;
   }
 
-  .statusBadge,
-  .paymentMethod {
-    font-size: 10px;
-    padding: 3px 10px;
+  .orderTable th,
+  .orderTable td {
+    padding: 8px 10px;
   }
 
-  .viewBtn,
-  .updateBtn {
-    padding: 3px 10px;
+  .orderId {
     font-size: 10px;
-    margin: 0 2px;
+    padding: 2px 6px;
+  }
+
+  .amountInfo strong {
+    font-size: 13px;
+  }
+
+  .viewBtn {
+    padding: 3px 12px;
+    font-size: 10px;
   }
 
   .pagination {
@@ -518,9 +463,19 @@
   .pageInfo {
     font-size: 12px;
   }
+
+  .stats {
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+
+  .statusBadge {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
 }
 
-/* Scrollbar Styling */
+/* Scrollbar Styling for Table */
 .tableContainer::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -550,7 +505,6 @@
   .filters,
   .clearBtn,
   .viewBtn,
-  .updateBtn,
   .pagination {
     display: none !important;
   }
@@ -571,8 +525,7 @@
     print-color-adjust: exact !important;
   }
 
-  .statusBadge,
-  .paymentMethod {
+  .statusBadge {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }

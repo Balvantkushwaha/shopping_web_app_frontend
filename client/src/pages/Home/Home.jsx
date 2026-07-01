@@ -2,10 +2,11 @@
 import { useState, useEffect } from 'react';
 import HeroSlider from '../../components/HeroSlider/HeroSlider';
 import CategorySection from '../../components/CategorySection/CategorySection';
-import ProductSlider from '../../components/ProductSlider/ProductSlider';
+// import ProductSlider from '../../components/ProductSlider/ProductSlider';
 import { categories } from '../../data/categories';
 import useProducts from '../../hooks/useProducts';
 import styles from './Home.module.css';
+import ProductScroll from '../../components/ProductScroll/ProductScroll';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -37,26 +38,21 @@ const Home = () => {
           popularData,
           tShirtsData,
           shirtsData,
-          jeansData,
-          // jacketsData,
+          jeansData,         
           // allProductsData
         ] = await Promise.all([
           getNewArrivals(1, 10),
           getPopularProducts(1, 10),
           getProductsByCategory('T-Shirts', 1, 8),
           getProductsByCategory('Shirts', 1, 8),
-          getProductsByCategory('Jeans', 1, 8),
-          // getProductsByCategory('Jackets', 1, 8),
-          // getAllProducts(1, 8)
+          getProductsByCategory('Jeans', 1, 8),        
         ]);
 
         setNewArrivals(newArrivalsData || []);
         setPopularProducts(popularData || []);
         setTShirts(tShirtsData || []);
         setShirts(shirtsData || []);
-        setJeans(jeansData || []);
-        // setJackets(jacketsData || []);
-        // setRecommended(allProductsData || []);
+        setJeans(jeansData || []);     
       } catch (error) {
         console.error('Error fetching home data:', error);
       } finally {
@@ -84,51 +80,51 @@ const Home = () => {
       <div className={styles.container}>        
         
         {popularProducts.length > 0 && (
-          <ProductSlider 
+          <ProductScroll
             title="Popular Products" 
             products={popularProducts} 
-            seeAllLink="/products?sort=popular"
+            seeAllLink="/search?isPopular=true"
           />
         )}
         
         {newArrivals.length > 0 && (
-          <ProductSlider 
+          <ProductScroll
             title="New Arrivals" 
             products={newArrivals} 
             seeAllLink="/products?filter=new"
           />
         )}
-      <HeroSlider />
+      {/* <HeroSlider /> */}
         
         {tShirts.length > 0 && (
-          <ProductSlider 
+          <ProductScroll
             title="T-Shirts" 
             products={tShirts} 
-            seeAllLink="/products?category=T-Shirts"
+            seeAllLink="/search?category=T-Shirts"
           />
         )}
         
         {shirts.length > 0 && (
-          <ProductSlider 
+          <ProductScroll
             title="Shirts" 
             products={shirts} 
-            seeAllLink="/products?category=Shirts"
+            seeAllLink="/search?category=Shirts"
           />
         )}
         
         {jeans.length > 0 && (
-          <ProductSlider 
+          <ProductScroll 
             title="Jeans" 
             products={jeans} 
-            seeAllLink="/products?category=Jeans"
+            seeAllLink="/search?category=Jeans"
           />
         )}
 
         {jeans.length > 0 && (
-          <ProductSlider 
+          <ProductScroll
             title="Lower" 
             products={jeans} 
-            seeAllLink="/products?category=Lower"
+            seeAllLink="/search?category=Lower"
           />
         )}        
 
