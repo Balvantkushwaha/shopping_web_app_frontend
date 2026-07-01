@@ -5,7 +5,7 @@ import { lazy, Suspense } from "react";
 
 import PublicLayout from "../components/PublicLayout";
 import ScrollToTop from "../components/ScrollToTop";
-import PageLoader from "../components/PageLoader";
+// import PageLoader from "../components/PageLoader";
 
 // Lazy Loaded Pages
 const Home = lazy(() => import("../pages/Home/Home"));
@@ -39,7 +39,7 @@ const AppRoutes = () => {
       <Router>
         <ScrollToTop />
 
-        <Suspense fallback={<PageLoader/>}>
+        <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             {/* Public Routes */}
             <Route element={<PublicLayout/>}>
