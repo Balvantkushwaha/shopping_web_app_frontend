@@ -47,7 +47,7 @@ const Checkout = () => {
     if (mobileNumber.length === 10) {
       const dummyOtp = "123456";
       setSentOtp(dummyOtp);
-      alert(`OTP sent: ₹{dummyOtp} (Demo)`);
+      alert(`OTP sent: ₹${dummyOtp} (Demo)`);
     } else {
       alert("Please enter a valid 10-digit mobile number");
     }
