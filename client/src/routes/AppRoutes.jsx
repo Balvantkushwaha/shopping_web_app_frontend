@@ -5,7 +5,7 @@ import { lazy, Suspense } from "react";
 
 import PublicLayout from "../components/PublicLayout";
 import ScrollToTop from "../components/ScrollToTop";
-import PageLoader from "../components/Pageloader";
+import PageLoader from "../components/PageLoader";
 
 // Lazy Loaded Pages
 const Home = lazy(() => import("../pages/Home/Home"));
