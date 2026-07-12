@@ -45,9 +45,9 @@ const Footer = () => {
               <li>
                 <a href="/contact">Contact Us</a>
               </li>
-              <li>
+              {/* <li>
                 <a href="/track-order">Track Order</a>
-              </li>              
+              </li>               */}
               
               <li>
                 <a href="/faq">FAQs</a>

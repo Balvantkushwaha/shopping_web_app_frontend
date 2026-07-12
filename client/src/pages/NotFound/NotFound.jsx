@@ -1,15 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { Home, ShoppingBag, ArrowLeft } from 'lucide-react';
 import styles from './NotFound.module.css';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+
 
 const NotFound = () => {
   const navigate = useNavigate();
 
   return (
     <>
-    <Header />
     <div className={styles.notFoundPage}>
       <div className={styles.container}>
         <div className={styles.errorCode}>
@@ -55,7 +53,6 @@ const NotFound = () => {
         </div>
       </div>
     </div>
-    <Footer/>
     </>
   );
 };

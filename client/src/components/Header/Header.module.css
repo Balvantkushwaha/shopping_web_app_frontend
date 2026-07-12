@@ -173,6 +173,12 @@
     top: 1px;
     right: 1px;
   }
+  .icons>.cartBtn{
+     display: none;    
+    }
+   .icons>.accountBtn{
+      display: none;
+    }
 }
 
 @media (max-width: 480px) {
@@ -183,132 +189,35 @@
   .logo h1 {
     font-size: 1.1rem;
   }
+
 }
 
 
-/* .header {
-  position: sticky;
-  top: 0;
-  background: #000000;
-  border-bottom: 1px solid #333;
-  z-index: 1000;
-  padding: 1rem 0;
-}
 
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-}
 
-.logo a {
-  text-decoration: none;
-}
-
-.logo h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #ffffff;
-  margin: 0;
-}
-
-.logo h1 span {
-  color: #666666;
-}
-
-.logo p {
-  font-size: 0.7rem;
-  letter-spacing: 3px;
-  color: #666666;
-  margin: 0;
-  margin-top: 2px;
-}
-
-.nav {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
-
-.nav a {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.nav a:hover {
-  color: #999999;
-}
-
-.icons {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
-
-.iconBtn {
+.accountBtn{
   background: none;
   border: none;
   cursor: pointer;
-  color: #ffffff;
+  color: #4b5563;
   position: relative;
   transition: color 0.3s ease;
-  padding: 0;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.iconBtn:hover {
-  color: #999999;
+.cartBtn{
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4b5563;
+  position: relative;
+  transition: color 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.badge {
-  position: absolute;
-  top: -8px;
-  right: -12px;
-  background: #ffffff;
-  color: #000000;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 50%;
-  min-width: 18px;
-  text-align: center;
-}
-
-.menuBtn {
-  display: none;
-}
-
-@media (max-width: 1024px) {
-  .nav {
-    display: none;
-  }
-  
-  .menuBtn {
-    display: block;
-  }
-  
-  .container {
-    padding: 0 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .logo h1 {
-    font-size: 1.2rem;
-  }
-  
-  .logo p {
-    font-size: 0.6rem;
-  }
-  
-  .icons {
-    gap: 1rem;
-  }
-} */

@@ -46,7 +46,7 @@ const Cart = () => {
           <div className={styles.cartItems}>
             {items.map((item) => (
               <div key={item.id} className={styles.cartItem}>
-                <div className={styles.itemImage}>
+                <div className={styles.itemImage}onClick={()=>{navigate("/product/"+item.slug)}}>
                   <img src={item.image} alt={item.name} />
                 </div>
 

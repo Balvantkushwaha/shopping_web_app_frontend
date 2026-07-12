@@ -1,12 +1,12 @@
 // pages/Home/Home.jsx
 import { useState, useEffect } from 'react';
 import HeroSlider from '../../components/HeroSlider/HeroSlider';
-import CategorySection from '../../components/CategorySection/CategorySection';
-// import ProductSlider from '../../components/ProductSlider/ProductSlider';
-import { categories } from '../../data/categories';
+// import CategorySection from '../../components/CategorySection/CategorySection';
+// import { categories } from '../../data/categories';
 import useProducts from '../../hooks/useProducts';
 import styles from './Home.module.css';
 import ProductScroll from '../../components/ProductScroll/ProductScroll';
+import ProductSlider from '../../components/ProductSlider/ProductSlider';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -75,7 +75,7 @@ const Home = () => {
   return (
     <div className={styles.home}>
       <HeroSlider />
-      <CategorySection categories={categories} />
+      {/* <CategorySection categories={categories} /> */}
       
       <div className={styles.container}>        
         
@@ -88,16 +88,16 @@ const Home = () => {
         )}
         
         {newArrivals.length > 0 && (
-          <ProductScroll
+          <ProductSlider
             title="New Arrivals" 
             products={newArrivals} 
-            seeAllLink="/products?filter=new"
+            seeAllLink="/search?isNewArrival=true"
           />
         )}
       {/* <HeroSlider /> */}
         
         {tShirts.length > 0 && (
-          <ProductScroll
+          <ProductSlider
             title="T-Shirts" 
             products={tShirts} 
             seeAllLink="/search?category=T-Shirts"
@@ -105,7 +105,7 @@ const Home = () => {
         )}
         
         {shirts.length > 0 && (
-          <ProductScroll
+          <ProductSlider
             title="Shirts" 
             products={shirts} 
             seeAllLink="/search?category=Shirts"
@@ -113,7 +113,7 @@ const Home = () => {
         )}
         
         {jeans.length > 0 && (
-          <ProductScroll 
+          <ProductSlider 
             title="Jeans" 
             products={jeans} 
             seeAllLink="/search?category=Jeans"
@@ -121,7 +121,7 @@ const Home = () => {
         )}
 
         {jeans.length > 0 && (
-          <ProductScroll
+          <ProductSlider
             title="Lower" 
             products={jeans} 
             seeAllLink="/search?category=Lower"

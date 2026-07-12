@@ -1,11 +1,11 @@
-import styles from "./PageLoader.module.css";
+// import styles from "./PageLoader.module.css";
 
-const PageLoader = () => {
-  return (
-    <div className={styles.loaderContainer}>
-      <div className={styles.spinner}></div>
-    </div>
-  );
-};
+// const PageLoader = () => {
+//   return (
+//     <div className={styles.loaderContainer}>
+//       <div className={styles.spinner}></div>
+//     </div>
+//   );
+// };
 
-export default PageLoader;
+// export default PageLoader;

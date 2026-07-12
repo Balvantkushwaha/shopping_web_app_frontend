@@ -120,8 +120,13 @@
 }
 
 @media (max-width: 768px) {
+
   .container {
-    padding: 0 1rem;
+    /* padding: 0 1rem; */
+    display: none;
+  }
+  .footer{
+    padding: 2rem 0 1rem 0;
   }
   
   .bottom {
