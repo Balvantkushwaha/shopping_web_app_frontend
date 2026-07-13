@@ -15,12 +15,17 @@ export const authApi = {
   resendOTP: async (mobile) => {
     console.log("Calling API resendOTP with mobile:", mobile);
     const res = await api.post('/auth/resend-otp', { mobile });
+    console.log("Resend otp is:",res.data)
+    alert("Resend otp is:"+res.data.data)
     return res.data;
   },
 
   initRegister: async (mobile) => {
     console.log("Calling  API initRegister with mobile:", mobile);
     const res = await api.post('/auth/register/init', { mobile });
+    console.log("init register otp is :",res.data)
+    alert("Init Register otp is:"+res.data.data)
+
     return res.data;
   },
 
@@ -58,6 +63,9 @@ export const authApi = {
       mobile,
       loginMethod: 'otp'
     });
+     console.log("Login otp is:",res.data)
+    alert("Login otp is:"+res.data.data)
+
     return res.data;
   },
 
@@ -70,6 +78,9 @@ export const authApi = {
   forgetPassword: async (mobile) => {
     console.log("Calling API forgetPassword with mobile:", mobile);
     const res = await api.post('/auth/forget-password', { mobile });
+    console.log("Forger Password for otp is:",res.data)
+    alert("Forget Password for otp is:"+res.data.data)
+
     return res.data;
   },
 
@@ -93,6 +104,15 @@ export const authApi = {
   logout: async () => {
     console.log("Calling API logout");
     const res = await api.post('/auth/logout');
+    return res.data;
+  },
+
+  addAddress:async(address,email)=>{
+    const res = await api.put('/auth/profile/address', {address,email});
+    return res.data;
+  },
+  updateAddress:async(addressId,address,email)=>{
+    const res = await api.put(`/auth/profile/address/${addressId}`, {address,email});
     return res.data;
   }
 };

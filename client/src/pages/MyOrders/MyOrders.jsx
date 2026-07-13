@@ -1,448 +1,367 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Phone, Lock, Package, Truck, CheckCircle, Clock, AlertCircle, Eye, ChevronDown, ChevronUp, Search } from 'lucide-react';
-import styles from './MyOrders.module.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { 
+  Package, 
+  Clock, 
+  CheckCircle, 
+  XCircle, 
+  Truck, 
+  ChevronRight,
+  ShoppingBag,
+  Calendar,
+  MapPin,
+  IndianRupee,
+  Eye,
+  Filter,
+  Search
+} from "lucide-react";
+import { useAppSelector } from "../../redux/hooks";
+import { selectIsAuthenticated } from "../../redux/slices/authSlice";
+import { orderApi } from "../../api/orderApi";
+import styles from "./MyOrders.module.css";
 
 const MyOrders = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1); // 1: Mobile, 2: OTP, 3: Orders
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [otp, setOtp] = useState('');
-  const [sentOtp, setSentOtp] = useState('');
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [expandedOrder, setExpandedOrder] = useState(null);
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Dummy orders data based on mobile number
-  const dummyOrders = {
-    '9876543210': [
-      {
-        id: 'ORD-2024-001',
-        date: '2024-01-15',
-        status: 'delivered',
-        total: 139.97,
-        items: [
-          { name: 'Premium Black Cotton Tee', quantity: 2, price: 29.99, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=100' },
-          { name: 'Slim Fit Denim Jeans', quantity: 1, price: 79.99, image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=100' }
-        ],
-        shippingAddress: '123 Fashion Street, Mumbai - 400001',
-        trackingHistory: [
-          { status: 'Order Placed', date: '2024-01-15 10:30 AM', completed: true },
-          { status: 'Order Confirmed', date: '2024-01-15 02:15 PM', completed: true },
-          { status: 'Processing', date: '2024-01-16 09:00 AM', completed: true },
-          { status: 'Shipped', date: '2024-01-17 06:30 PM', completed: true },
-          { status: 'Delivered', date: '2024-01-19 02:00 PM', completed: true }
-        ]
-      },
-      {
-        id: 'ORD-2024-002',
-        date: '2024-01-10',
-        status: 'shipped',
-        total: 89.99,
-        items: [
-          { name: 'Classic White Tee', quantity: 1, price: 24.99, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=100' },
-          { name: 'Denim Trucker Jacket', quantity: 1, price: 64.99, image: 'https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=100' }
-        ],
-        shippingAddress: '456 Park Avenue, Delhi - 110001',
-        trackingHistory: [
-          { status: 'Order Placed', date: '2024-01-10 11:20 AM', completed: true },
-          { status: 'Order Confirmed', date: '2024-01-10 03:45 PM', completed: true },
-          { status: 'Processing', date: '2024-01-11 10:00 AM', completed: true },
-          { status: 'Shipped', date: '2024-01-12 09:30 AM', completed: true },
-          { status: 'In Transit', date: '2024-01-13 08:00 AM', completed: false },
-          { status: 'Out for Delivery', date: 'Estimated 2024-01-15', completed: false }
-        ]
-      },
-      {
-        id: 'ORD-2024-003',
-        date: '2024-01-05',
-        status: 'processing',
-        total: 64.99,
-        items: [
-          { name: 'Oversized Hoodie', quantity: 1, price: 64.99, image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=100' }
-        ],
-        shippingAddress: '789 Lake View, Bangalore - 560001',
-        trackingHistory: [
-          { status: 'Order Placed', date: '2024-01-05 09:15 AM', completed: true },
-          { status: 'Order Confirmed', date: '2024-01-05 01:30 PM', completed: true },
-          { status: 'Processing', date: '2024-01-06 10:00 AM', completed: false },
-          { status: 'Shipped', date: 'Pending', completed: false }
-        ]
-      }
-    ],
-    '9999999999': [
-      {
-        id: 'ORD-2024-004',
-        date: '2024-01-18',
-        status: 'delivered',
-        total: 199.99,
-        items: [
-          { name: 'Premium Leather Jacket', quantity: 1, price: 199.99, image: 'https://images.unsplash.com/photo-1551028719-00167b16eac1?w=100' }
-        ],
-        shippingAddress: '101 Beach Road, Chennai - 600001',
-        trackingHistory: [
-          { status: 'Order Placed', date: '2024-01-18 10:00 AM', completed: true },
-          { status: 'Order Confirmed', date: '2024-01-18 12:30 PM', completed: true },
-          { status: 'Processing', date: '2024-01-19 09:00 AM', completed: true },
-          { status: 'Shipped', date: '2024-01-20 02:00 PM', completed: true },
-          { status: 'Delivered', date: '2024-01-22 11:30 AM', completed: true }
-        ]
-      },
-      {
-        id: 'ORD-2024-005',
-        date: '2024-01-12',
-        status: 'cancelled',
-        total: 59.99,
-        items: [
-          { name: 'Oxford Button Down Shirt', quantity: 1, price: 59.99, image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=100' }
-        ],
-        shippingAddress: '202 Garden Colony, Hyderabad - 500001',
-        trackingHistory: [
-          { status: 'Order Placed', date: '2024-01-12 08:30 AM', completed: true },
-          { status: 'Order Confirmed', date: '2024-01-12 11:00 AM', completed: true },
-          { status: 'Cancelled', date: '2024-01-12 02:00 PM', completed: true }
-        ]
-      }
-    ]
+  // Order status mapping
+  const orderStatusMap = {
+    pending: { label: "Pending", icon: Clock, color: "#f59e0b", bg: "#fef3c7" },
+    confirmed: { label: "Confirmed", icon: CheckCircle, color: "#3b82f6", bg: "#eff6ff" },
+    processing: { label: "Processing", icon: Package, color: "#8b5cf6", bg: "#f3e8ff" },
+    shipped: { label: "Shipped", icon: Truck, color: "#06b6d4", bg: "#cffafe" },
+    delivered: { label: "Delivered", icon: CheckCircle, color: "#22c55e", bg: "#dcfce7" },
+    cancelled: { label: "Cancelled", icon: XCircle, color: "#ef4444", bg: "#fef2f2" },
+    returned: { label: "Returned", icon: XCircle, color: "#8b5cf6", bg: "#f3e8ff" },
   };
 
-  const handleSendOtp = () => {
-    if (mobileNumber.length === 10) {
-      const dummyOtp = '123456';
-      setSentOtp(dummyOtp);
-      alert(`OTP sent to ${mobileNumber}: ${dummyOtp} (Demo)`);
-    } else {
-      alert('Please enter a valid 10-digit mobile number');
+  // Fetch orders on component mount
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
     }
-  };
+    fetchOrders();
+  }, [isAuthenticated]);
 
-  const handleVerifyOtp = () => {
-    if (otp === sentOtp) {
+  const fetchOrders = async () => {
+    try {
       setLoading(true);
-      // Simulate API call
-      setTimeout(() => {
-        const userOrders = dummyOrders[mobileNumber] || [];
-        setOrders(userOrders);
-        setStep(3);
-        setLoading(false);
-        if (userOrders.length === 0) {
-          alert('No orders found for this mobile number.');
-        }
-      }, 1000);
-    } else {
-      alert('Invalid OTP. Please try again.');
+      setError(null);
+      const response = await orderApi.getBuyerOrders();
+      console.log("Orders response:", response);
+      
+      if (response?.success && response?.data) {
+        setOrders(response.data);
+      } else if (response?.orders) {
+        setOrders(response.orders);
+      } else if (Array.isArray(response)) {
+        setOrders(response);
+      } else {
+        setOrders([]);
+      }
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      setError(err.message || "Failed to load orders");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getStatusIcon = (status) => {
-    switch(status) {
-      case 'delivered':
-        return <CheckCircle className={styles.statusDelivered} size={20} />;
-      case 'shipped':
-        return <Truck className={styles.statusShipped} size={20} />;
-      case 'processing':
-        return <Clock className={styles.statusProcessing} size={20} />;
-      case 'cancelled':
-        return <AlertCircle className={styles.statusCancelled} size={20} />;
-      default:
-        return <Package className={styles.statusDefault} size={20} />;
+  // Get status config
+  const getStatusConfig = (status) => {
+    const statusKey = status?.toLowerCase() || "pending";
+    return orderStatusMap[statusKey] || orderStatusMap.pending;
+  };
+
+  // Format date
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    } catch {
+      return "N/A";
     }
   };
 
-  const getStatusLabel = (status) => {
-    return status.charAt(0).toUpperCase() + status.slice(1);
-  };
-
-  const getStatusClass = (status) => {
-    return styles[status];
-  };
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-  };
-
-  const toggleOrderExpand = (orderId) => {
-    setExpandedOrder(expandedOrder === orderId ? null : orderId);
-  };
-
+  // Filter orders
   const getFilteredOrders = () => {
-    if (filterStatus === 'all') return orders;
-    return orders.filter(order => order.status === filterStatus);
+    let filtered = orders;
+
+    // Filter by status
+    if (selectedFilter !== "all") {
+      filtered = filtered.filter(
+        (order) => order.status?.toLowerCase() === selectedFilter
+      );
+    }
+
+    // Filter by search term (order ID or product name)
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase().trim();
+      filtered = filtered.filter(
+        (order) =>
+          order.orderId?.toLowerCase().includes(term) ||
+          order._id?.toLowerCase().includes(term) ||
+          order.items?.some((item) =>
+            item.product_name?.toLowerCase().includes(term)
+          )
+      );
+    }
+
+    return filtered;
   };
 
-  const getStatusCount = (status) => {
-    if (status === 'all') return orders.length;
-    return orders.filter(order => order.status === status).length;
+  const filteredOrders = getFilteredOrders();
+
+  // Get filter counts
+  const getFilterCount = (status) => {
+    if (status === "all") return orders.length;
+    return orders.filter((order) => order.status?.toLowerCase() === status).length;
   };
 
-  // Step 1: Mobile Number Input
-  if (step === 1) {
+  // Loading state
+  if (loading) {
     return (
-      <div className={styles.myOrdersPage}>
-        <div className={styles.hero}>
-          <div className={styles.heroContent}>
-            <Package size={48} />
-            <h1>My Orders</h1>
-            <p>Enter your mobile number to view all your orders</p>
-          </div>
-        </div>
-
-        <div className={styles.container}>
-          <div className={styles.verifyCard}>
-            <div className={styles.verifyIcon}>
-              <Phone size={32} />
-            </div>
-            <h2>Verify Your Mobile Number</h2>
-            <p>We'll send a one-time password to verify your identity</p>
-            
-            <div className={styles.verifyForm}>
-              <div className={styles.formGroup}>
-                <label>Mobile Number</label>
-                <div className={styles.inputWrapper}>
-                  <Phone size={18} className={styles.inputIcon} />
-                  <input
-                    type="tel"
-                    placeholder="Enter 10-digit mobile number"
-                    value={mobileNumber}
-                    onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, ''))}
-                    maxLength="10"
-                    autoFocus
-                  />
-                </div>
-              </div>
-              <button 
-                className={styles.sendOtpBtn}
-                onClick={handleSendOtp}
-                disabled={mobileNumber.length !== 10}
-              >
-                Send OTP
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSpinner}></div>
+        <p>Loading your orders...</p>
       </div>
     );
   }
 
-  // Step 2: OTP Verification
-  if (step === 2) {
+  // No orders state
+  if (!loading && orders.length === 0) {
     return (
-      <div className={styles.myOrdersPage}>
-        <div className={styles.hero}>
-          <div className={styles.heroContent}>
-            <Lock size={48} />
-            <h1>Verify OTP</h1>
-            <p>Enter the OTP sent to {mobileNumber}</p>
-          </div>
+      <div className={styles.emptyState}>
+        <div className={styles.emptyIcon}>
+          <ShoppingBag size={64} />
         </div>
-
-        <div className={styles.container}>
-          <div className={styles.verifyCard}>
-            <div className={styles.verifyIcon}>
-              <Lock size={32} />
-            </div>
-            <h2>Enter OTP</h2>
-            <p>We've sent a 6-digit code to your mobile number</p>
-            
-            <div className={styles.verifyForm}>
-              <div className={styles.formGroup}>
-                <label>OTP Code</label>
-                <div className={styles.inputWrapper}>
-                  <Lock size={18} className={styles.inputIcon} />
-                  <input
-                    type="text"
-                    placeholder="Enter 6-digit OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                    maxLength="6"
-                    autoFocus
-                  />
-                </div>
-              </div>
-              <div className={styles.otpActions}>
-                <button 
-                  className={styles.resendBtn}
-                  onClick={handleSendOtp}
-                >
-                  Resend OTP
-                </button>
-                <button 
-                  className={styles.backBtn}
-                  onClick={() => setStep(1)}
-                >
-                  Change Number
-                </button>
-              </div>
-              <button 
-                className={styles.verifyOtpBtn}
-                onClick={handleVerifyOtp}
-                disabled={otp.length !== 6 || loading}
-              >
-                {loading ? 'Verifying...' : 'Verify & View Orders'}
-              </button>
-            </div>
-          </div>
-        </div>
+        <h2>No Orders Yet</h2>
+        <p>You haven't placed any orders yet. Start shopping now!</p>
+        <button onClick={() => navigate("/")} className={styles.shopBtn}>
+          Start Shopping
+        </button>
       </div>
     );
   }
 
-  // Step 3: Orders List
   return (
     <div className={styles.myOrdersPage}>
-      <div className={styles.hero}>
-        <div className={styles.heroContent}>
-          <Package size={48} />
-          <h1>My Orders</h1>
-          <p>{orders.length} orders found for {mobileNumber}</p>
-        </div>
-      </div>
-
       <div className={styles.container}>
-        {/* Status Filter */}
+        {/* Header */}
+        <div className={styles.header}>
+          <div className={styles.headerLeft}>
+            <Package size={24} className={styles.headerIcon} />
+            <h1 className={styles.title}>My Orders</h1>
+            <span className={styles.orderCount}>{orders.length} orders</span>
+          </div>
+        </div>
+
+        {/* Filters and Search */}
         <div className={styles.filterSection}>
           <div className={styles.filterTabs}>
-            <button 
-              className={`${styles.filterTab} ${filterStatus === 'all' ? styles.active : ''}`}
-              onClick={() => setFilterStatus('all')}
+            <button
+              className={`${styles.filterTab} ${
+                selectedFilter === "all" ? styles.active : ""
+              }`}
+              onClick={() => setSelectedFilter("all")}
             >
-              All ({getStatusCount('all')})
+              All ({getFilterCount("all")})
             </button>
-            <button 
-              className={`${styles.filterTab} ${filterStatus === 'processing' ? styles.active : ''}`}
-              onClick={() => setFilterStatus('processing')}
+            <button
+              className={`${styles.filterTab} ${
+                selectedFilter === "pending" ? styles.active : ""
+              }`}
+              onClick={() => setSelectedFilter("pending")}
             >
-              Processing ({getStatusCount('processing')})
+              <Clock size={14} />
+              Pending ({getFilterCount("pending")})
             </button>
-            <button 
-              className={`${styles.filterTab} ${filterStatus === 'shipped' ? styles.active : ''}`}
-              onClick={() => setFilterStatus('shipped')}
+            <button
+              className={`${styles.filterTab} ${
+                selectedFilter === "confirmed" ? styles.active : ""
+              }`}
+              onClick={() => setSelectedFilter("confirmed")}
             >
-              Shipped ({getStatusCount('shipped')})
+              <CheckCircle size={14} />
+              Confirmed ({getFilterCount("confirmed")})
             </button>
-            <button 
-              className={`${styles.filterTab} ${filterStatus === 'delivered' ? styles.active : ''}`}
-              onClick={() => setFilterStatus('delivered')}
+            <button
+              className={`${styles.filterTab} ${
+                selectedFilter === "shipped" ? styles.active : ""
+              }`}
+              onClick={() => setSelectedFilter("shipped")}
             >
-              Delivered ({getStatusCount('delivered')})
+              <Truck size={14} />
+              Shipped ({getFilterCount("shipped")})
             </button>
-            <button 
-              className={`${styles.filterTab} ${filterStatus === 'cancelled' ? styles.active : ''}`}
-              onClick={() => setFilterStatus('cancelled')}
+            <button
+              className={`${styles.filterTab} ${
+                selectedFilter === "delivered" ? styles.active : ""
+              }`}
+              onClick={() => setSelectedFilter("delivered")}
             >
-              Cancelled ({getStatusCount('cancelled')})
+              <CheckCircle size={14} />
+              Delivered ({getFilterCount("delivered")})
             </button>
+            <button
+              className={`${styles.filterTab} ${
+                selectedFilter === "cancelled" ? styles.active : ""
+              }`}
+              onClick={() => setSelectedFilter("cancelled")}
+            >
+              <XCircle size={14} />
+              Cancelled ({getFilterCount("cancelled")})
+            </button>
+          </div>
+
+          <div className={styles.searchWrapper}>
+            <Search size={18} className={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Search by order ID or product..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={styles.searchInput}
+            />
           </div>
         </div>
 
-        {/* Orders List */}
-        {getFilteredOrders().length === 0 ? (
-          <div className={styles.noOrders}>
-            <Package size={48} />
-            <h3>No orders found</h3>
-            <p>You haven't placed any orders with this status yet.</p>
-            <button onClick={() => navigate('/products')} className={styles.shopBtn}>
-              Start Shopping
+        {/* Error State */}
+        {error && (
+          <div className={styles.errorContainer}>
+            <p>{error}</p>
+            <button onClick={fetchOrders} className={styles.retryBtn}>
+              Retry
             </button>
           </div>
-        ) : (
-          <div className={styles.ordersList}>
-            {getFilteredOrders().map((order) => (
-              <div key={order.id} className={styles.orderCard}>
-                <div className={styles.orderHeader} onClick={() => toggleOrderExpand(order.id)}>
-                  <div className={styles.orderInfo}>
-                    <div className={styles.orderId}>
-                      <span className={styles.idLabel}>Order #</span>
-                      <span className={styles.idValue}>{order.id}</span>
-                    </div>
-                    <div className={styles.orderMeta}>
-                      <span className={styles.orderDate}>{formatDate(order.date)}</span>
-                      <span className={styles.orderItemsCount}>
-                        {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+        )}
+
+        {/* Orders List */}
+        <div className={styles.ordersList}>
+          {filteredOrders.length === 0 ? (
+            <div className={styles.noResults}>
+              <p>No orders found matching your filters</p>
+              <button
+                onClick={() => {
+                  setSelectedFilter("all");
+                  setSearchTerm("");
+                }}
+                className={styles.clearFiltersBtn}
+              >
+                Clear Filters
+              </button>
+            </div>
+          ) : (
+            filteredOrders.map((order) => {
+              const statusConfig = getStatusConfig(order.status);
+              const StatusIcon = statusConfig.icon;
+              const totalItems = order.items?.reduce(
+                (sum, item) => sum + (item.quantity || 1),
+                0
+              ) || 0;
+
+              return (
+                <div key={order._id || order.orderId} className={styles.orderCard}>
+                  {/* Order Header */}
+                  <div className={styles.orderHeader}>
+                    <div className={styles.orderIdWrapper}>
+                      <span className={styles.orderId}>
+                        Order #{order.orderId || order._id?.slice(-8) || "N/A"}
+                      </span>
+                      <span className={styles.orderDate}>
+                        <Calendar size={14} />
+                        {formatDate(order.createdAt || order.created_at)}
                       </span>
                     </div>
+                    <div
+                      className={styles.orderStatus}
+                      style={{
+                        backgroundColor: statusConfig.bg,
+                        color: statusConfig.color,
+                      }}
+                    >
+                      <StatusIcon size={14} />
+                      {statusConfig.label}
+                    </div>
                   </div>
-                  <div className={styles.orderRight}>
-                    <span className={`${styles.statusBadge} ${getStatusClass(order.status)}`}>
-                      {getStatusIcon(order.status)}
-                      {getStatusLabel(order.status)}
-                    </span>
-                    <span className={styles.orderTotal}>${order.total.toFixed(2)}</span>
-                    {expandedOrder === order.id ? (
-                      <ChevronUp size={20} className={styles.expandIcon} />
-                    ) : (
-                      <ChevronDown size={20} className={styles.expandIcon} />
+
+                  {/* Order Items */}
+                  <div className={styles.orderItems}>
+                    {order.items?.slice(0, 3).map((item, index) => (
+                      <div key={index} className={styles.orderItem}>
+                        <div className={styles.orderItemImage}>
+                          <img
+                            src={item.cover_image || item.image || "/placeholder.png"}
+                            alt={item.product_name}
+                          />
+                        </div>
+                        <div className={styles.orderItemDetails}>
+                          <p className={styles.orderItemName}>
+                            {item.product_name}
+                          </p>
+                          <p className={styles.orderItemMeta}>
+                            Qty: {item.quantity || 1} × ₹
+                            {Number(item.selling_price || item.price).toFixed(2)}
+                          </p>
+                        </div>
+                        <div className={styles.orderItemPrice}>
+                          ₹
+                          {(
+                            (item.selling_price || item.price) *
+                            (item.quantity || 1)
+                          ).toFixed(2)}
+                        </div>
+                      </div>
+                    ))}
+                    {order.items?.length > 3 && (
+                      <div className={styles.moreItems}>
+                        +{order.items.length - 3} more items
+                      </div>
                     )}
                   </div>
-                </div>
 
-                {expandedOrder === order.id && (
-                  <div className={styles.orderDetails}>
-                    {/* Order Items */}
-                    <div className={styles.orderItemsSection}>
-                      <h4>Order Items</h4>
-                      <div className={styles.itemsGrid}>
-                        {order.items.map((item, idx) => (
-                          <div key={idx} className={styles.orderItem}>
-                            <img src={item.image} alt={item.name} />
-                            <div className={styles.itemInfo}>
-                              <p className={styles.itemName}>{item.name}</p>
-                              <p className={styles.itemQty}>Qty: {item.quantity}</p>
-                              <p className={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                  {/* Order Footer */}
+                  <div className={styles.orderFooter}>
+                    <div className={styles.orderTotal}>
+                      <span className={styles.totalLabel}>Total Amount</span>
+                      <span className={styles.totalAmount}>
+                        ₹{Number(order.final_payable_amount || order.total).toFixed(2)}
+                      </span>
                     </div>
-
-                    {/* Tracking History */}
-                    <div className={styles.trackingSection}>
-                      <h4>Tracking History</h4>
-                      <div className={styles.timeline}>
-                        {order.trackingHistory.map((event, idx) => (
-                          <div key={idx} className={styles.timelineItem}>
-                            <div className={styles.timelineDot}>
-                              {event.completed ? (
-                                <CheckCircle size={14} className={styles.timelineCompleted} />
-                              ) : (
-                                <Clock size={14} className={styles.timelinePending} />
-                              )}
-                            </div>
-                            <div className={styles.timelineContent}>
-                              <div className={styles.timelineHeader}>
-                                <span className={styles.timelineStatus}>{event.status}</span>
-                                <span className={styles.timelineDate}>{event.date}</span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Shipping Address */}
-                    <div className={styles.addressSection}>
-                      <h4>Shipping Address</h4>
-                      <p>{order.shippingAddress}</p>
-                    </div>
-
-                    {/* Action Buttons */}
                     <div className={styles.orderActions}>
-                      {order.status === 'delivered' && (
-                        <button className={styles.reorderBtn}>Reorder</button>
-                      )}
-                      {order.status !== 'cancelled' && order.status !== 'delivered' && (
-                        <button className={styles.cancelOrderBtn}>Cancel Order</button>
-                      )}
-                      <button className={styles.supportBtn}>Need Help?</button>
+                      <button
+                        className={styles.viewDetailsBtn}
+                        onClick={() => navigate(`/order/${order._id || order.orderId}`)}
+                      >
+                        <Eye size={16} />
+                        View Details
+                      </button>
+                      <button
+                        className={styles.trackBtn}
+                        onClick={() => navigate(`/track-order/${order._id || order.orderId}`)}
+                      >
+                        <Truck size={16} />
+                        Track
+                      </button>
                     </div>
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
     </div>
   );

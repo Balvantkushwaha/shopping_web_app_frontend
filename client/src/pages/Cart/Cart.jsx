@@ -28,7 +28,7 @@ const Cart = () => {
         <h2>Your cart is empty</h2>
         <p>Looks like you haven't added any items to your cart yet.</p>
         <button
-          onClick={() => navigate("/products")}
+          onClick={() => navigate("/")}
           className={styles.shopBtn}
         >
           Continue Shopping
