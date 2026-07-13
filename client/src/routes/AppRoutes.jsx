@@ -9,7 +9,6 @@ import PublicLayout from "../components/PublicLayout";
 import ScrollToTop from "../components/ScrollToTop";
 import ProtectedRoute from "../components/ProtectedRoute";
 import CategoryPage from "../pages/CategoryPage/CategoryPage";
-import PageLoader from "../components/PageLoader";
 
 // Lazy Loaded Pages
 const Home = lazy(() => import("../pages/Home/Home"));
@@ -32,6 +31,7 @@ const Unauthorized = lazy(() => import("../pages/Unauthorized/Unauthorized"));
 // Login Modal - For auth
 import { useState } from "react";
 import { LoginModal } from "../LoginModal";
+import Spinner from "../components/Spinner/Spinner";
 
 const AppRoutes = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -40,7 +40,7 @@ const AppRoutes = () => {
 
   // Show loader while auth is initializing
   if (!initialized) {
-    return <PageLoader/>;
+    return <Spinner/>;
   }
 
   return (
@@ -48,7 +48,7 @@ const AppRoutes = () => {
       <Router>
         <ScrollToTop />
 
-        <Suspense fallback={<PageLoader />}>
+        <Suspense fallback={<Spinner/>}>
           <Routes>
             {/* ===== PUBLIC ROUTES (No authentication needed) ===== */}
             <Route 
