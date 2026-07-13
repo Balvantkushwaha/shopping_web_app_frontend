@@ -6,6 +6,6 @@ const PageLoader = () => {
       <div className={styles.spinner}></div>
     </div>
   );
-};
+};    
 
 export default PageLoader;
