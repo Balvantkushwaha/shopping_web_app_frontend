@@ -124,7 +124,8 @@
 
 @media (max-width: 768px) {
   .container {
-    padding: 0 1rem;
+    padding: 1rem;
+    margin-bottom: 80px;
   }
   
   .bottom {
