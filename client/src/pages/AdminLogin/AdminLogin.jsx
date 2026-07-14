@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useAppDispatch } from '../../redux/hooks';
-// import { adminLogin } from '../../redux/slices/authSlice';
+import { useAppDispatch } from '../../redux/hooks';
+import { adminLogin } from '../../redux/slices/authSlice';
 import { Shield, Phone, Lock, CheckCircle, Users, BarChart3, Settings } from 'lucide-react';
 import styles from './AdminLogin.module.css';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const [mobileNumber, setMobileNumber] = useState('');
   const [otp, setOtp] = useState('');
   const [sentOtp, setSentOtp] = useState('');
@@ -24,7 +24,7 @@ const AdminLogin = () => {
 
   const handleVerifyOtp = () => {
     if (otp === sentOtp) {
-      // dispatch(adminLogin());
+      dispatch(adminLogin());
       navigate('/dashboard');
     } else {
       alert('Invalid OTP');

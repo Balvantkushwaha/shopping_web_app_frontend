@@ -88,16 +88,16 @@ const Home = () => {
         )}
         
         {newArrivals.length > 0 && (
-          <ProductSlider
+          <ProductScroll
             title="New Arrivals" 
             products={newArrivals} 
             seeAllLink="/search?isNewArrival=true"
           />
         )}
-      {/* <HeroSlider /> */}
+      <HeroSlider />
         
         {tShirts.length > 0 && (
-          <ProductSlider
+          <ProductScroll
             title="T-Shirts" 
             products={tShirts} 
             seeAllLink="/search?category=T-Shirts"
@@ -105,7 +105,7 @@ const Home = () => {
         )}
         
         {shirts.length > 0 && (
-          <ProductSlider
+          <ProductScroll
             title="Shirts" 
             products={shirts} 
             seeAllLink="/search?category=Shirts"
@@ -113,7 +113,7 @@ const Home = () => {
         )}
         
         {jeans.length > 0 && (
-          <ProductSlider 
+          <ProductScroll 
             title="Jeans" 
             products={jeans} 
             seeAllLink="/search?category=Jeans"
