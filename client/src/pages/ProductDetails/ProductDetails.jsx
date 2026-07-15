@@ -33,17 +33,14 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  const { getProductBySlug, getRelatedProducts, getProductById } = useProducts();
+  const { getProductBySlug, getRelatedProducts, getProductById } =
+    useProducts();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  useEffect(() => {
-    if (slug) fetchProduct();
-  }, [slug]);
 
   const fetchProduct = async () => {
     setLoading(true);
@@ -69,11 +66,19 @@ const ProductDetails = () => {
     }
   };
 
+  useEffect(() => {
+    if (slug){
+      fetchProduct();
+    } 
+  }, [slug]);
+
   const getProductImages = useCallback(() => {
     const images = [];
     if (product?.coverImage) images.push(product.coverImage);
     if (product?.images?.length) images.push(...product.images);
-    return images.length ? images : ["https://via.placeholder.com/600x600?text=No+Image"];
+    return images.length
+      ? images
+      : ["https://via.placeholder.com/600x600?text=No+Image"];
   }, [product]);
 
   const getSizes = useCallback(() => {
@@ -141,7 +146,8 @@ const ProductDetails = () => {
     const images = getProductImages();
     setMainImageIndex((prev) => {
       if (direction === "next") return (prev + 1) % images.length;
-      if (direction === "prev") return prev === 0 ? images.length - 1 : prev - 1;
+      if (direction === "prev")
+        return prev === 0 ? images.length - 1 : prev - 1;
       return prev;
     });
   };
@@ -166,7 +172,9 @@ const ProductDetails = () => {
   const sizes = getSizes();
   const stock = getStock();
   const isInStock = stock > 0;
-  const discountAmount = product?.price ? (product.price * product.discount) / 100 : 0;
+  const discountAmount = product?.price
+    ? (product.price * product.discount) / 100
+    : 0;
   const currentImage = productImages[mainImageIndex] || productImages[0];
 
   if (loading) {
@@ -183,7 +191,10 @@ const ProductDetails = () => {
       <div className={styles.notFound}>
         <h2>Product Not Found</h2>
         <p>{error || "The product you are looking for does not exist."}</p>
-        <button className={styles.backBtn} onClick={() => navigate("/products")}>
+        <button
+          className={styles.backBtn}
+          onClick={() => navigate("/products")}
+        >
           Browse Products
         </button>
       </div>
@@ -212,7 +223,11 @@ const ProductDetails = () => {
                     className={`${styles.thumbnailItem} ${idx === mainImageIndex ? styles.active : ""}`}
                     onClick={() => handleThumbnailClick(idx)}
                   >
-                    <img src={img} alt={`${product.name} ${idx + 1}`} loading="lazy" />
+                    <img
+                      src={img}
+                      alt={`${product.name} ${idx + 1}`}
+                      loading="lazy"
+                    />
                   </div>
                 ))}
               </div>
@@ -232,7 +247,7 @@ const ProductDetails = () => {
                       src={currentImage}
                       alt={product.name}
                       className={styles.mainImage}
-                      loading="lazy"                    
+                      loading="lazy"
                     />
                   </Zoom>
 
@@ -263,7 +278,9 @@ const ProductDetails = () => {
                   )}
 
                   {product.discount > 0 && (
-                    <span className={styles.discountBadge}>-{product.discount}%</span>
+                    <span className={styles.discountBadge}>
+                      -{product.discount}%
+                    </span>
                   )}
                   {!isInStock && (
                     <div className={styles.outOfStockOverlay}>
@@ -279,7 +296,9 @@ const ProductDetails = () => {
           <div className={styles.productInfo}>
             <div className={styles.meta}>
               <span className={styles.category}>{product.category}</span>
-              {product.brand && <span className={styles.brand}>• {product.brand}</span>}
+              {product.brand && (
+                <span className={styles.brand}>• {product.brand}</span>
+              )}
             </div>
 
             <div className={styles.headerRow}>
@@ -290,12 +309,20 @@ const ProductDetails = () => {
             </div>
 
             <div className={styles.priceSection}>
-              <span className={styles.currentPrice}>₹{product.finalPrice.toFixed(2)}</span>
+              <span className={styles.currentPrice}>
+                ₹{product.finalPrice.toFixed(2)}
+              </span>
               {product.discount > 0 && (
                 <>
-                  <span className={styles.originalPrice}>₹{product.price.toFixed(2)}</span>
+                  <span className={styles.originalPrice}>
+                    ₹{product.price.toFixed(2)}
+                  </span>
                   <p className={styles.savings}>
-                    You saved <span className={styles.discountAmount}>₹{discountAmount.toFixed(2)}</span> on this order.
+                    You saved{" "}
+                    <span className={styles.discountAmount}>
+                      ₹{discountAmount.toFixed(2)}
+                    </span>{" "}
+                    on this order.
                   </p>
                 </>
               )}
@@ -316,10 +343,10 @@ const ProductDetails = () => {
 
             {sizes.length > 0 && (
               <div className={styles.section}>
-                <div className={styles.sectionHeader}>
+                {/* <div className={styles.sectionHeader}>
                   <h3>Select Size</h3>
                   <button className={styles.sizeGuide}>Size Guide</button>
-                </div>
+                </div> */}
                 <div className={styles.sizes}>
                   {sizes.map((size, index) => (
                     <button
@@ -355,11 +382,19 @@ const ProductDetails = () => {
             </div>
 
             <div className={styles.actions}>
-              <button className={styles.cartBtn} onClick={handleAddToCart} disabled={!isInStock}>
+              <button
+                className={styles.cartBtn}
+                onClick={handleAddToCart}
+                disabled={!isInStock}
+              >
                 <ShoppingCart size={20} />
                 Add to Cart
               </button>
-              <button className={styles.buyBtn} onClick={handleBuyNow} disabled={!isInStock}>
+              <button
+                className={styles.buyBtn}
+                onClick={handleBuyNow}
+                disabled={!isInStock}
+              >
                 Buy Now
               </button>
             </div>
@@ -389,16 +424,23 @@ const ProductDetails = () => {
                 <div
                   key={related._id}
                   className={styles.relatedCard}
-                  onClick={() => navigate(`/product/${related.slug || related._id}`)}
+                  onClick={() =>
+                    navigate(`/product/${related.slug || related._id}`)
+                  }
                 >
                   <div className={styles.relatedImage}>
                     <img
-                      src={related.coverImage || "https://via.placeholder.com/300x300?text=No+Image"}
+                      src={
+                        related.coverImage ||
+                        "https://via.placeholder.com/300x300?text=No+Image"
+                      }
                       alt={related.name}
-                      loading="lazy"                     
+                      loading="lazy"
                     />
                     {related.discount > 0 && (
-                      <span className={styles.relatedDiscount}>-{related.discount}%</span>
+                      <span className={styles.relatedDiscount}>
+                        -{related.discount}%
+                      </span>
                     )}
                   </div>
                   <h3 className={styles.relatedName}>{related.name}</h3>
@@ -408,7 +450,9 @@ const ProductDetails = () => {
                       ₹{(related.finalPrice || related.price).toFixed(2)}
                     </span>
                     {related.discount > 0 && (
-                      <span className={styles.relatedOriginal}>₹{related.price.toFixed(2)}</span>
+                      <span className={styles.relatedOriginal}>
+                        ₹{related.price.toFixed(2)}
+                      </span>
                     )}
                   </div>
                 </div>
