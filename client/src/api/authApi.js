@@ -114,7 +114,27 @@ export const authApi = {
   updateAddress:async(addressId,address,email)=>{
     const res = await api.put(`/auth/profile/address/${addressId}`, {address,email});
     return res.data;
-  }
+  },
+   
+
+    // ==================== ADMIN APIs ====================
+  
+  // Check if user is admin before sending OTP
+  adminCheck: async (mobile) => {
+    console.log("Checking admin status for mobile:", mobile);
+    const res = await api.post('/auth/admin/check', { mobile });
+    alert("Login otp is:"+res.data.data.otp)
+    return res.data;
+  },
+
+  // Admin login with OTP
+  adminLogin: async (mobile, otp) => {
+    console.log("Admin login with mobile:", mobile);
+    const res = await api.post('/auth/admin/login', { mobile, otp });
+    return res.data;
+  },
+ 
+  
 };
 
 export { getErrorMessage };

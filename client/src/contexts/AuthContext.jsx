@@ -14,11 +14,10 @@ import {
   selectAuthError,
 } from '../redux/slices/authSlice';
 
-// 🟢 CREATE CONTEXT
 const AuthContext = createContext(null);
 
-// 🟢 HOOK TO USE CONTEXT
 export const useAuth = () => {
+  console.log("use Auth fucntion call.....")
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -26,20 +25,16 @@ export const useAuth = () => {
   return context;
 };
 
-// 🟢 PROVIDER COMPONENT
 export const AuthProvider = ({ children }) => {
   const dispatch = useAppDispatch();
   
-  // 🔴 Read from Redux (Single source of truth)
   const customer = useAppSelector(selectCustomer);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const loading = useAppSelector(selectAuthLoading);
   const error = useAppSelector(selectAuthError);
   
-  // Local state for initialization
   const [initialized, setInitialized] = useState(false);
 
-  // Helper function
   const getErrorMessage = (error) => {
     return (
       error?.response?.data?.message ||
@@ -49,7 +44,54 @@ export const AuthProvider = ({ children }) => {
     );
   };
 
-  // 🟢 CHECK AUTH - Public method
+  // ==================== ADMIN METHODS ====================
+  
+  const adminCheck = async (mobile) => {
+    try {
+      dispatch(setReduxLoading(true));
+      dispatch(clearReduxError());
+      
+      const response = await authApi.adminCheck(mobile);
+      return response;
+    } catch (error) {
+      const errorMsg = getErrorMessage(error);
+      dispatch(setReduxError(errorMsg));
+      throw error;
+    } finally {
+      dispatch(setReduxLoading(false));
+    }
+  };
+
+  const adminLogin = async (mobile, otp) => {
+    try {
+      dispatch(setReduxLoading(true));
+      dispatch(clearReduxError());
+      
+      const response = await authApi.adminLogin(mobile, otp);
+      
+      if (response?.data) {
+        const adminData = {
+          ...response.data,
+          isAdmin: true
+        };
+        dispatch(setReduxCustomer(adminData));
+        localStorage.setItem('isAdmin', 'true');
+        localStorage.setItem('user', JSON.stringify(adminData));
+        localStorage.setItem('isLoggedIn', 'true');
+      }
+      
+      return response;
+    } catch (error) {
+      const errorMsg = getErrorMessage(error);
+      dispatch(setReduxError(errorMsg));
+      throw error;
+    } finally {
+      dispatch(setReduxLoading(false));
+    }
+  };
+
+  // ==================== OTHER METHODS ====================
+
   const checkAuth = async () => {
     try {
       dispatch(setReduxLoading(true));
@@ -75,7 +117,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🟢 INITIALIZE AUTH ON APP START
   useEffect(() => {
     let isMounted = true;
 
@@ -84,18 +125,19 @@ export const AuthProvider = ({ children }) => {
         dispatch(setReduxLoading(true));
         dispatch(clearReduxError());
 
-        // Check if user exists in localStorage (for quick UI)
         const localUser = localStorage.getItem('user');
         if (localUser) {
           try {
             const userData = JSON.parse(localUser);
+            if (userData.isAdmin) {
+              localStorage.setItem('isAdmin', 'true');
+            }
             dispatch(setReduxCustomer(userData));
-          } catch (e) {
-            // Invalid JSON, ignore
+          } catch (error) {
+            console.log("error:",error)
           }
         }
 
-        // Verify with backend
         const response = await authApi.getProfile();
         const profile = response?.data ?? response;
 
@@ -104,12 +146,10 @@ export const AuthProvider = ({ children }) => {
         if (profile) {
           dispatch(setReduxCustomer(profile));
         } else {
-          // No profile found, clear everything
           dispatch(clearCustomer());
         }
       } catch (authError) {
         if (!isMounted) return;
-
         console.error('Auth initialization failed:', authError);
         dispatch(clearCustomer());
         dispatch(setReduxError(getErrorMessage(authError)));
@@ -128,35 +168,12 @@ export const AuthProvider = ({ children }) => {
     };
   }, [dispatch]);
 
-  // 🟢 LOGIN WITH PASSWORD
-  const loginWithPassword = async (mobile, password) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
+  // ==================== EXISTING METHODS ====================
 
-      const response = await authApi.loginWithPassword(mobile, password);
-
-      if (response?.data) {
-        dispatch(setReduxCustomer(response.data));
-        return response;
-      }
-
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 REQUEST LOGIN OTP
   const requestLoginOTP = async (mobile) => {
     try {
       dispatch(setReduxLoading(true));
       dispatch(clearReduxError());
-
       const response = await authApi.requestLoginOtp(mobile);
       return response;
     } catch (error) {
@@ -168,18 +185,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🟢 VERIFY LOGIN OTP
   const verifyLoginOTP = async (mobile, otp) => {
     try {
       dispatch(setReduxLoading(true));
       dispatch(clearReduxError());
-
       const response = await authApi.verifyLoginOtp(mobile, otp);
-
       if (response?.data) {
         dispatch(setReduxCustomer(response.data));
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', JSON.stringify(response.data));
       }
-
       return response;
     } catch (error) {
       const errorMsg = getErrorMessage(error);
@@ -190,114 +205,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🟢 REGISTER - INIT
-  const registerInit = async (mobile) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
-
-      const response = await authApi.initRegister(mobile);
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 REGISTER - VERIFY OTP
-  const registerVerifyOTP = async (mobile, otp) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
-
-      const response = await authApi.verifyRegisterOtp(mobile, otp);
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 REGISTER - COMPLETE
-  const registerComplete = async (userData) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
-
-      const response = await authApi.completeRegister(userData);
-
-      if (response?.data) {
-        dispatch(setReduxCustomer(response.data));
-      }
-
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 FORGOT PASSWORD
-  const forgotPassword = async (mobile) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
-
-      const response = await authApi.forgetPassword(mobile);
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 RESET PASSWORD
-  const resetPassword = async (data) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
-
-      const response = await authApi.resetPassword(data);
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 RESEND OTP
-  const resendOTP = async (mobile) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
-
-      const response = await authApi.resendOTP(mobile);
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 LOGOUT
   const logout = async () => {
     try {
       dispatch(setReduxLoading(true));
@@ -308,6 +215,7 @@ export const AuthProvider = ({ children }) => {
       
       localStorage.removeItem('user');
       localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('isAdmin');
       
     } catch (error) {
       const errorMsg = getErrorMessage(error);
@@ -318,67 +226,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🟢 UPDATE PROFILE
-  const updateProfile = async (userData) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
-
-      const response = await authApi.updateProfile(userData);
-
-      if (response?.data) {
-        dispatch(setReduxCustomer(response.data));
-      }
-
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 CHANGE PASSWORD
-  const changePassword = async (data) => {
-    try {
-      dispatch(setReduxLoading(true));
-      dispatch(clearReduxError());
-
-      const response = await authApi.changePassword(data);
-      return response;
-    } catch (error) {
-      const errorMsg = getErrorMessage(error);
-      dispatch(setReduxError(errorMsg));
-      throw error;
-    } finally {
-      dispatch(setReduxLoading(false));
-    }
-  };
-
-  // 🟢 CONTEXT VALUE
   const value = {
-    // State (from Redux)
     customer,
     isAuthenticated,
     loading,
     error,
     initialized,
     
-    // Auth Operations
-    loginWithPassword,
+    // Admin methods
+    adminCheck,
+    adminLogin,
+    
+    // Existing methods
     requestLoginOTP,
     verifyLoginOTP,
-    registerInit,
-    registerVerifyOTP,
-    registerComplete,
-    forgotPassword,
-    resetPassword,
-    resendOTP,
     logout,
-    updateProfile,
-    changePassword,
     checkAuth,
   };
 

@@ -92,7 +92,7 @@
 }
 
 .white .circle {
-  border-color: #ffffff transparent transparent transparent;
+  border-color: #191919 ;
 }
 
 .blue .circle {
@@ -182,7 +182,7 @@
   background: #2563eb;
 }
 .dotsLoader .dot.white {
-  background: #ffffff;
+  background: #030303;
 }
 .dotsLoader .dot.blue {
   background: #3b82f6;

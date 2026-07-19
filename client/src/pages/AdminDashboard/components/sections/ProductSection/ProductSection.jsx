@@ -4,6 +4,7 @@ import ProductForm from "./ProductForm/ProductForm";
 import ProductView from "./ProductView/ProductView";
 import api from "../../../../../api/axios";
 import { FaEdit, FaTrash, FaEye, FaPlus } from "react-icons/fa";
+import { UPLOADS_URL } from "../../../../../config";
 
 const ProductSection = () => {
   const [products, setProducts] = useState([]);
@@ -218,12 +219,11 @@ const ProductSection = () => {
                     <div className={styles.productInfo}>
                       {product.coverImage && (
                         <img 
-                          src={product.coverImage} 
+                          // src={product.coverImage} 
+                           src={`${UPLOADS_URL}${product.coverImage}`|| product.coverImage}                       
+
                           alt={product.name}
-                          className={styles.productImage}
-                          // onError={(e) => {
-                          //   e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
-                          // }}
+                          className={styles.productImage}                        
                         />
                       )}
                       <div>
@@ -292,12 +292,10 @@ const ProductSection = () => {
                 <div className={styles.productInfo}>
                   {product.coverImage && (
                     <img 
-                      src={product.coverImage} 
+                      // src={product.coverImage} 
+                      src={`${UPLOADS_URL}${product.coverImage}`|| product.coverImage}                       
                       alt={product.name}
-                      className={styles.productImage}
-                      // onError={(e) => {
-                      //   e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
-                      // }}
+                      className={styles.productImage}                    
                     />
                   )}
                   <div>

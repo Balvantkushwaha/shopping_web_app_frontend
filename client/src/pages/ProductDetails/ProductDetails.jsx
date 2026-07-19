@@ -18,6 +18,8 @@ import useProducts from "../../hooks/useProducts";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import styles from "./ProductDetails.module.css";
+import { UPLOADS_URL } from "../../config";
+import { getServiceAbility } from "../../services/shiprocketapi";
 
 const ProductDetails = () => {
   const { slug } = useParams();
@@ -32,6 +34,12 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  const [pincode, setPincode] = useState("");
+  const [serviceability, setServiceability] = useState(null);
+  const [checkingPincode, setCheckingPincode] = useState(false);
+  const [deliveryError, setDeliveryError] = useState("");
+
 
   const { getProductBySlug, getRelatedProducts, getProductById } =
     useProducts();
@@ -50,7 +58,7 @@ const ProductDetails = () => {
       if (!productData) productData = await getProductById(slug);
       if (productData) {
         setProduct(productData);
-        const related = await getRelatedProducts(productData._id, 4);
+        const related = await getRelatedProducts(productData._id, 10);
         setRelatedProducts(related || []);
         if (productData.sizes?.length > 0) {
           setSelectedSize(productData.sizes[0].size || productData.sizes[0]);
@@ -66,10 +74,12 @@ const ProductDetails = () => {
     }
   };
 
+  console.log("slug:",slug)
+
   useEffect(() => {
-    if (slug){
+    if (slug) {
       fetchProduct();
-    } 
+    }
   }, [slug]);
 
   const getProductImages = useCallback(() => {
@@ -123,6 +133,51 @@ const ProductDetails = () => {
       }, 2000);
     }
   };
+
+  const handleCheckPincode = async () => {
+    if (!pincode || pincode.length !== 6) {
+      alert("Please enter valid pincode");
+      return setDeliveryError("Please enter a valid 6 digit pincode");
+    }
+
+    try {
+      setCheckingPincode(true);
+
+      const res = await getServiceAbility(product, pincode, "Prepaid");
+      console.log("data:====================",res);
+      if(res.success){
+        setServiceability(res.data);  
+        setDeliveryError("")      
+      }else{
+        setDeliveryError("Delivery not available for this pincode")
+      }
+    } catch (error) {
+      console.error(error);
+      setDeliveryError("Delivery not available for this pincode..")
+      setServiceability(null);
+    } finally {
+      setCheckingPincode(false);
+    }
+  };
+
+  console.log("serviceabiltiy in product detials page:", serviceability);
+
+  // const handlePincodeChange = async (e) => {
+  //   const value = e.target.value.replace(/\D/g, "");
+
+  //   setPincode(value);
+
+  //   if (value.length === 6) {
+  //     try {
+  //       const data = await getServiceAbility(product, value, "Prepaid");
+
+  //       setServiceability(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setServiceability(null);
+  //     }
+  //   }
+  // };
 
   const handleBuyNow = () => {
     handleAddToCart();
@@ -224,7 +279,7 @@ const ProductDetails = () => {
                     onClick={() => handleThumbnailClick(idx)}
                   >
                     <img
-                      src={img}
+                      src={`${UPLOADS_URL}${img}`}
                       alt={`${product.name} ${idx + 1}`}
                       loading="lazy"
                     />
@@ -244,7 +299,7 @@ const ProductDetails = () => {
                     transitionDuration={300}
                   >
                     <img
-                      src={currentImage}
+                      src={`${UPLOADS_URL}${currentImage}`}
                       alt={product.name}
                       className={styles.mainImage}
                       loading="lazy"
@@ -408,10 +463,46 @@ const ProductDetails = () => {
                 <Shield size={18} />
                 <span>Secure Payment</span>
               </div>
-              <div className={styles.trustItem}>
+              {/* <div className={styles.trustItem}>
                 <RotateCcw size={18} />
                 <span>7-Day Returns</span>
+              </div> */}
+            </div>
+
+            <div className={styles.pincodeSection}>
+              <h3>Delivery Option</h3>
+
+              <div className={styles.pincodeInputWrapper}>
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={pincode}
+                  onChange={(e) =>
+                    setPincode(e.target.value.replace(/\D/g, ""))
+                  }
+                  placeholder="Enter Pincode"
+                  className={styles.pincodeInput}
+                />
+
+                <button
+                  onClick={handleCheckPincode}
+                  disabled={checkingPincode}
+                  className={styles.checkBtn}
+                >
+                  {checkingPincode ? "Checking..." : "Check"}
+                </button>
               </div>
+
+              {serviceability && pincode ? (
+                <p className={styles.available}>
+                  ✓ Delivery available in {serviceability.expectedDeliveryDays}{" "}
+                  days
+                </p>
+              ) : (
+                <div></div>
+              )}
+               {/* Error */}
+              {deliveryError && <p className={styles.unavailable}>{deliveryError}</p>}
             </div>
           </div>
         </div>
@@ -430,10 +521,9 @@ const ProductDetails = () => {
                 >
                   <div className={styles.relatedImage}>
                     <img
-                      src={
-                        related.coverImage ||
-                        "https://via.placeholder.com/300x300?text=No+Image"
-                      }
+                      // src={related.coverImage ||"https://via.placeholder.com/300x300?text=No+Image"
+                      // }
+                      src={`${UPLOADS_URL}${related.coverImage}`}                      
                       alt={related.name}
                       loading="lazy"
                     />

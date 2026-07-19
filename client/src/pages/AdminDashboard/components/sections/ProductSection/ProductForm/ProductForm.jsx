@@ -29,7 +29,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
 
   const [errors, setErrors] = useState({});
   const [tagInput, setTagInput] = useState("");
-  const [imageInput, setImageInput] = useState("");
+  // const [imageInput, setImageInput] = useState("");
 
   const categories = ["T-Shirts", "Shirts", "Pants", "Jeans"];
   const subCategories = [
@@ -118,23 +118,21 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
 
     if (!formData.coverImage.trim()) {
       newErrors.coverImage = "Cover image URL is required";
-    } else if (!isValidUrl(formData.coverImage)) {
-      newErrors.coverImage = "Please enter a valid image URL";
-    }
+    } 
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   // URL validation helper
-  const isValidUrl = (string) => {
-    try {
-      new URL(string);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
+  // const isValidUrl = (string) => {
+  //   try {
+  //     new URL(string);
+  //     return true;
+  //   } catch (_) {
+  //     return false;
+  //   }
+  // };
 
   // Handle input changes
   const handleChange = (e) => {
@@ -201,17 +199,17 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
   };
 
   // Add image
-  const addImage = () => {
-    if (imageInput.trim() && isValidUrl(imageInput.trim())) {
-      setFormData({
-        ...formData,
-        images: [...formData.images, imageInput.trim()],
-      });
-      setImageInput("");
-    } else {
-      alert("Please enter a valid image URL");
-    }
-  };
+  // const addImage = () => {
+  //   if (imageInput.trim() && isValidUrl(imageInput.trim())) {
+  //     setFormData({
+  //       ...formData,
+  //       images: [...formData.images, imageInput.trim()],
+  //     });
+  //     setImageInput("");
+  //   } else {
+  //     alert("Please enter a valid image URL");
+  //   }
+  // };
 
   // Remove image
   // const removeImage = (index) => {
@@ -222,6 +220,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    // alert("iiiiiiiiiiiiii")
     if (validateForm()) {
       // Prepare data for API
       const submitData = {
@@ -422,10 +421,10 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
             </div>
             {/* Pricing */}
             <div className={styles.section}>
-              <h3>Pricing</h3>
+              <h3>Pricing Details</h3>
 
               <div className={styles.formGroup}>
-                <label>Price *</label>
+                <label>MRP Price *</label>
                 <input
                   type="number"
                   name="price"
@@ -477,7 +476,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
             </div>
             {/* Images */}
             <div className={styles.section}>
-              <h3>Images</h3>
+              <h3>Product Images</h3>
 
               {/* Cover Image Upload */}
               <div className={styles.formGroup}>
@@ -487,7 +486,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                 {formData.coverImage && (
                   <div className={styles.imagePreview}>
                     <img
-                      src={`${UPLOADS_URL}/${formData.coverImage}`}
+                      src={`${UPLOADS_URL}${formData.coverImage}`}
                       alt="Cover"
                     />
                     <button
@@ -512,7 +511,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                   onUploadSuccess={handleCoverImageUploadSuccess}
                   folderName="cover-images" // Specify folder name for Cloudinary
                   accept=".jpg,.jpeg,.png,.webp"
-                  required={true}
+                  required={false}
                 />
 
                 {errors.coverImage && (

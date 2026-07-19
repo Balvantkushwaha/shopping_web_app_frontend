@@ -32,6 +32,7 @@ const Unauthorized = lazy(() => import("../pages/Unauthorized/Unauthorized"));
 import { useState } from "react";
 import { LoginModal } from "../LoginModal";
 import Spinner from "../components/Spinner/Spinner";
+import AdminRoute from "../components/AdminRoute";
 
 const AppRoutes = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -124,9 +125,9 @@ const AppRoutes = () => {
             <Route
               path="/dashboard"
               element={
-                // <ProtectedRoute requireRole="admin">
+                <AdminRoute>
                   <AdminDashboard />
-                // </ProtectedRoute>
+                </AdminRoute>
               }
             />
 

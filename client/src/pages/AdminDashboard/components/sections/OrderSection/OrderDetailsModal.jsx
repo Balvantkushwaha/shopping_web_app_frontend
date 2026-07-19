@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './OrderDetailsModal.module.css';
+import { UPLOADS_URL } from '../../../../../config';
 
 const OrderDetailsModal = ({ order, onClose, getStatusBadge, formatDate }) => {
   return (
@@ -107,7 +108,8 @@ const OrderDetailsModal = ({ order, onClose, getStatusBadge, formatDate }) => {
                       <td>
                         <div className={styles.productInfo}>
                           <img 
-                            src={item.cover_image} 
+                            // src={item.cover_image} 
+                            src={`${UPLOADS_URL}${item.cover_image}`}               
                             alt={item.product_name}
                             className={styles.productImage}
                           />

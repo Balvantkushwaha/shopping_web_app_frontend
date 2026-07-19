@@ -1,5 +1,6 @@
 // ProductView/ProductView.jsx
 import styles from "./ProductView.module.css";
+import { UPLOADS_URL } from "../../../../../../config";
 import { FaTimes } from "react-icons/fa";
 
 const ProductView = ({ product, onClose }) => {
@@ -29,12 +30,9 @@ const ProductView = ({ product, onClose }) => {
           <div className={styles.imageContainer}>
             {product.coverImage ? (
               <img 
-                src={product.coverImage} 
+                src={`${UPLOADS_URL}${product.coverImage}`|| product.coverImage} 
                 alt={product.name}
-                className={styles.productImage}
-                // onError={(e) => {
-                //   e.target.src = 'https://via.placeholder.com/300x300?text=No+Image';
-                // }}
+                className={styles.productImage}      
               />
             ) : (
               <div className={styles.noImage}>No Image Available</div>

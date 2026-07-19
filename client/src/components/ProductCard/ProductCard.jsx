@@ -1,6 +1,7 @@
 // components/ProductCard/ProductCard.jsx
 import { useNavigate } from "react-router-dom";
 import styles from "./ProductCard.module.css";
+import { UPLOADS_URL } from "../../config";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -22,12 +23,12 @@ const ProductCard = ({ product }) => {
 
   // Get first image from images array or coverImage
   const getProductImage = () => {
-      if (product.coverImage) {
-      return product.coverImage;
+    if (product.coverImage) {
+      return `${UPLOADS_URL}${product.coverImage}`;
     }
     if (product.images && product.images.length > 0) {
-      return product.images[0];
-    }  
+      return `${UPLOADS_URL}${product.images[0]}`;
+    }
     return "https://via.placeholder.com/300x300?text=No+Image";
   };
 
@@ -76,7 +77,7 @@ const ProductCard = ({ product }) => {
         <img
           src={getProductImage()}
           alt={product.name}
-          className={styles.image}         
+          className={styles.image}
         />
 
         <div className={styles.badgeContainer}>{getBadges()}</div>

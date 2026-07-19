@@ -7,6 +7,7 @@ import {
   clearCart,
 } from "../../redux/slices/cartSlice";
 import styles from "./Cart.module.css";
+import { UPLOADS_URL } from "../../config";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -47,7 +48,11 @@ const Cart = () => {
             {items.map((item) => (
               <div key={item.id} className={styles.cartItem}>
                 <div className={styles.itemImage}onClick={()=>{navigate("/product/"+item.slug)}}>
-                  <img src={item.image} alt={item.name} />
+                  <img 
+                  // src={item.image}
+                  src={`${UPLOADS_URL}${item.image}`}                  
+                  alt={item.name}
+                 />
                 </div>
 
                 <div className={styles.itemDetails}>

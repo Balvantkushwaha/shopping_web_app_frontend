@@ -19,6 +19,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { selectIsAuthenticated } from "../../redux/slices/authSlice";
 import { orderApi } from "../../api/orderApi";
 import styles from "./MyOrders.module.css";
+import { UPLOADS_URL } from "../../config";
 
 const MyOrders = () => {
   const navigate = useNavigate();
@@ -303,7 +304,8 @@ const MyOrders = () => {
                       <div key={index} className={styles.orderItem}>
                         <div className={styles.orderItemImage}>
                           <img
-                            src={item.cover_image || item.image || "/placeholder.png"}
+                          src={`${UPLOADS_URL}${item.cover_image}`}                  
+                            // src={item.cover_image || item.image || "/placeholder.png"}
                             alt={item.product_name}
                           />
                         </div>

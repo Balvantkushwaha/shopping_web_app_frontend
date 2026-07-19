@@ -138,9 +138,9 @@
     display: none;
   }
 
-  .menuBtn {
+  /* .menuBtn {
     display: flex;
-  }
+  } */
 }
 
 @media (max-width: 768px) {
@@ -173,12 +173,12 @@
     top: 1px;
     right: 1px;
   }
-  .icons>.cartBtn{
+  /* .icons>.cartBtn{
      display: none;    
     }
    .icons>.accountBtn{
       display: none;
-    }
+    } */
 }
 
 @media (max-width: 480px) {

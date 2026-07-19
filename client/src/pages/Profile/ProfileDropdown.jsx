@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { UserCircle, ShoppingBag, LogOut } from "lucide-react";
+import { UserCircle, ShoppingBag, LogOut, ShoppingCart } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { selectCustomer, clearCustomer } from "../../redux/slices/authSlice";
 import { useAuth } from "../../contexts/AuthContext";
@@ -56,6 +56,7 @@ const ProfileDropdown = ({ onClose }) => {
   const menuItems = [
     { icon: UserCircle, label: "My Profile", path: "/profile" },
     { icon: ShoppingBag, label: "My Orders", path: "/my-order" },
+    { icon: ShoppingCart, label: "My Carts", path:"/cart"}
   ];
 
   return (
@@ -65,7 +66,7 @@ const ProfileDropdown = ({ onClose }) => {
         <div className={styles.avatar}>{getUserInitials()}</div>
         <div className={styles.userInfo}>
           <p className={styles.userName}>{getUserName()}</p>
-          <p className={styles.userRole}>{customer?.role || "Customer"}</p>
+          {/* <p className={styles.userRole}>{customer?.role || "Customer"}</p> */}
         </div>
       </div>
 

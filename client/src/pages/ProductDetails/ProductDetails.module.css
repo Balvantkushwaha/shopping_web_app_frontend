@@ -817,3 +817,81 @@
     transform: none;
   }
 }
+.pincodeSection {
+  margin-top: 20px;
+}
+
+.pincodeSection h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.pincodeInputWrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pincodeInput {
+  flex: 1;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.pincodeInput:focus {
+  border-color: #000;
+}
+
+.checkBtn {
+  height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 6px;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.checkBtn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.checkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.available {
+  margin-top: 10px;
+  color: #16a34a;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.unavailable {
+  margin-top: 10px;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  /* .pincodeInputWrapper {
+    flex-direction: column;
+    align-items: stretch;
+  } */
+
+  /* .checkBtn {
+    width: 20%;
+  } */
+}
