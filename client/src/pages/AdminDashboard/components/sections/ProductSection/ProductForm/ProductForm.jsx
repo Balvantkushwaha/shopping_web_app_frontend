@@ -4,7 +4,8 @@ import { UPLOADS_URL } from "../../../../../../config";
 import DeletImageOnlyFromCloudnery from "../../../../../../ImageUpload/DeletImageOnlyFromCloudnery";
 import FileUploadProduct from "../../../../../../ImageUpload/FileUploadProduct";
 import styles from "./ProductForm.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { FaTimes, FaPlus, FaTag, FaBox, FaImage, FaCube, FaTshirt } from "react-icons/fa";
 
 const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
   const [formData, setFormData] = useState({
@@ -18,7 +19,13 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
     discount: "",
     coverImage: "",
     images: [],
-    sizes: [{ size: "M", stock: 0 }],
+    package_weight_in_kg: "",
+    package_dimension: {
+      length: "",
+      breadth: "",
+      height: "",
+    },
+    sizes: [{ size: "M", stock: "" }],
     material: "",
     fit: "",
     tags: [],
@@ -29,24 +36,16 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
 
   const [errors, setErrors] = useState({});
   const [tagInput, setTagInput] = useState("");
-  // const [imageInput, setImageInput] = useState("");
+  const [activeSection, setActiveSection] = useState(null);
+  const errorRefs = useRef({});
+  const sectionRefs = useRef({});
 
-  const categories = ["T-Shirts", "Shirts", "Pants", "Jeans"];
-  const subCategories = [
-    "Casual",
-    "Formal",
-    "Sports",
-    "Party",
-    "Western",
-    "Traditional",
-  ];
+  const categories = ["T-Shirts", "Shirts", "Pants", "Jeans", "Jackets", "Sweaters"];
+  const subCategories = ["Casual", "Formal", "Sports", "Party", "Western", "Traditional"];
   const genders = ["Men", "Women", "Boys", "Girls", "Unisex"];
   const fits = ["Regular", "Slim", "Oversized", "Relaxed", "Skinny"];
-  const sizeOptions = ["S", "M", "L", "XL", "XXL", "28", "30", "32", "34"];
+  const sizeOptions = ["S", "M", "L", "XL", "XXL", "28", "30", "32", "34", "36", "38"];
 
-  console.log("UPLOADS_URL =>",UPLOADS_URL)
-
-  // Populate form if editing
   useEffect(() => {
     if (product) {
       setFormData({
@@ -60,7 +59,13 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
         discount: product.discount || "",
         coverImage: product.coverImage || "",
         images: product.images || [],
-        sizes: product.sizes || [{ size: "M", stock: 0 }],
+        package_weight_in_kg: product.package_weight_in_kg || "",
+        package_dimension: {
+          length: product.package_dimension?.length || "",
+          breadth: product.package_dimension?.breadth || "",
+          height: product.package_dimension?.height || "",
+        },
+        sizes: product.sizes || [{ size: "M", stock: ""}],
         material: product.material || "",
         fit: product.fit || "",
         tags: product.tags || [],
@@ -71,83 +76,113 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
     }
   }, [product]);
 
-  // Validate form
   const validateForm = () => {
     const newErrors = {};
+    let firstErrorField = null;
 
     if (!formData.name.trim()) {
       newErrors.name = "Product name is required";
+      if (!firstErrorField) firstErrorField = "name";
     } else if (formData.name.length < 3) {
       newErrors.name = "Name must be at least 3 characters";
+      if (!firstErrorField) firstErrorField = "name";
     }
 
     if (!formData.description.trim()) {
       newErrors.description = "Description is required";
+      if (!firstErrorField) firstErrorField = "description";
     } else if (formData.description.length < 20) {
       newErrors.description = "Description must be at least 20 characters";
+      if (!firstErrorField) firstErrorField = "description";
     }
 
     if (!formData.category) {
       newErrors.category = "Category is required";
+      if (!firstErrorField) firstErrorField = "category";
     }
 
     if (!formData.brand.trim()) {
       newErrors.brand = "Brand is required";
+      if (!firstErrorField) firstErrorField = "brand";
     }
 
     if (!formData.gender) {
       newErrors.gender = "Gender is required";
+      if (!firstErrorField) firstErrorField = "gender";
     }
 
     if (!formData.price || parseFloat(formData.price) <= 0) {
       newErrors.price = "Valid price is required";
+      if (!firstErrorField) firstErrorField = "price";
     } else if (isNaN(formData.price)) {
       newErrors.price = "Price must be a number";
+      if (!firstErrorField) firstErrorField = "price";
     }
 
     if (formData.discount) {
       const discountNum = parseFloat(formData.discount);
       if (isNaN(discountNum) || discountNum < 0 || discountNum > 100) {
         newErrors.discount = "Discount must be between 0 and 100";
+        if (!firstErrorField) firstErrorField = "discount";
       }
     }
 
     if (formData.sizes.some((s) => s.stock < 0)) {
       newErrors.sizes = "Stock cannot be negative";
+      if (!firstErrorField) firstErrorField = "sizes";
     }
 
     if (!formData.coverImage.trim()) {
-      newErrors.coverImage = "Cover image URL is required";
-    } 
+      newErrors.coverImage = "Cover image is required";
+      if (!firstErrorField) firstErrorField = "coverImage";
+    }
+
+    if (!formData.package_weight_in_kg || parseFloat(formData.package_weight_in_kg) <= 0) {
+      newErrors.package_weight_in_kg = "Package weight is required";
+      if (!firstErrorField) firstErrorField = "package_weight_in_kg";
+    }
+
+    const dim = formData.package_dimension;
+    if (!dim.length || parseFloat(dim.length) <= 0) {
+      newErrors.package_dimension_length = "Length is required";
+      if (!firstErrorField) firstErrorField = "package_dimension_length";
+    }
+    if (!dim.breadth || parseFloat(dim.breadth) <= 0) {
+      newErrors.package_dimension_breadth = "Breadth is required";
+      if (!firstErrorField) firstErrorField = "package_dimension_breadth";
+    }
+    if (!dim.height || parseFloat(dim.height) <= 0) {
+      newErrors.package_dimension_height = "Height is required";
+      if (!firstErrorField) firstErrorField = "package_dimension_height";
+    }
 
     setErrors(newErrors);
+
+    // Scroll to first error
+    if (firstErrorField && errorRefs.current[firstErrorField]) {
+      setTimeout(() => {
+        errorRefs.current[firstErrorField]?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+        errorRefs.current[firstErrorField]?.focus();
+      }, 100);
+    }
+
     return Object.keys(newErrors).length === 0;
   };
 
-  // URL validation helper
-  // const isValidUrl = (string) => {
-  //   try {
-  //     new URL(string);
-  //     return true;
-  //   } catch (_) {
-  //     return false;
-  //   }
-  // };
-
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
-    // Clear error for this field
     if (errors[name]) {
       setErrors({ ...errors, [name]: "" });
     }
   };
 
-  // Handle size changes
   const handleSizeChange = (index, field, value) => {
     const newSizes = [...formData.sizes];
     if (field === "stock") {
@@ -158,17 +193,15 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
     setFormData({ ...formData, sizes: newSizes });
   };
 
-  // Add size
   const addSize = () => {
     if (formData.sizes.length < 6) {
       setFormData({
         ...formData,
-        sizes: [...formData.sizes, { size: "", stock: 0 }],
+        sizes: [...formData.sizes, { size: "", stock: "" }],
       });
     }
   };
 
-  // Remove size
   const removeSize = (index) => {
     if (formData.sizes.length > 1) {
       const newSizes = formData.sizes.filter((_, i) => i !== index);
@@ -176,12 +209,8 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
     }
   };
 
-  // Add tag
   const addTag = () => {
-    if (
-      tagInput.trim() &&
-      !formData.tags.includes(tagInput.trim().toLowerCase())
-    ) {
+    if (tagInput.trim() && !formData.tags.includes(tagInput.trim().toLowerCase())) {
       setFormData({
         ...formData,
         tags: [...formData.tags, tagInput.trim().toLowerCase()],
@@ -190,7 +219,6 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
     }
   };
 
-  // Remove tag
   const removeTag = (tag) => {
     setFormData({
       ...formData,
@@ -198,31 +226,47 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
     });
   };
 
-  // Add image
-  // const addImage = () => {
-  //   if (imageInput.trim() && isValidUrl(imageInput.trim())) {
-  //     setFormData({
-  //       ...formData,
-  //       images: [...formData.images, imageInput.trim()],
-  //     });
-  //     setImageInput("");
-  //   } else {
-  //     alert("Please enter a valid image URL");
-  //   }
-  // };
+  const handleImageUploadSuccess = (filename) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, filename],
+    }));
+  };
 
-  // Remove image
-  // const removeImage = (index) => {
-  //   const newImages = formData.images.filter((_, i) => i !== index);
-  //   setFormData({ ...formData, images: newImages });
-  // };
+  const handleCoverImageUploadSuccess = (filename) => {
+    setFormData((prev) => ({
+      ...prev,
+      coverImage: filename,
+    }));
+  };
 
-  // Handle form submission
+  const removeImage = async (index) => {
+    const imageToRemove = formData.images[index];
+    if (imageToRemove && imageToRemove.includes("/")) {
+      const publicId = imageToRemove.split("/").pop().split(".")[0];
+      await DeletImageOnlyFromCloudnery(publicId);
+    }
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
+  const removeCoverImage = async () => {
+    const coverImage = formData.coverImage;
+    if (coverImage && coverImage.includes("/")) {
+      const publicId = coverImage.split("/").pop().split(".")[0];
+      await DeletImageOnlyFromCloudnery(publicId);
+    }
+    setFormData((prev) => ({
+      ...prev,
+      coverImage: "",
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // alert("iiiiiiiiiiiiii")
     if (validateForm()) {
-      // Prepare data for API
       const submitData = {
         ...formData,
         price: parseFloat(formData.price),
@@ -241,116 +285,78 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
     }
   };
 
-  // Inside your component
-  // const [imageInput, setImageInput] = useState("");
-
-  // Function to handle image upload success
-  const handleImageUploadSuccess = (filename) => {
-    // Add the uploaded image to the images array
-    console.log("image:",filename)
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, filename],
-    }));
-  };
-
-  // Function to handle cover image upload success
-  const handleCoverImageUploadSuccess = (filename) => {
-    console.log("coverImage=>",filename)
-
-    setFormData((prev) => ({
-      ...prev,
-      coverImage: filename,
-    }));
-  };
-
-  // Function to remove image
-  const removeImage = async (index) => {
-    const imageToRemove = formData.images[index];
-
-    // If it's a Cloudinary image, delete it from Cloudinary
-    if (imageToRemove && imageToRemove.includes("/")) {
-      // Extract public ID from the URL
-      const publicId = imageToRemove.split("/").pop().split(".")[0];
-      await DeletImageOnlyFromCloudnery(publicId);
-    }
-
-    // Remove from state
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-  };
-
-  // Function to remove cover image
-  const removeCoverImage = async () => {
-    const coverImage = formData.coverImage;
-    console.log("coverImage=>",coverImage)
-
-    if (coverImage && coverImage.includes("/")) {
-      const publicId = coverImage.split("/").pop().split(".")[0];
-      await DeletImageOnlyFromCloudnery(publicId);
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      coverImage: "",
-    }));
-  };
-
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>{product ? "Edit Product" : "Add New Product"}</h2>
+          <div className={styles.headerLeft}>
+            <h2>{product ? "✏️ Edit Product" : "✨ Add New Product"}</h2>
+            <span className={styles.headerBadge}>
+              {product ? "Update" : "Create"}
+            </span>
+          </div>
           <button className={styles.closeBtn} onClick={onClose}>
-            ✕
+            <FaTimes />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGrid}>
-            {/* Basic Information */}
-            <div className={styles.section}>
-              <h3>Basic Information</h3>
+            {/* Section 1: Basic Information */}
+            <div className={`${styles.section} ${styles.sectionBasic}`} ref={(el) => sectionRefs.current.basic = el}>
+              <div className={styles.sectionHeader}>
+                <FaTshirt className={styles.sectionIcon} />
+                <h3>Basic Information</h3>
+                <span className={styles.requiredBadge}>Required</span>
+              </div>
 
               <div className={styles.formGroup}>
-                <label>Product Name *</label>
+                <label>
+                  Product Name <span className={styles.requiredStar}>*</span>
+                </label>
                 <input
+                  ref={(el) => errorRefs.current.name = el}
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="e.g., Classic Cotton T-Shirt"
+                  placeholder="Enter product name..."
                   className={errors.name ? styles.error : ""}
                 />
-                {errors.name && (
-                  <span className={styles.errorText}>{errors.name}</span>
-                )}
+                {errors.name && <span className={styles.errorText}>{errors.name}</span>}
               </div>
 
               <div className={styles.formGroup}>
-                <label>Description *</label>
+                <label>
+                  Description <span className={styles.requiredStar}>*</span>
+                </label>
                 <textarea
+                  ref={(el) => errorRefs.current.description = el}
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                   rows="4"
-                  placeholder="Product description..."
+                  placeholder="Describe your product in detail..."
                   className={errors.description ? styles.error : ""}
                 />
-                {errors.description && (
-                  <span className={styles.errorText}>{errors.description}</span>
-                )}
+                {errors.description && <span className={styles.errorText}>{errors.description}</span>}
               </div>
             </div>
-            {/* Category & Brand */}
-            <div className={styles.section}>
-              <h3>Category & Brand</h3>
+
+            {/* Section 2: Category & Brand */}
+            <div className={`${styles.section} ${styles.sectionCategory}`} ref={(el) => sectionRefs.current.category = el}>
+              <div className={styles.sectionHeader}>
+                <FaBox className={styles.sectionIcon} />
+                <h3>Category & Brand</h3>
+                <span className={styles.requiredBadge}>Required</span>
+              </div>
 
               <div className={styles.formGroup}>
-                <label>Category *</label>
+                <label>
+                  Category <span className={styles.requiredStar}>*</span>
+                </label>
                 <select
+                  ref={(el) => errorRefs.current.category = el}
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
@@ -358,14 +364,10 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                 >
                   <option value="">Select Category</option>
                   {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
+                    <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
-                {errors.category && (
-                  <span className={styles.errorText}>{errors.category}</span>
-                )}
+                {errors.category && <span className={styles.errorText}>{errors.category}</span>}
               </div>
 
               <div className={styles.formGroup}>
@@ -377,31 +379,33 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                 >
                   <option value="">Select Sub Category</option>
                   {subCategories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
+                    <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
               </div>
 
               <div className={styles.formGroup}>
-                <label>Brand *</label>
+                <label>
+                  Brand <span className={styles.requiredStar}>*</span>
+                </label>
                 <input
+                  ref={(el) => errorRefs.current.brand = el}
                   type="text"
                   name="brand"
                   value={formData.brand}
                   onChange={handleChange}
-                  placeholder="e.g., Nike"
+                  placeholder="Enter brand name..."
                   className={errors.brand ? styles.error : ""}
                 />
-                {errors.brand && (
-                  <span className={styles.errorText}>{errors.brand}</span>
-                )}
+                {errors.brand && <span className={styles.errorText}>{errors.brand}</span>}
               </div>
 
               <div className={styles.formGroup}>
-                <label>Gender *</label>
+                <label>
+                  Gender <span className={styles.requiredStar}>*</span>
+                </label>
                 <select
+                  ref={(el) => errorRefs.current.gender = el}
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
@@ -409,23 +413,27 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                 >
                   <option value="">Select Gender</option>
                   {genders.map((g) => (
-                    <option key={g} value={g}>
-                      {g}
-                    </option>
+                    <option key={g} value={g}>{g}</option>
                   ))}
                 </select>
-                {errors.gender && (
-                  <span className={styles.errorText}>{errors.gender}</span>
-                )}
+                {errors.gender && <span className={styles.errorText}>{errors.gender}</span>}
               </div>
             </div>
-            {/* Pricing */}
-            <div className={styles.section}>
-              <h3>Pricing Details</h3>
+
+            {/* Section 3: Pricing */}
+            <div className={`${styles.section} ${styles.sectionPricing}`} ref={(el) => sectionRefs.current.pricing = el}>
+              <div className={styles.sectionHeader}>
+                <FaCube className={styles.sectionIcon} />
+                <h3>Pricing Details</h3>
+                <span className={styles.requiredBadge}>Required</span>
+              </div>
 
               <div className={styles.formGroup}>
-                <label>MRP Price *</label>
+                <label>
+                  MRP Price (₹) <span className={styles.requiredStar}>*</span>
+                </label>
                 <input
+                  ref={(el) => errorRefs.current.price = el}
                   type="number"
                   name="price"
                   value={formData.price}
@@ -435,14 +443,13 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                   min="0"
                   className={errors.price ? styles.error : ""}
                 />
-                {errors.price && (
-                  <span className={styles.errorText}>{errors.price}</span>
-                )}
+                {errors.price && <span className={styles.errorText}>{errors.price}</span>}
               </div>
 
               <div className={styles.formGroup}>
                 <label>Discount (%)</label>
                 <input
+                  ref={(el) => errorRefs.current.discount = el}
                   type="number"
                   name="discount"
                   value={formData.discount}
@@ -452,9 +459,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                   max="100"
                   className={errors.discount ? styles.error : ""}
                 />
-                {errors.discount && (
-                  <span className={styles.errorText}>{errors.discount}</span>
-                )}
+                {errors.discount && <span className={styles.errorText}>{errors.discount}</span>}
               </div>
 
               <div className={styles.formGroup}>
@@ -463,142 +468,220 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                   type="text"
                   value={
                     formData.price && formData.discount
-                      ? (
-                          formData.price -
-                          (formData.price * formData.discount) / 100
-                        ).toFixed(2)
-                      : formData.price || "0.00"
+                      ? `₹${(formData.price - (formData.price * formData.discount) / 100).toFixed(2)}`
+                      : formData.price ? `₹${formData.price}` : "₹0.00"
                   }
                   disabled
                   className={styles.readonly}
                 />
               </div>
             </div>
-            {/* Images */}
-            <div className={styles.section}>
-              <h3>Product Images</h3>
 
-              {/* Cover Image Upload */}
+            {/* Section 4: Package Details */}
+            <div className={`${styles.section} ${styles.sectionPackage}`} ref={(el) => sectionRefs.current.package = el}>
+              <div className={styles.sectionHeader}>
+                <FaBox className={styles.sectionIcon} />
+                <h3>Package Details</h3>
+                <span className={styles.requiredBadge}>Required</span>
+              </div>
+
               <div className={styles.formGroup}>
-                <label>Cover Image URL *</label>
+                <label>
+                  Weight (kg) <span className={styles.requiredStar}>*</span>
+                </label>
+                <input
+                  ref={(el) => errorRefs.current.package_weight_in_kg = el}
+                  type="number"
+                  name="package_weight_in_kg"
+                  value={formData.package_weight_in_kg}
+                  onChange={handleChange}
+                  placeholder="e.g., 0.5"
+                  step="0.01"
+                  min="0"
+                  className={errors.package_weight_in_kg ? styles.error : ""}
+                />
+                {errors.package_weight_in_kg && <span className={styles.errorText}>{errors.package_weight_in_kg}</span>}
+              </div>
 
-                {/* Show the existing cover image preview if it exists */}
+              <div className={styles.formGroup}>
+                <label>
+                  Dimensions (cm) <span className={styles.requiredStar}>*</span>
+                </label>
+                <div className={styles.dimensionRow}>
+                  <div className={styles.dimensionInputWrapper}>
+                    <input
+                      ref={(el) => errorRefs.current.package_dimension_length = el}
+                      type="number"
+                      value={formData.package_dimension.length}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          package_dimension: {
+                            ...formData.package_dimension,
+                            length: e.target.value,
+                          },
+                        });
+                        if (errors.package_dimension_length) {
+                          setErrors({ ...errors, package_dimension_length: "" });
+                        }
+                      }}
+                      placeholder="Length"
+                      step="0.1"
+                      min="0"
+                      className={errors.package_dimension_length ? styles.error : ""}
+                    />
+                    {errors.package_dimension_length && <span className={styles.errorText}>{errors.package_dimension_length}</span>}
+                  </div>
+                  <div className={styles.dimensionInputWrapper}>
+                    <input
+                      ref={(el) => errorRefs.current.package_dimension_breadth = el}
+                      type="number"
+                      value={formData.package_dimension.breadth}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          package_dimension: {
+                            ...formData.package_dimension,
+                            breadth: e.target.value,
+                          },
+                        });
+                        if (errors.package_dimension_breadth) {
+                          setErrors({ ...errors, package_dimension_breadth: "" });
+                        }
+                      }}
+                      placeholder="Breadth"
+                      step="0.1"
+                      min="0"
+                      className={errors.package_dimension_breadth ? styles.error : ""}
+                    />
+                    {errors.package_dimension_breadth && <span className={styles.errorText}>{errors.package_dimension_breadth}</span>}
+                  </div>
+                  <div className={styles.dimensionInputWrapper}>
+                    <input
+                      ref={(el) => errorRefs.current.package_dimension_height = el}
+                      type="number"
+                      value={formData.package_dimension.height}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          package_dimension: {
+                            ...formData.package_dimension,
+                            height: e.target.value,
+                          },
+                        });
+                        if (errors.package_dimension_height) {
+                          setErrors({ ...errors, package_dimension_height: "" });
+                        }
+                      }}
+                      placeholder="Height"
+                      step="0.1"
+                      min="0"
+                      className={errors.package_dimension_height ? styles.error : ""}
+                    />
+                    {errors.package_dimension_height && <span className={styles.errorText}>{errors.package_dimension_height}</span>}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 5: Images */}
+            <div className={`${styles.section} ${styles.sectionImages}`} ref={(el) => sectionRefs.current.images = el}>
+              <div className={styles.sectionHeader}>
+                <FaImage className={styles.sectionIcon} />
+                <h3>Product Images</h3>
+                <span className={styles.requiredBadge}>Required</span>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>
+                  Cover Image <span className={styles.requiredStar}>*</span>
+                </label>
                 {formData.coverImage && (
                   <div className={styles.imagePreview}>
-                    <img
-                      src={`${UPLOADS_URL}${formData.coverImage}`}
-                      alt="Cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={removeCoverImage}
-                      className={styles.removeImageBtn}
-                    >
-                      ✕
+                    <img src={`${UPLOADS_URL}${formData.coverImage}`} alt="Cover" />
+                    <button type="button" onClick={removeCoverImage} className={styles.removeImageBtn}>
+                      <FaTimes />
                     </button>
                   </div>
                 )}
-
-                {/* File upload component for cover image */}
                 <FileUploadProduct
                   name="coverImage"
                   onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      coverImage: e.target.value,
-                    }));
+                    setFormData((prev) => ({ ...prev, coverImage: e.target.value }));
                   }}
                   onUploadSuccess={handleCoverImageUploadSuccess}
-                  folderName="cover-images" // Specify folder name for Cloudinary
+                  folderName="cover-images"
                   accept=".jpg,.jpeg,.png,.webp"
-                  required={false}
                 />
-
-                {errors.coverImage && (
-                  <span className={styles.errorText}>{errors.coverImage}</span>
-                )}
+                {errors.coverImage && <span className={styles.errorText}>{errors.coverImage}</span>}
               </div>
 
-              {/* Additional Images Upload */}
               <div className={styles.formGroup}>
                 <label>Additional Images</label>
-
                 <div className={styles.imageList}>
                   {formData.images.map((img, index) => (
                     <div key={index} className={styles.imageItem}>
-                      <img
-                        src={`${UPLOADS_URL}/${img}`}
-                        alt={`Product ${index}`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index)}
-                        className={styles.removeImageBtn}
-                      >
-                        ✕
+                      <img src={`${UPLOADS_URL}/${img}`} alt={`Product ${index}`} />
+                      <button type="button" onClick={() => removeImage(index)} className={styles.removeImageBtn}>
+                        <FaTimes />
                       </button>
                     </div>
                   ))}
                 </div>
-
-                {/* File upload component for additional images */}
                 <FileUploadProduct
                   name="additionalImage"
-                  onChange={(e) => {
-                    // This will be handled by onUploadSuccess
-                  }}
                   onUploadSuccess={handleImageUploadSuccess}
                   folderName="product-images"
                   accept=".jpg,.jpeg,.png,.webp"
-                  required={false}
                 />
               </div>
             </div>
-            {/* Sizes & Stock */}
-            <div className={styles.section}>
-              <h3>Sizes & Stock</h3>
+
+            {/* Section 6: Sizes & Stock */}
+            <div className={`${styles.section} ${styles.sectionSizes}`} ref={(el) => sectionRefs.current.sizes = el}>
+              <div className={styles.sectionHeader}>
+                <FaTshirt className={styles.sectionIcon} />
+                <h3>Sizes & Stock</h3>
+                <span className={styles.requiredBadge}>Required</span>
+              </div>
 
               {formData.sizes.map((sizeObj, index) => (
                 <div key={index} className={styles.sizeRow}>
                   <select
                     value={sizeObj.size}
-                    onChange={(e) =>
-                      handleSizeChange(index, "size", e.target.value)
-                    }
+                    onChange={(e) => handleSizeChange(index, "size", e.target.value)}
                   >
                     <option value="">Select Size</option>
                     {sizeOptions.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
+                      <option key={s} value={s}>{s}</option>
                     ))}
                   </select>
                   <input
                     type="number"
                     value={sizeObj.stock}
-                    onChange={(e) =>
-                      handleSizeChange(index, "stock", e.target.value)
-                    }
+                    onChange={(e) => handleSizeChange(index, "stock", e.target.value)}
                     placeholder="Stock"
-                    min="0"
+                    // min="0"
                   />
                   {formData.sizes.length > 1 && (
-                    <button type="button" onClick={() => removeSize(index)}>
-                      ✕
+                    <button type="button" onClick={() => removeSize(index)} className={styles.removeSizeBtn}>
+                      <FaTimes />
                     </button>
                   )}
                 </div>
               ))}
-              {errors.sizes && (
-                <span className={styles.errorText}>{errors.sizes}</span>
-              )}
+              {errors.sizes && <span className={styles.errorText}>{errors.sizes}</span>}
               <button type="button" className={styles.addBtn} onClick={addSize}>
-                + Add Size
+                <FaPlus /> Add Size
               </button>
             </div>
-            {/* Additional Details */}
-            <div className={styles.section}>
-              <h3>Additional Details</h3>
+
+            {/* Section 7: Additional Details */}
+            <div className={`${styles.section} ${styles.sectionAdditional}`} ref={(el) => sectionRefs.current.additional = el}>
+              <div className={styles.sectionHeader}>
+                <FaBox className={styles.sectionIcon} />
+                <h3>Additional Details</h3>
+              </div>
 
               <div className={styles.formGroup}>
                 <label>Material</label>
@@ -616,9 +699,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                 <select name="fit" value={formData.fit} onChange={handleChange}>
                   <option value="">Select Fit</option>
                   {fits.map((f) => (
-                    <option key={f} value={f}>
-                      {f}
-                    </option>
+                    <option key={f} value={f}>{f}</option>
                   ))}
                 </select>
               </div>
@@ -630,81 +711,78 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
-                    placeholder="e.g., summer, casual"
-                    onKeyPress={(e) =>
-                      e.key === "Enter" && (e.preventDefault(), addTag())
-                    }
+                    placeholder="Enter tag and press Enter"
+                    onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
                   />
                   <button type="button" onClick={addTag}>
-                    Add
+                    <FaPlus /> Add
                   </button>
                 </div>
                 <div className={styles.tags}>
                   {formData.tags.map((tag) => (
                     <span key={tag} className={styles.tag}>
+                      <FaTag />
                       {tag}
                       <button type="button" onClick={() => removeTag(tag)}>
-                        ✕
+                        <FaTimes />
                       </button>
                     </span>
                   ))}
                 </div>
               </div>
             </div>
-            {/* Flags */}
-            <div className={styles.section}>
-              <h3>Product Flags</h3>
+
+            {/* Section 8: Product Flags */}
+            <div className={`${styles.section} ${styles.sectionFlags}`} ref={(el) => sectionRefs.current.flags = el}>
+              <div className={styles.sectionHeader}>
+                <FaBox className={styles.sectionIcon} />
+                <h3>Product Flags</h3>
+              </div>
 
               <div className={styles.checkboxGroup}>
-                <label>
+                <label className={styles.checkboxLabel}>
                   <input
                     type="checkbox"
                     name="isNewArrival"
                     checked={formData.isNewArrival}
                     onChange={handleChange}
                   />
-                  New Arrival
+                  <span className={styles.checkboxText}>✨ New Arrival</span>
                 </label>
-                <label>
+                <label className={styles.checkboxLabel}>
                   <input
                     type="checkbox"
                     name="isPopular"
                     checked={formData.isPopular}
                     onChange={handleChange}
                   />
-                  Popular
+                  <span className={styles.checkboxText}>🔥 Popular</span>
                 </label>
-                <label>
+                <label className={styles.checkboxLabel}>
                   <input
                     type="checkbox"
                     name="isFeatured"
                     checked={formData.isFeatured}
                     onChange={handleChange}
                   />
-                  Featured
+                  <span className={styles.checkboxText}>⭐ Featured</span>
                 </label>
               </div>
             </div>
           </div>
 
           <div className={styles.formActions}>
-            <button
-              type="button"
-              className={styles.cancelBtn}
-              onClick={onClose}
-            >
+            <button type="button" className={styles.cancelBtn} onClick={onClose}>
               Cancel
             </button>
-            <button
-              type="submit"
-              className={styles.submitBtn}
-              disabled={loading}
-            >
-              {loading
-                ? "Saving..."
-                : product
-                  ? "Update Product"
-                  : "Create Product"}
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
+              {loading ? (
+                <span className={styles.loadingSpinner}>⏳</span>
+              ) : product ? (
+                "🔄 Update Product"
+              ) : (
+                "➕ Create Product"
+              )}
             </button>
           </div>
         </form>

@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from "./OrderSection.module.css";
 import OrderDetailsModal from './OrderDetailsModal';
 import api from '../../../../../api/axios';
+import { FaSearch, FaTimes, FaSync, FaBox, FaRupeeSign, FaCalendarAlt, FaTag } from 'react-icons/fa';
 
 const OrderSection = () => {
   const [orders, setOrders] = useState([]);
@@ -9,6 +10,8 @@ const OrderSection = () => {
   const [error, setError] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [searchOrderId, setSearchOrderId] = useState('');
+  const searchInputRef = useRef(null);
   
   const [pagination, setPagination] = useState({
     page: 1,
@@ -21,7 +24,8 @@ const OrderSection = () => {
   const [filters, setFilters] = useState({
     payment_method: '',
     payment_status: '',
-    order_status: ''
+    order_status: '',
+    order_id: ''
   });
 
   // Fetch orders with filters using axios
@@ -30,16 +34,19 @@ const OrderSection = () => {
     setError(null);
     
     try {
-      let queryString = `?page=${pagination.page}&&limit=${pagination.limit}`;
+      let queryString = `?page=${pagination.page}&limit=${pagination.limit}`;
       
       if (filters.payment_method) {
-        queryString += `&&payment_method=${filters.payment_method}`;
+        queryString += `&payment_method=${filters.payment_method}`;
       }
       if (filters.payment_status) {
-        queryString += `&&payment_status=${filters.payment_status}`;
+        queryString += `&payment_status=${filters.payment_status}`;
       }
       if (filters.order_status) {
-        queryString += `&&order_status=${filters.order_status}`;
+        queryString += `&order_status=${filters.order_status}`;       
+      }
+      if (filters.order_id) {
+        queryString += `&order_id=${filters.order_id}`;
       }
 
       const response = await api.get(`order/${queryString}`);
@@ -84,12 +91,52 @@ const OrderSection = () => {
     setFilters({
       payment_method: '',
       payment_status: '',
-      order_status: ''
+      order_status: '',
+      order_id: ''
     });
+    setSearchOrderId('');
     setPagination(prev => ({
       ...prev,
       page: 1
     }));
+  };
+
+  // Handle search by Order ID
+  const handleSearchOrder = () => {
+    if (searchOrderId.trim()) {
+      setFilters(prev => ({
+        ...prev,
+        order_id: searchOrderId.trim()
+      }));
+      setPagination(prev => ({
+        ...prev,
+        page: 1
+      }));
+    }
+  };
+
+  // Handle Enter key press for search
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearchOrder();
+    }
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchOrderId('');
+    setFilters(prev => ({
+      ...prev,
+      order_id: ''
+    }));
+    setPagination(prev => ({
+      ...prev,
+      page: 1
+    }));
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
   };
 
   // Handle page change
@@ -136,23 +183,6 @@ const OrderSection = () => {
     return colors[status] || '#757575';
   };
 
-  // Get customer name
-  const getCustomerName = (order) => {
-    if (order.shippingAddress) {
-      const { first_name, last_name } = order.shippingAddress;
-      return `${first_name || ''} ${last_name || ''}`.trim() || 'Guest';
-    }
-    return 'Guest';
-  };
-
-  // Get customer phone
-  const getCustomerPhone = (order) => {
-    if (order.shippingAddress && order.shippingAddress.phone) {
-      return order.shippingAddress.phone;
-    }
-    return order.guest_mobile_no || 'N/A';
-  };
-
   // View Order Details
   const handleViewOrder = (order) => {
     setSelectedOrder(order);
@@ -168,64 +198,108 @@ const OrderSection = () => {
   return (
     <div className={styles.orderSection}>
       <div className={styles.header}>
-        <h2>Order Management</h2>
-        <div className={styles.stats}>
-          <span>Total Orders: {pagination.total}</span>
+        <div className={styles.headerLeft}>
+          <h2>📦 Order Management</h2>
+          <div className={styles.stats}>
+            <span>Total Orders: {pagination.total}</span>
+          </div>
         </div>
+        <button 
+          className={styles.refreshBtn} 
+          onClick={() => fetchOrders()}
+          disabled={loading}
+        >
+          <FaSync className={loading ? styles.spinning : ''} />
+          Refresh
+        </button>
       </div>
 
-      {/* Filter Section */}
-      {/* <div className={styles.filters}>
-        <div className={styles.filterGroup}>
-          <label>Payment Method</label>
-          <select
-            value={filters.payment_method}
-            onChange={(e) => handleFilterChange('payment_method', e.target.value)}
+      {/* Filter Section with Search */}
+      <div className={styles.filtersContainer}>
+        {/* Search by Order ID */}
+        <div className={styles.searchWrapper}>
+          <div className={styles.searchInputWrapper}>
+            <FaSearch className={styles.searchIcon} />
+            <input
+              ref={searchInputRef}
+              type="text"
+              className={styles.searchInput}
+              placeholder="Search by Order ID..."
+              value={searchOrderId}
+              onChange={(e) => setSearchOrderId(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
+            />
+            {searchOrderId && (
+              <button 
+                className={styles.clearSearchBtn}
+                onClick={clearSearch}
+                type="button"
+              >
+                <FaTimes />
+              </button>
+            )}
+          </div>
+          <button 
+            className={styles.searchBtn}
+            onClick={handleSearchOrder}
+            disabled={!searchOrderId.trim() || loading}
           >
-            <option value="">All Methods</option>
-            <option value="ONLINE">Online</option>
-            <option value="COD">Cash on Delivery</option>
-          </select>
+            Search
+          </button>
         </div>
 
-        <div className={styles.filterGroup}>
-          <label>Payment Status</label>
-          <select
-            value={filters.payment_status}
-            onChange={(e) => handleFilterChange('payment_status', e.target.value)}
-          >
-            <option value="">All Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Paid">Paid</option>
-            <option value="Failed">Failed</option>
-            <option value="Refunded">Refunded</option>
-          </select>
-        </div>
+        {/* Active Search Indicator */}
+        {filters.order_id && (
+          <div className={styles.searchActive}>
+            <span>🔍 Searching for Order ID: <strong>{filters.order_id}</strong></span>
+            <button onClick={clearSearch} className={styles.clearSearchActiveBtn}>
+              <FaTimes /> Clear
+            </button>
+          </div>
+        )}
 
-        <div className={styles.filterGroup}>
-          <label>Order Status</label>
-          <select
-            value={filters.order_status}
-            onChange={(e) => handleFilterChange('order_status', e.target.value)}
-          >
-            <option value="">All Status</option>
-            <option value="Placed">Placed</option>
-            <option value="Processing">Processing</option>
-            <option value="Shipped">Shipped</option>
-            <option value="Delivered">Delivered</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
-        </div>
+        {/* Filters */}
+        <div className={styles.filters}>
+          <div className={styles.filterGroup}>
+            <label>Payment Status</label>
+            <select
+              value={filters.payment_status}
+              onChange={(e) => handleFilterChange('payment_status', e.target.value)}
+            >
+              <option value="">All Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Paid">Paid</option>
+            </select>
+          </div>
 
-        <button className={styles.clearBtn} onClick={clearFilters}>
-          Clear Filters
-        </button>
-      </div> */}
+          <div className={styles.filterGroup}>
+            <label>Order Status</label>
+            <select
+              value={filters.order_status}
+              onChange={(e) => handleFilterChange('order_status', e.target.value)}
+            >
+              <option value="">All Status</option>
+              <option value="Placed">Placed</option>
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          <button className={styles.clearBtn} onClick={clearFilters}>
+            <FaTimes /> Clear Filters
+          </button>
+        </div>
+      </div>
 
       {/* Error Message */}
       {error && (
         <div className={styles.error}>
-          Error: {error}
+          <span>⚠️ {error}</span>
+          <button onClick={() => setError(null)} className={styles.errorClose}>
+            <FaTimes />
+          </button>
         </div>
       )}
 
@@ -237,20 +311,19 @@ const OrderSection = () => {
         </div>
       )}
 
-      {/* Orders Table */}
+      {/* Orders Table/Grid */}
       {!loading && !error && (
         <>
+          {/* Desktop Table View */}
           <div className={styles.tableContainer}>
             <table className={styles.orderTable}>
               <thead>
                 <tr>
                   <th>Order ID</th>
-                  <th>Customer Name</th>
-                  <th>Mobile</th>
                   <th>Items</th>
                   <th>Total Amount</th>
-                  {/* <th>Payment Status</th>
-                  <th>Order Status</th> */}
+                  <th>Payment Status</th>
+                  <th>Order Status</th>
                   <th>Order Date</th>
                   <th>Action</th>
                 </tr>
@@ -258,8 +331,21 @@ const OrderSection = () => {
               <tbody>
                 {orders.length === 0 ? (
                   <tr>
-                    <td colSpan="9" className={styles.noOrders}>
-                      No orders found
+                    <td colSpan="7" className={styles.noOrders}>
+                      {filters.order_id ? (
+                        <div className={styles.noOrderFound}>
+                          <p>❌ No order found with ID: <strong>{filters.order_id}</strong></p>
+                          <p className={styles.hint}>Please check the Order ID and try again</p>
+                          <button 
+                            className={styles.clearSearchBtnInline}
+                            onClick={clearSearch}
+                          >
+                            <FaTimes /> Clear Search
+                          </button>
+                        </div>
+                      ) : (
+                        'No orders found'
+                      )}
                     </td>
                   </tr>
                 ) : (
@@ -267,13 +353,10 @@ const OrderSection = () => {
                     <tr key={order._id}>
                       <td>
                         <span className={styles.orderId}>{order.order_id || order._id?.slice(-6)}</span>
+                        {filters.order_id && order.order_id === filters.order_id && (
+                          <span className={styles.searchMatchBadge}>✓ Found</span>
+                        )}
                       </td>
-                      <td>
-                        <div className={styles.customerInfo}>
-                          <strong>{getCustomerName(order)}</strong>
-                        </div>
-                      </td>
-                      <td>{getCustomerPhone(order)}</td>
                       <td>
                         <div className={styles.itemsInfo}>
                           <span>{order.items?.length || 0} items</span>
@@ -284,7 +367,7 @@ const OrderSection = () => {
                           <strong>₹{order.final_payable_amount?.toFixed(2) || '0.00'}</strong>
                         </div>
                       </td>
-                      {/* <td>
+                      <td>
                         <span 
                           className={styles.statusBadge}
                           style={{ 
@@ -305,14 +388,14 @@ const OrderSection = () => {
                         >
                           {order.order_status || 'N/A'}
                         </span>
-                      </td> */}
+                      </td>
                       <td>{formatDate(order.createdAt)}</td>
                       <td>
                         <button 
                           className={styles.viewBtn}
                           onClick={() => handleViewOrder(order)}
                         >
-                          View Order
+                          View
                         </button>
                       </td>
                     </tr>
@@ -320,6 +403,89 @@ const OrderSection = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className={styles.mobileCardContainer}>
+            {orders.length === 0 ? (
+              <div className={styles.noOrdersCard}>
+                {filters.order_id ? (
+                  <div className={styles.noOrderFound}>
+                    <p>❌ No order found with ID: <strong>{filters.order_id}</strong></p>
+                    <p className={styles.hint}>Please check the Order ID and try again</p>
+                    <button 
+                      className={styles.clearSearchBtnInline}
+                      onClick={clearSearch}
+                    >
+                      <FaTimes /> Clear Search
+                    </button>
+                  </div>
+                ) : (
+                  'No orders found'
+                )}
+              </div>
+            ) : (
+              orders.map((order) => (
+                <div key={order._id} className={styles.orderCard}>
+                  <div className={styles.orderCardHeader}>
+                    <div className={styles.orderCardId}>
+                      <FaTag className={styles.cardIcon} />
+                      <span className={styles.orderId}>{order.order_id || order._id?.slice(-6)}</span>
+                      {filters.order_id && order.order_id === filters.order_id && (
+                        <span className={styles.searchMatchBadge}>✓ Found</span>
+                      )}
+                    </div>
+                    <div className={styles.orderCardStatus}>
+                      <span 
+                        className={styles.statusBadge}
+                        style={{ 
+                          backgroundColor: getStatusBadge(order.order_status, 'order'),
+                          color: '#fff'
+                        }}
+                      >
+                        {order.order_status || 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.orderCardBody}>
+                    <div className={styles.orderCardRow}>
+                      <span className={styles.cardLabel}>Items:</span>
+                      <span className={styles.cardValue}>{order.items?.length || 0} items</span>
+                    </div>
+                    <div className={styles.orderCardRow}>
+                      <span className={styles.cardLabel}>Total Amount:</span>
+                      <span className={styles.cardAmount}>₹{order.final_payable_amount?.toFixed(2) || '0.00'}</span>
+                    </div>
+                    <div className={styles.orderCardRow}>
+                      <span className={styles.cardLabel}>Payment:</span>
+                      <span 
+                        className={styles.statusBadge}
+                        style={{ 
+                          backgroundColor: getStatusBadge(order.payment_status, 'payment'),
+                          color: '#fff'
+                        }}
+                      >
+                        {order.payment_status || 'N/A'}
+                      </span>
+                    </div>
+                    <div className={styles.orderCardRow}>
+                      <span className={styles.cardLabel}>Date:</span>
+                      <span className={styles.cardValue}>{formatDate(order.createdAt)}</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.orderCardFooter}>
+                    <button 
+                      className={styles.viewBtn}
+                      onClick={() => handleViewOrder(order)}
+                    >
+                      View Order Details
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
           {/* Pagination */}

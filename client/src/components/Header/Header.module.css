@@ -148,6 +148,10 @@
     height: 60px;
     padding: 0 1rem;
   }
+   .menuBtn {
+    display: block;
+  }
+
 
   .logo h1 {
     font-size: 1.25rem;

@@ -90,7 +90,7 @@ const ProductCard = ({ product }) => {
         )}
 
         {/* Rating */}
-        {product.rating > 0 && (
+        {/* {product.rating > 0 && (
           <div className={styles.rating}>
             ⭐ {product.rating.toFixed(1)}
             {product.totalReviews > 0 && (
@@ -99,7 +99,7 @@ const ProductCard = ({ product }) => {
               </span>
             )}
           </div>
-        )}
+        )} */}
       </div>
 
       <div className={styles.info}>

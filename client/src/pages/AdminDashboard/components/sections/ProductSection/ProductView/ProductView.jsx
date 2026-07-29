@@ -79,6 +79,31 @@ const ProductView = ({ product, onClose }) => {
               </div>
             </div>
 
+
+            {/* Add after the stock/status section */}
+{/* Package Details */}
+{(product.package_weight_in_kg || product.package_dimension) && (
+  <div className={styles.packageDetails}>
+    <h4>Package Details</h4>
+    <div className={styles.detailGrid}>
+      {product.package_weight_in_kg && (
+        <div className={styles.detailItem}>
+          <span className={styles.label}>Weight</span>
+          <span className={styles.value}>{product.package_weight_in_kg} kg</span>
+        </div>
+      )}
+      {product.package_dimension && (
+        <div className={styles.detailItem}>
+          <span className={styles.label}>Dimensions</span>
+          <span className={styles.value}>
+            {product.package_dimension.length} × {product.package_dimension.breadth} × {product.package_dimension.height} cm
+          </span>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
             {product.description && (
               <div className={styles.description}>
                 <h4>Description</h4>
