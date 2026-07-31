@@ -30,7 +30,7 @@
 }
 
 .brand {
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   position: relative;
   z-index: 1;
 }
@@ -382,4 +382,40 @@
   opacity: 0.5;
   cursor: not-allowed;
   color: #94a3b8;
+}
+
+
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.featureCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(6px);
+}
+
+.icon {
+  font-size: 22px;
+  color: #4f9dff;
+}
+
+.featureCard span {
+  font-size: 16px;
+  font-weight: 600;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ShoppingCart, Menu, User } from "lucide-react";
 import { useAppSelector } from "../../redux/hooks";
@@ -15,6 +15,7 @@ const Header = ({ onLoginClick }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const customer = useAppSelector(selectCustomer);
@@ -23,6 +24,7 @@ const Header = ({ onLoginClick }) => {
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const getUserInitials = () => {
+    console.log("customer.....",customer)
     if (!customer) return "U";
     const first = customer.firstName?.charAt(0) || "";
     const last = customer.lastName?.charAt(0) || "";
@@ -32,6 +34,27 @@ const Header = ({ onLoginClick }) => {
       "U"
     );
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    const handleScroll = () => {
+      setIsUserMenuOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, true);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll, true);
+    };
+  }, []);
+  // console.log("custormer:",customer)
 
   return (
     <>
@@ -83,7 +106,7 @@ const Header = ({ onLoginClick }) => {
             </button>
 
             {/* Account Button */}
-            <div className={styles.accountWrapper}>
+            <div className={styles.accountWrapper} ref={dropdownRef}>
               {isAuthenticated && customer ? (
                 <>
                   <button

@@ -121,7 +121,7 @@ const Home = () => {
         )}
 
         {jeans.length > 0 && (
-          <ProductSlider
+          <ProductScroll
             title="Lower" 
             products={jeans} 
             seeAllLink="/search?category=Lower"

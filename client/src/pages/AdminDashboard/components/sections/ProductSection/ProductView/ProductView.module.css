@@ -243,7 +243,7 @@
 /* Mobile Responsive */
 @media (max-width: 640px) {
   .modal {
-    max-height: 100vh;
+    max-height: 95vh;
     border-radius: 12px;
   }
 

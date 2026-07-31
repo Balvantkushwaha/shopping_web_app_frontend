@@ -213,6 +213,7 @@ import { useNavigate } from 'react-router-dom';
 import { Shield, Phone, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import styles from './AdminLogin.module.css';
+import { FaBoxOpen, FaShoppingCart, FaTachometerAlt, FaUsers } from 'react-icons/fa';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -326,11 +327,26 @@ const AdminLogin = () => {
           <p>Admin Panel</p>
         </div>
         <div className={styles.features}>
-          <div>📦 Manage Products</div>
-          <div>👥 Handle Orders</div>
-          {/* <div>📊 View Analytics</div>
-          <div>⚙️ Store Settings</div> */}
-        </div>
+  <div className={styles.featureCard}>
+    <FaTachometerAlt className={styles.icon} />
+    <span>Dashboard Overview</span>
+  </div>
+
+  <div className={styles.featureCard}>
+    <FaBoxOpen className={styles.icon} />
+    <span>Manage Products</span>
+  </div>
+
+  <div className={styles.featureCard}>
+    <FaShoppingCart className={styles.icon} />
+    <span>Manage Orders</span>
+  </div>
+
+  <div className={styles.featureCard}>
+    <FaUsers className={styles.icon} />
+    <span>Manage Users</span>
+  </div>
+</div>
       </div>
 
       <div className={styles.rightPanel}>

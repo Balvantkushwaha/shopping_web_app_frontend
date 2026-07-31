@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { 
   FaSearch, 
   FaUser, 
   FaUsers, 
   FaCheckCircle, 
-  FaTimesCircle,
   FaExclamationTriangle,
   FaEye,
   FaEdit,
@@ -25,13 +24,11 @@ import {
   FaSpinner,
   FaTimes,
   FaSave,
-  FaBan,
   FaUserCircle,
   FaInfoCircle,
   FaSync,
-  FaSort,
-  FaSortUp,
-  FaSortDown
+  FaMapMarkerAlt,
+  FaShoppingBag
 } from 'react-icons/fa';
 import styles from "./UserSection.module.css";
 import api from '../../../../../api/axios';
@@ -43,6 +40,7 @@ const UserSection = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   
   // Pagination state
   const [pagination, setPagination] = useState({
@@ -68,16 +66,19 @@ const UserSection = () => {
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [statusUpdate, setStatusUpdate] = useState({ status: '', reason: '' });
-  const [updating, setUpdating] = useState(false);  
+  const [updating, setUpdating] = useState(false);
 
-  // Fetch users and stats on component mount and filter change
-  useEffect(() => {
-    fetchUsers();
-    fetchUserStats();
-  }, [filters.page, filters.search, filters.role, filters.status, filters.sortBy, filters.sortOrder]);
+  // Debounce function
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
 
   // Fetch users with pagination and filters
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const { page, limit, search, role, status, sortBy, sortOrder } = filters;
@@ -94,27 +95,43 @@ const UserSection = () => {
     } finally {
       setLoading(false);
     }
+  }, [filters]);
+
+  // Debounced search
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      setFilters(prev => ({ ...prev, search: value, page: 1 }));
+    }, 500),
+    []
+  );
+
+  // Handle search input change with debouncing
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    debouncedSearch(value);
   };
 
   // Fetch user statistics
   const fetchUserStats = async () => {
     try {
-      const response = await api.get(
-        '/admin/users/stats',       
-      );
+      const response = await api.get('/admin/users/stats');
       setUserStats(response.data.data);
     } catch (err) {
       console.error('Error fetching user stats:', err);
     }
   };
 
+  // Fetch users and stats on component mount and filter change
+  useEffect(() => {
+    fetchUsers();
+    fetchUserStats();
+  }, [fetchUsers]);
+
   // Fetch single user details
   const fetchUserDetails = async (userId) => {
     try {
-      const response = await api.get(
-        `/admin/users/${userId}`,
-      
-      );
+      const response = await api.get(`/admin/users/${userId}`);
       setSelectedUser(response.data.data);
       setShowUserModal(true);
     } catch (err) {
@@ -127,16 +144,14 @@ const UserSection = () => {
   const updateUserStatus = async (userId) => {
     try {
       setUpdating(true);
-      alert("userId:"+userId)
-      await api.patch(
-        `/admin/users/${userId}/status`,
+      await api.post(
+        `/admin/users/${userId}`,
         {
           status: statusUpdate.status,
           reason: statusUpdate.reason
         }        
       );
       
-      // Refresh users list
       await fetchUsers();
       await fetchUserStats();
       
@@ -145,7 +160,7 @@ const UserSection = () => {
       alert('User status updated successfully!');
     } catch (err) {
       console.error('Error updating status:', err);
-      alert('Failed to update user status');
+      alert(err.response?.data?.message || 'Failed to update user status');
     } finally {
       setUpdating(false);
     }
@@ -155,11 +170,8 @@ const UserSection = () => {
   const deleteUser = async (userId) => {
     try {
       setUpdating(true);
-      await api.delete(
-        `/admin/users/${userId}`,
-      );
+      await api.delete(`/admin/users/${userId}`);
       
-      // Refresh users list
       await fetchUsers();
       await fetchUserStats();
       
@@ -167,7 +179,7 @@ const UserSection = () => {
       alert('User deleted successfully!');
     } catch (err) {
       console.error('Error deleting user:', err);
-      alert('Failed to delete user');
+      alert(err.response?.data?.message || 'Failed to delete user');
     } finally {
       setUpdating(false);
     }
@@ -176,13 +188,6 @@ const UserSection = () => {
   // Handle filter changes
   const handleFilterChange = (key, value) => {
     setFilters({ ...filters, [key]: value, page: 1 });
-  };
-
-  // Handle search
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setFilters({ ...filters, page: 1 });
-    fetchUsers();
   };
 
   // Handle page change
@@ -197,6 +202,15 @@ const UserSection = () => {
     return new Date(date).toLocaleDateString('en-IN', {
       day: '2-digit',
       month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  // Format date with time
+  const formatDateTime = (date) => {
+    return new Date(date).toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -208,6 +222,7 @@ const UserSection = () => {
     const colors = {
       'active': '#4CAF50',
       'inactive': '#FF9800',
+      'suspended': '#F44336'
     };
     return colors[status] || '#9E9E9E';
   };
@@ -217,6 +232,7 @@ const UserSection = () => {
     const colors = {
       'admin': '#E53935',
       'buyer': '#5C6BC0',
+      'vendor': '#43A047'
     };
     return colors[role] || '#9E9E9E';
   };
@@ -226,6 +242,7 @@ const UserSection = () => {
     switch(status) {
       case 'active': return <FaUserCheck />;
       case 'inactive': return <FaUserClock />;
+      case 'suspended': return <FaUserSlash />;
       default: return <FaUser />;
     }
   };
@@ -286,8 +303,15 @@ const UserSection = () => {
               <h2 className={styles.statValue}>{userStats.overview.inactive}</h2>
             </div>
           </div>
-          
-          
+           <div className={styles.statCard}>
+            <div className={styles.statIconWrapper} style={{ background: '#FFEBEE', color: '#E53935' }}>
+              <FaUserSlash />
+            </div>
+            <div className={styles.statInfo}>
+              <p className={styles.statLabel}>Suspended</p>
+              <h2 className={styles.statValue}>{userStats.overview.suspended}</h2>
+            </div>
+          </div>
           
           <div className={styles.statCard}>
             <div className={styles.statIconWrapper} style={{ background: '#F3E5F5', color: '#8E24AA' }}>
@@ -303,35 +327,29 @@ const UserSection = () => {
 
       {/* Filters and Search */}
       <div className={styles.filterSection}>
-        <form onSubmit={handleSearch} className={styles.searchForm}>
-          <div className={styles.searchWrapper}>
-            <FaSearch className={styles.searchIcon} />
-            <input
-              type="text"
-              placeholder="Search by name , phone..."
-              value={filters.search}
-              onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-              className={styles.searchInput}
-            />
-            <button type="submit" className={styles.searchBtn}>Search</button>
-          </div>
-        </form>
+        <div className={styles.searchWrapper}>
+          <FaSearch className={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Search by name or phone..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className={styles.searchInput}
+          />
+          {searchTerm && (
+            <button 
+              className={styles.clearBtn}
+              onClick={() => {
+                setSearchTerm('');
+                setFilters({ ...filters, search: '', page: 1 });
+              }}
+            >
+              <FaTimes />
+            </button>
+          )}
+        </div>
 
         <div className={styles.filterWrapper}>
-          {/* <div className={styles.filterGroup}>
-            <FaFilter className={styles.filterIcon} />
-            <select
-              value={filters.role}
-              onChange={(e) => handleFilterChange('role', e.target.value)}
-              className={styles.filterSelect}
-            >
-              <option value="">All Roles</option>
-              <option value="buyer">Buyer</option>
-              <option value="vendor">Vendor</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div> */}
-
           <div className={styles.filterGroup}>
             <select
               value={filters.status}
@@ -341,6 +359,7 @@ const UserSection = () => {
               <option value="">All Status</option>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
+              <option value="suspended">Suspended</option>
             </select>
           </div>
 
@@ -352,20 +371,20 @@ const UserSection = () => {
             >
               <option value="createdAt">Sort by Date</option>
               <option value="firstName">Sort by Name</option>
-              {/* <option value="role">Sort by Role</option> */}
             </select>
           </div>
 
           <button
             onClick={() => handleFilterChange('sortOrder', filters.sortOrder === 'desc' ? 'asc' : 'desc')}
             className={styles.sortBtn}
+            title={filters.sortOrder === 'desc' ? 'Sort Ascending' : 'Sort Descending'}
           >
             {filters.sortOrder === 'desc' ? <FaArrowDown /> : <FaArrowUp />}
           </button>
         </div>
       </div>
 
-      {/* User Table */}
+      {/* User Table - Desktop */}
       {error ? (
         <div className={styles.errorContainer}>
           <FaExclamationTriangle className={styles.errorIcon} />
@@ -374,92 +393,170 @@ const UserSection = () => {
         </div>
       ) : (
         <>
-          <div className={styles.tableContainer}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Mobile</th>
-                  <th>Status</th>
-                  {/* <th>Orders</th> */}
-                  <th>Joined</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.length === 0 ? (
+          {/* Desktop View */}
+          <div className={styles.desktopView}>
+            <div className={styles.tableContainer}>
+              <table className={styles.table}>
+                <thead>
                   <tr>
-                    <td colSpan="8" className={styles.emptyState}>
-                      <FaUsers className={styles.emptyIcon} />
-                      <p>No users found</p>
-                      <span>Try adjusting your filters</span>
-                    </td>
+                    <th>User</th>
+                    <th>Mobile</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
                   </tr>
-                ) : (
-                  users.map((user) => (
-                    <tr key={user._id}>
-                      <td>
-                        <div className={styles.userInfo}>
-                          <div className={styles.userAvatar}>
-                            {user.firstName?.charAt(0) || 'U'}
-                          </div>
-                          <div>
-                            <div className={styles.userName}>
-                              {user.firstName} {user.lastName}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={styles.mobile}>{user.mobile || 'N/A'}</td>
-
-                      <td>
-                        <span 
-                          className={styles.statusBadge}
-                          style={{ background: getStatusColor(user.status || 'active') }}
-                        >
-                          {getStatusIcon(user.status || 'active')}
-                          {user.status || 'active'}
-                        </span>
-                      </td>
-                      {/* <td className={styles.orderCount}>{user.orderCount || 0}</td> */}
-                      <td className={styles.date}>{formatDate(user.createdAt)}</td>
-                      <td>
-                        <div className={styles.actionButtons}>
-                          <button
-                            onClick={() => fetchUserDetails(user.userId)}
-                            className={styles.actionBtn}
-                            title="View Details"
-                          >
-                            <FaEye />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedUser(user);
-                              setShowStatusModal(true);
-                              setStatusUpdate({ status: '', reason: '' });
-                            }}
-                            className={styles.actionBtn}
-                            title="Update Status"
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedUser(user);
-                              setShowDeleteModal(true);
-                            }}
-                            className={`${styles.actionBtn} ${styles.deleteBtn}`}
-                            title="Delete User"
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
+                </thead>
+                <tbody>
+                  {users.length === 0 ? (
+                    <tr>
+                      <td colSpan="5" className={styles.emptyState}>
+                        <FaUsers className={styles.emptyIcon} />
+                        <p>No users found</p>
+                        <span>Try adjusting your filters</span>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    users.map((user) => (
+                      <tr key={user._id}>
+                        <td>
+                          <div className={styles.userInfo}>
+                            <div className={styles.userAvatar}>
+                              {user.firstName?.charAt(0) || 'U'}
+                            </div>
+                            <div>
+                              <div className={styles.userName}>
+                                {user.firstName} {user.lastName}
+                              </div>
+                              {/* <div className={styles.userId}>{user.userId}</div> */}
+                            </div>
+                          </div>
+                        </td>
+                        <td className={styles.mobile}>
+                          <FaPhone className={styles.iconSmall} />
+                          {user.mobile || 'N/A'}
+                        </td>
+                        <td>
+                          <span 
+                            className={styles.statusBadge}
+                            style={{ background: getStatusColor(user.status || 'active') }}
+                          >
+                            {getStatusIcon(user.status || 'active')}
+                            {user.status || 'active'}
+                          </span>
+                        </td>
+                        <td className={styles.date}>
+                          <FaCalendarAlt className={styles.iconSmall} />
+                          {formatDate(user.createdAt)}
+                        </td>
+                        <td>
+                          <div className={styles.actionButtons}>
+                            <button
+                              onClick={() => fetchUserDetails(user.userId)}
+                              className={styles.actionBtn}
+                              title="View Details"
+                            >
+                              <FaEye />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedUser(user);
+                                setShowStatusModal(true);
+                                setStatusUpdate({ status: '', reason: '' });
+                              }}
+                              className={styles.actionBtn}
+                              title="Update Status"
+                            >
+                              <FaEdit />
+                            </button>
+                            {/* <button
+                              onClick={() => {
+                                setSelectedUser(user);
+                                setShowDeleteModal(true);
+                              }}
+                              className={`${styles.actionBtn} ${styles.deleteBtn}`}
+                              title="Delete User"
+                            >
+                              <FaTrash />
+                            </button> */}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile View - Cards */}
+          <div className={styles.mobileView}>
+            {users.length === 0 ? (
+              <div className={styles.emptyStateCard}>
+                <FaUsers className={styles.emptyIcon} />
+                <p>No users found</p>
+              </div>
+            ) : (
+              users.map((user) => (
+                <div key={user._id} className={styles.userCard}>
+                  <div className={styles.userCardHeader}>
+                    <div className={styles.userCardAvatar}>
+                      {user.firstName?.charAt(0) || 'U'}
+                    </div>
+                    <div className={styles.userCardInfo}>
+                      <div className={styles.userCardName}>
+                        {user.firstName} {user.lastName}
+                      </div>
+                      {/* <div className={styles.userCardId}>{user.userId}</div> */}
+                    </div>
+                    <span 
+                      className={styles.statusBadgeSmall}
+                      style={{ background: getStatusColor(user.status || 'active') }}
+                    >
+                      {user.status || 'active'}
+                    </span>
+                  </div>
+                  
+                  <div className={styles.userCardBody}>
+                    <div className={styles.userCardRow}>
+                      <FaPhone className={styles.iconSmall} />
+                      <span>{user.mobile || 'N/A'}</span>
+                    </div>
+                    <div className={styles.userCardRow}>
+                      <FaCalendarAlt className={styles.iconSmall} />
+                      <span>Joined: {formatDate(user.createdAt)}</span>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.userCardActions}>
+                    <button
+                      onClick={() => fetchUserDetails(user.userId)}
+                      className={styles.cardActionBtn}
+                    >
+                      <FaEye /> View
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setShowStatusModal(true);
+                        setStatusUpdate({ status: '', reason: '' });
+                      }}
+                      className={styles.cardActionBtn}
+                    >
+                      <FaEdit /> Status
+                    </button>
+                    {/* <button
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setShowDeleteModal(true);
+                      }}
+                      className={`${styles.cardActionBtn} ${styles.cardDeleteBtn}`}
+                    >
+                      <FaTrash /> Delete
+                    </button> */}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
           {/* Pagination */}
@@ -557,7 +654,7 @@ const UserSection = () => {
                   <FaCalendarAlt className={styles.detailIcon} />
                   <div>
                     <label>Joined</label>
-                    <p>{formatDate(selectedUser.user.createdAt)}</p>
+                    <p>{formatDateTime(selectedUser.user.createdAt)}</p>
                   </div>
                 </div>
                 <div className={styles.detailItem}>
@@ -571,7 +668,7 @@ const UserSection = () => {
 
               {selectedUser.orders.total > 0 && (
                 <div className={styles.orderSummary}>
-                  <h4>Order Summary</h4>
+                  <h4><FaShoppingBag className={styles.iconSmall} /> Order Summary</h4>
                   <div className={styles.orderStats}>
                     <div className={styles.orderStat}>
                       <span>Total Orders</span>
@@ -587,7 +684,7 @@ const UserSection = () => {
 
               {selectedUser.user.addresses && selectedUser.user.addresses.length > 0 && (
                 <div className={styles.addressSection}>
-                  <h4>Addresses</h4>
+                  <h4><FaMapMarkerAlt className={styles.iconSmall} /> Addresses</h4>
                   {selectedUser.user.addresses.map((addr, index) => (
                     <div key={index} className={styles.addressCard}>
                       <p>{addr.street}</p>
@@ -632,6 +729,7 @@ const UserSection = () => {
                     <option value="">Select Status</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
+                    <option value="suspended">Suspended</option>
                   </select>
                 </div>
                 <div className={styles.formGroup}>

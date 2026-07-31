@@ -87,9 +87,9 @@ const AppRoutes = () => {
               <Route
                 path="/checkout"
                 element={
-                  // <ProtectedRoute>
+                  <ProtectedRoute>
                     <Checkout />
-                  // </ProtectedRoute>
+                   </ProtectedRoute>
                 }
               />
 

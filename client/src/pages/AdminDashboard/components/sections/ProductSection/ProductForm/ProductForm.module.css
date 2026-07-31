@@ -662,7 +662,7 @@
   }
   
   .modal {
-    max-height: 100vh;
+    max-height: 95vh;
     border-radius: var(--radius-md);
   }
   

@@ -396,16 +396,13 @@
   .cardDetails {
     grid-template-columns: 1fr;
   }
+  
 
-  .cardActions {
-    flex-direction: column;
-  }
-
-  .cardActions .viewBtn,
+  /* .cardActions .viewBtn,
   .cardActions .editBtn,
   .cardActions .deleteBtn {
     width: 100%;
-  }
+  } */
 
   .pagination {
     flex-direction: column;
