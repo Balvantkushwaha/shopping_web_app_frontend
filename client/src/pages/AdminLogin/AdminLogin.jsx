@@ -273,7 +273,7 @@ const AdminLogin = () => {
 
   const handleVerifyOTP = async () => {
     if (!otp || otp.length !== 4) {
-      setError('Please enter a valid 6-digit OTP');
+      setError('Please enter a valid 4-digit OTP');
       return;
     }
 
@@ -328,8 +328,8 @@ const AdminLogin = () => {
         <div className={styles.features}>
           <div>📦 Manage Products</div>
           <div>👥 Handle Orders</div>
-          <div>📊 View Analytics</div>
-          <div>⚙️ Store Settings</div>
+          {/* <div>📊 View Analytics</div>
+          <div>⚙️ Store Settings</div> */}
         </div>
       </div>
 

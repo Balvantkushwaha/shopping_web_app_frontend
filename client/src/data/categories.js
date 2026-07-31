@@ -1,12 +1,11 @@
 export const categories = [
-  { id: 1, name: "T-Shirts", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400", count: 45 },
-  { id: 2, name: "Shirts", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400", count: 32 },
-  { id: 3, name: "Jeans", image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400", count: 28 },
+  { id: 1, name: "T-Shirts", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400" },
+  { id: 2, name: "Shirts", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400" },
+  { id: 3, name: "Jeans", image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400" },
   {
     id: 4,
     name: "Lower",
     image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200",
-    count: 24
   }
 ];
 

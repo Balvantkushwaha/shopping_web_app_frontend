@@ -20,7 +20,7 @@ const CategorySection = ({ categories }) => {
             >
               <div className={styles.overlay}>
                 <h3 className={styles.categoryName}>{category.name}</h3>
-                <p className={styles.productCount}>{category.count} Products</p>
+                {/* <p className={styles.productCount}>{category.count} Products</p> */}
               </div>
             </div>
           </div>

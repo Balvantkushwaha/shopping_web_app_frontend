@@ -5,6 +5,7 @@ import ProductView from "./ProductView/ProductView";
 import api from "../../../../../api/axios";
 import { FaEdit, FaTrash, FaEye, FaPlus } from "react-icons/fa";
 import { UPLOADS_URL } from "../../../../../config";
+import { useNavigate } from "react-router-dom";
 
 const ProductSection = () => {
   const [products, setProducts] = useState([]);
@@ -17,7 +18,7 @@ const ProductSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
-
+  const navigate = useNavigate();
   // Fetch all products
   const fetchProducts = async (page = 1) => {
     setLoading(true);
@@ -189,12 +190,12 @@ const ProductSection = () => {
       )}
 
       {/* Loading State */}
-      {loading && (
+      {/* {loading && (
         <div className={styles.loadingOverlay}>
           <div className={styles.loader}></div>
           <p>Loading...</p>
         </div>
-      )}
+      )} */}
 
       {/* Desktop Table View */}
       <div className={styles.tableContainer}>
@@ -295,7 +296,8 @@ const ProductSection = () => {
                       // src={product.coverImage} 
                       src={`${UPLOADS_URL}${product.coverImage}`|| product.coverImage}                       
                       alt={product.name}
-                      className={styles.productImage}                    
+                      className={styles.productImage}
+                      onClick={() => navigate("/product/"+product.slug)}                  
                     />
                   )}
                   <div>

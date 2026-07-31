@@ -17,7 +17,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
         <nav className={styles.nav}>
           <Link to="/" onClick={onClose}>Home</Link>
           <Link to="/category" onClick={onClose}>Categories</Link>
-          <Link to="/search?isNewArrival=true" onClick={onClose}>New Arrivals</Link>
+          {/* <Link to="/search?isNewArrival=true" onClick={onClose}>New Arrivals</Link> */}
           <Link to="/search?isPopular=true" onClick={onClose}>Popular Products</Link>
           <Link to="/about" onClick={onClose}>About</Link>
           <Link to="/contact" onClick={onClose}>Contact</Link>
