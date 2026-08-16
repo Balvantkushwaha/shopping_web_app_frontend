@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Search, ShoppingCart, Menu, User } from "lucide-react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Search, ShoppingCart, Menu, User, Home, Grid, Heart } from "lucide-react";
 import { useAppSelector } from "../../redux/hooks";
 import {
   selectIsAuthenticated,
@@ -16,6 +16,7 @@ const Header = ({ onLoginClick, isLoading }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const dropdownRef = useRef(null);
 
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -62,6 +63,20 @@ const Header = ({ onLoginClick, isLoading }) => {
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
+
+  // Bottom nav items
+  const bottomNavItems = [
+    { path: "/", icon: Home, label: "Home" },
+    { path: "/search", icon: Search, label: "Search" },
+    { path: "/category", icon: Grid, label: "Categories" },
+    { path: "/cart", icon: ShoppingCart, label: "Cart", hasBadge: true },
+    { path: "/profile", icon: User, label: "Profile" },
+  ];
+
+  const isActive = (path) => {
+    if (path === "/") return location.pathname === "/";
+    return location.pathname.startsWith(path);
+  };
 
   // Skeleton Loader
   if (isLoading) {
@@ -115,8 +130,8 @@ const Header = ({ onLoginClick, isLoading }) => {
 
           {/* Desktop Navigation */}
           <nav className={styles.nav}>
-            <Link to="/" className={styles.activeLink}>Home</Link>
-            <Link to="/category">Categories</Link>
+            <Link to="/" className={location.pathname === "/" ? styles.activeLink : ""}>Home</Link>
+            <Link to="/category" className={location.pathname === "/category" ? styles.activeLink : ""}>Categories</Link>
             <Link to="/search?isPopular=true">Popular</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
@@ -178,6 +193,26 @@ const Header = ({ onLoginClick, isLoading }) => {
           </div>
         </div>
       </header>
+
+      {/* Bottom Navigation - Mobile Only */}
+      <div className={styles.bottomNav}>
+        {bottomNavItems.map((item) => (
+          <button
+            key={item.path}
+            className={`${styles.bottomNavItem} ${isActive(item.path) ? styles.active : ""}`}
+            onClick={() => navigate(item.path)}
+            aria-label={item.label}
+          >
+            <div className={styles.bottomNavIcon}>
+              <item.icon size={22} strokeWidth={1.5} />
+              {item.hasBadge && cartCount > 0 && (
+                <span className={styles.bottomBadge}>{cartCount}</span>
+              )}
+            </div>
+            <span className={styles.bottomNavLabel}>{item.label}</span>
+          </button>
+        ))}
+      </div>
 
       <MobileMenu
         isOpen={isMobileMenuOpen}
