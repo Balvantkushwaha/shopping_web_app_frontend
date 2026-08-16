@@ -1,12 +1,20 @@
-/* HeroSlider.module.css */
+/* HeroSlider.module.css - Compact, Clean, Full-Bleed Mobile */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap");
+
+/* ========== CONTAINER - full viewport width, breaks out of any parent padding ========== */
 .sliderContainer {
-  width: 100%;
-  max-width: 1400px;
-  margin: 2px auto;
+  width: 100vw;
   position: relative;
-  border-radius: 16px;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  background: #000000;
+  height: 62vh;
+  max-height: 560px;
+  min-height: 380px;
 }
 
 .heroSwiper {
@@ -14,16 +22,14 @@
   height: 100%;
 }
 
+/* ========== SLIDE ========== */
 .slide {
   width: 100%;
-  height: 380px; /* Reduced from 500px */
+  height: 100%;
   position: relative;
+  overflow: hidden;
+  background: #000000;
   cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.slide:hover {
-  transform: scale(1.02);
 }
 
 .slideImage {
@@ -32,162 +38,248 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  position: relative;
-  transition: transform 0.5s ease;
 }
 
-.slide:hover .slideImage {
-  transform: scale(1.05);
+:global(.swiper-slide-active) .slideImage {
+  animation: zoomIn 6s ease-in-out infinite;
 }
 
+@keyframes zoomIn {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ========== OVERLAY ========== */
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(255, 255, 255, 0.1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.35) 50%,
+    rgba(0, 0, 0, 0.15) 75%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0 8%;
-  transition: background 0.3s ease;
+  padding: 0 7%;
 }
 
-.slide:hover .overlay {
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(255, 255, 255, 0.15) 100%);
+/* ========== CONTENT ========== */
+.contentWrapper {
+  max-width: 540px;
+  position: relative;
+  z-index: 2;
 }
 
 .content {
-  max-width: 500px;
   color: #ffffff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  text-align: left;
+  animation: slideUp 0.5s ease forwards;
 }
 
-.content h2 {
-  font-size: 2.8rem; /* Reduced from 3.5rem */
-  font-weight: 700;
-  margin-bottom: 0.2rem;
-  letter-spacing: -0.5px;
-  line-height: 1.1;
-  color: #ffffff;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.content p {
-  font-size: 1.2rem; /* Reduced from 1.5rem */
-  font-weight: 400;
-  opacity: 0.9;
-  letter-spacing: 0.3px;
-  color: #f0f0f0;
-  margin-bottom: 0.3rem;
-}
-
-.exploreText {
+.categoryTag {
   display: inline-block;
-  font-size: 0.9rem; /* Reduced from 1rem */
-  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  padding: 6px 18px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 14px;
+}
+
+.title {
+  font-family: "Poppins", sans-serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.01em;
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 6px 18px; /* Reduced padding */
-  border-radius: 30px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  margin-top: 8px; /* Reduced from 10px */
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
-.slide:hover .exploreText {
-  background: #ffffff;
+.subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 10px 0;
+  max-width: 440px;
+}
+
+.description {
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 20px 0;
+  max-width: 420px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ========== BUTTON ========== */
+.exploreBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
   color: #000000;
-  transform: translateX(5px);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+  background: #ffffff;
+  padding: 12px 28px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
 }
 
-/* Swiper pagination customization */
+.exploreBtn:hover {
+  transform: translateX(4px);
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.2);
+}
+
+.btnArrow {
+  transition: transform 0.3s ease;
+}
+
+.exploreBtn:hover .btnArrow {
+  transform: translateX(4px);
+}
+
+/* ========== PAGINATION ========== */
 :global(.swiper-pagination) {
   position: absolute;
-  bottom: 16px !important; /* Reduced from 24px */
+  bottom: 22px !important;
   left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
   gap: 8px;
-  z-index: 10;
+  z-index: 20;
 }
 
 :global(.swiper-pagination-bullet) {
-  width: 8px; /* Reduced from 10px */
-  height: 8px; /* Reduced from 10px */
-  background: rgba(255, 255, 255, 0.5);
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.35);
   opacity: 1;
   border-radius: 50%;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 :global(.swiper-pagination-bullet-active) {
   background: #ffffff;
-  transform: scale(1.25);
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+  width: 22px;
+  border-radius: 10px;
 }
 
-/* Responsive */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
-  .slide {
-    height: 320px; /* Reduced for tablet */
+  .sliderContainer {
+    height: 52vh;
+    max-height: 460px;
+    min-height: 340px;
   }
-  .content h2 {
-    font-size: 2.4rem;
+  .title {
+    font-size: 2.2rem;
   }
-  .content p {
-    font-size: 1.1rem;
+  .subtitle {
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 768px) {
-  .slide {
-    height: 280px; /* Reduced for mobile */
-  }
-  .content {
-    max-width: 80%;
-  }
-  .content h2 {
-    font-size: 1.8rem;
-  }
-  .content p {
-    font-size: 0.95rem;
-  }
-  .exploreText {
-    font-size: 0.8rem;
-    padding: 5px 14px;
+  .sliderContainer {
+    height: 42vh;
+    max-height: 380px;
+    min-height: 300px;
   }
   .overlay {
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 80%, rgba(255, 255, 255, 0.05) 100%);
     padding: 0 6%;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.75) 100%
+    );
+    align-items: flex-end;
+    padding-bottom: 36px;
+  }
+  .contentWrapper {
+    max-width: 100%;
+  }
+  .title {
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    font-size: 0.82rem;
+    margin-bottom: 8px;
+    max-width: 100%;
+  }
+  .description {
+    display: none;
+  }
+  .categoryTag {
+    font-size: 0.6rem;
+    padding: 4px 14px;
+    margin-bottom: 10px;
+  }
+  .exploreBtn {
+    padding: 9px 20px;
+    font-size: 0.75rem;
   }
   :global(.swiper-pagination) {
     bottom: 12px !important;
   }
 }
 
-@media (max-width: 480px) {
-  .slide {
-    height: 220px; /* Further reduced for small phones */
+@media (max-width: 400px) {
+  .sliderContainer {
+    height: 38vh;
+    max-height: 320px;
+    min-height: 260px;
   }
-  .content h2 {
-    font-size: 1.4rem;
+  .title {
+    font-size: 1.35rem;
   }
-  .content p {
-    font-size: 0.8rem;
+}
+
+/* Pause zoom on hover (desktop only) */
+@media (hover: hover) {
+  .sliderContainer:hover :global(.swiper-slide-active) .slideImage {
+    animation-play-state: paused;
   }
-  .exploreText {
-    font-size: 0.7rem;
-    padding: 4px 10px;
-    margin-top: 4px;
-  }
-  :global(.swiper-pagination-bullet) {
-    width: 6px;
-    height: 6px;
-  }
-  :global(.swiper-pagination) {
-    bottom: 8px !important;
-  }
+}
+
+:global(.swiper-slide-active) {
+  z-index: 2;
 }

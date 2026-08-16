@@ -10,9 +10,10 @@ import styles from "./Header.module.css";
 import MobileMenu from "./MobileMenu";
 import ProfileDropdown from "../../pages/Profile/ProfileDropdown";
 
-const Header = ({ onLoginClick }) => {
+const Header = ({ onLoginClick, isLoading }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -24,7 +25,6 @@ const Header = ({ onLoginClick }) => {
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const getUserInitials = () => {
-    console.log("customer.....",customer)
     if (!customer) return "U";
     const first = customer.firstName?.charAt(0) || "";
     const last = customer.lastName?.charAt(0) || "";
@@ -34,6 +34,14 @@ const Header = ({ onLoginClick }) => {
       "U"
     );
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,58 +62,88 @@ const Header = ({ onLoginClick }) => {
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
-  // console.log("custormer:",customer)
+
+  // Skeleton Loader
+  if (isLoading) {
+    return (
+      <header className={`${styles.header} ${styles.skeletonHeader}`}>
+        <div className={styles.container}>
+          <div className={styles.skeletonMenu} />
+          <div className={styles.skeletonLogo}>
+            <div className={styles.skeletonLine} />
+            <div className={styles.skeletonLineSmall} />
+          </div>
+          <div className={styles.skeletonNav}>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className={styles.skeletonNavItem} />
+            ))}
+          </div>
+          <div className={styles.skeletonIcons}>
+            {[1, 2, 3].map((i) => (
+              <div key={i} className={styles.skeletonIcon} />
+            ))}
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <>
-      <header className={styles.header}>
+      <header
+        className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}
+      >
         <div className={styles.container}>
+          {/* Mobile Menu Button */}
           <button
             className={`${styles.iconBtn} ${styles.menuBtn}`}
             onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Open menu"
           >
-            <Menu size={20} />
+            <Menu size={22} strokeWidth={1.5} />
           </button>
-          {/* Left - Logo */}
+
+          {/* Logo */}
           <div className={styles.logo}>
             <Link to="/">
               <h1>
-                BLACK<span>STUDIO</span>
+                BLACK<span className={styles.studioText}>STUDIO</span>
               </h1>
               <p>STYLE THAT SPEAKS</p>
             </Link>
           </div>
 
-          {/* Center - Navigation (Desktop) */}
+          {/* Desktop Navigation */}
           <nav className={styles.nav}>
-            <Link to="/">Home</Link>
+            <Link to="/" className={styles.activeLink}>Home</Link>
             <Link to="/category">Categories</Link>
-            {/* <Link to="/search?isNewArrival=true">New Arrivals</Link> */}
-            <Link to="/search?isPopular=true">Popular Products</Link>
+            <Link to="/search?isPopular=true">Popular</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
           </nav>
 
-          {/* Right - Icons */}
+          {/* Right Icons */}
           <div className={styles.icons}>
             <button
               onClick={() => navigate("/search")}
               className={styles.iconBtn}
+              aria-label="Search"
             >
-              <Search size={20} />
+              <Search size={20} strokeWidth={1.5} />
             </button>
 
             <button
               onClick={() => navigate("/cart")}
-              className={styles.cartBtn}
+              className={`${styles.iconBtn} ${styles.cartBtn}`}
+              aria-label="Cart"
             >
-              <ShoppingCart size={20} />
+              <ShoppingCart size={20} strokeWidth={1.5} />
               {cartCount > 0 && (
                 <span className={styles.badge}>{cartCount}</span>
               )}
             </button>
 
-            {/* Account Button */}
+            {/* Account */}
             <div className={styles.accountWrapper} ref={dropdownRef}>
               {isAuthenticated && customer ? (
                 <>
@@ -114,10 +152,11 @@ const Header = ({ onLoginClick }) => {
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                     aria-label="Account menu"
                   >
-                    <div className={styles.userAvatar}>{getUserInitials()}</div>
+                    <div className={styles.userAvatar}>
+                      {getUserInitials()}
+                    </div>
                   </button>
 
-                  {/* Profile Dropdown */}
                   {isUserMenuOpen && (
                     <div className={styles.dropdownWrapper}>
                       <ProfileDropdown
@@ -132,7 +171,7 @@ const Header = ({ onLoginClick }) => {
                   onClick={onLoginClick}
                   aria-label="Login"
                 >
-                  <User size={20} />
+                  <User size={20} strokeWidth={1.5} />
                 </button>
               )}
             </div>

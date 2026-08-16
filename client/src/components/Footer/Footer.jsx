@@ -1,5 +1,4 @@
-import { Send } from "lucide-react";
-import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 import styles from "./Footer.module.css";
 
 const Footer = () => {
@@ -20,15 +19,9 @@ const Footer = () => {
               <a href="#" aria-label="Facebook">
                 <FaFacebook size={18} />
               </a>
-
-              {/* <a href="#" aria-label="Twitter">
-                <FaTwitter size={18} />
-              </a> */}
-
               <a href="#" aria-label="Instagram">
                 <FaInstagram size={18} />
               </a>
-
               <a href="#" aria-label="YouTube">
                 <FaYoutube size={18} />
               </a>
@@ -45,10 +38,6 @@ const Footer = () => {
               <li>
                 <a href="/contact">Contact Us</a>
               </li>
-              {/* <li>
-                <a href="/track-order">Track Order</a>
-              </li>               */}
-              
               <li>
                 <a href="/faq">FAQs</a>
               </li>
@@ -63,9 +52,9 @@ const Footer = () => {
         <div className={styles.bottom}>
           <div className={styles.copyright}>
             <p>
-              © {new Date().getFullYear()} BLACK STUDIO. All Rights Reserved.  <a href="/privacy">Privacy Policy</a>
+              © {new Date().getFullYear()} BLACK STUDIO. All Rights Reserved.{" "}
+              <a href="/privacy">Privacy Policy</a>
             </p>
-              
           </div>
         </div>
       </div>

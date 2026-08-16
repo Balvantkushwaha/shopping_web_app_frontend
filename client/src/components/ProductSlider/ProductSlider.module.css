@@ -1,66 +1,181 @@
+/* ProductSlider.module.css - Dark Glass Professional Edition */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+
 .sliderSection {
-  padding: 20px;
-  /* margin: 30px 0; */
+  width: 100%;
+  padding: 40px 24px;
+  background: radial-gradient(circle at top left, #141414 0%, #0a0a0a 60%);
+  box-sizing: border-box;
 }
 
+/* ========== HEADER ========== */
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .title {
-  font-size: 24px;
-  font-weight: 700;
   margin: 0;
-  color: #000000;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  position: relative;
+  padding-left: 16px;
 }
 
+.title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+/* ========== SEE ALL BUTTON - dark glass pill ========== */
 .seeAllBtn {
-  padding: 8px 14px;
-  border: 1px solid #000000;
-  background: transparent;
-  color: #000000;
-  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50px;
   cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
 }
 
+.seeAllBtn::after {
+  content: "→";
+  transition: transform 0.3s ease;
+}
+
+.seeAllBtn:hover {
+  background: #ffffff;
+  color: #0a0a0a;
+  border-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+}
+
+.seeAllBtn:hover::after {
+  transform: translateX(3px);
+}
+
+/* ========== SWIPER ========== */
 .productSwiper {
   width: 100%;
+  padding: 4px 2px 12px;
 }
 
-/* Desktop */
+/* Slide cards themselves get a subtle glass frame */
 .productSwiper :global(.swiper-slide) {
-  width: 200px !important;
+  width: 220px !important;
+  height: auto;
+}
+
+/* Custom nav arrows (glass style, only show if Navigation module is enabled later) */
+.productSwiper :global(.swiper-button-next),
+.productSwiper :global(.swiper-button-prev) {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.productSwiper :global(.swiper-button-next)::after,
+.productSwiper :global(.swiper-button-prev)::after {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.productSwiper :global(.swiper-button-next:hover),
+.productSwiper :global(.swiper-button-prev:hover) {
+  background: #ffffff;
+  color: #0a0a0a;
 }
 
 /* Tablet */
 @media (max-width: 768px) {
   .sliderSection {
-    padding: 15px;
+    padding: 28px 16px;
   }
 
   .title {
-    font-size: 20px;
+    font-size: 1.35rem;
   }
 
   .productSwiper :global(.swiper-slide) {
-    width: 180px !important;
+    width: 190px !important;
   }
 }
 
 /* Mobile */
 @media (max-width: 480px) {
   .sliderSection {
-    padding: 10px;
+    padding: 20px 12px;
+  }
+
+  .header {
+    margin-bottom: 18px;
+    padding-bottom: 12px;
   }
 
   .title {
-    font-size: 18px;
+    font-size: 1.1rem;
+    padding-left: 12px;
+  }
+
+  .seeAllBtn {
+    padding: 7px 14px;
+    font-size: 11px;
   }
 
   .productSwiper :global(.swiper-slide) {
-    width: 160px !important;
+    width: 155px !important;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .sliderSection {
+    padding: 16px 10px;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .seeAllBtn {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+
+  .productSwiper :global(.swiper-slide) {
+    width: 140px !important;
   }
 }

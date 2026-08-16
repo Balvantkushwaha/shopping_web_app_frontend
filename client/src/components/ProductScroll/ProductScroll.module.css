@@ -1,51 +1,97 @@
+/* ProductScroll.module.css - Dark Glass Professional Edition */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+
 .section {
   width: 100%;
-  padding: 20px;
-  background: #ffffff;
+  padding: 40px 24px;
+  background: radial-gradient(circle at top left, #141414 0%, #0a0a0a 60%);
   box-sizing: border-box;
+  position: relative;
 }
 
+/* ========== HEADER ========== */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .title {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #1a1a1a;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  position: relative;
+  padding-left: 16px;
 }
 
+.title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+/* ========== SEE ALL BUTTON - dark glass pill ========== */
 .seeAllBtn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50px;
   cursor: pointer;
-  font-size: 14px;
-  background: #000;
-  color: #fff;
-  transition: opacity 0.2s ease;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
 }
 
-.seeAllBtn:hover {
-  opacity: 0.9;
+.seeAllBtn::after {
+  content: "→";
+  transition: transform 0.3s ease;
 }
 
+.seeAllBtn:hover {
+  background: #ffffff;
+  color: #0a0a0a;
+  border-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+}
+
+.seeAllBtn:hover::after {
+  transform: translateX(3px);
+}
+
+/* ========== GRID ========== */
 .productGrid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
+  gap: 18px;
+  transition: all 0.3s ease;
 }
 
-/* Product Card inside grid should take full width */
 .productGrid > * {
-  min-width: 0; /* Prevents overflow */
+  min-width: 0;
   width: 100%;
 }
 
@@ -53,72 +99,72 @@
 @media (max-width: 1200px) {
   .productGrid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    gap: 16px;
   }
 }
 
 /* Tablet */
 @media (max-width: 768px) {
+  .section {
+    padding: 28px 16px;
+  }
+
   .productGrid {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
 
   .title {
-    font-size: 1.3rem;
-  }
-  
-  .section {
-    padding: 15px;
+    font-size: 1.35rem;
   }
 }
 
 /* Mobile - 2 products per row */
 @media (max-width: 480px) {
+  .section {
+    padding: 20px 12px;
+  }
+
+  .header {
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+  }
+
   .productGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px; /* Increased from 5px for better spacing */
-  }
-  
-  .section {
-    padding: 10px;
+    gap: 10px;
   }
 
   .title {
     font-size: 1.1rem;
+    padding-left: 12px;
   }
 
   .seeAllBtn {
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 7px 14px;
+    font-size: 11px;
   }
 }
 
-/* Extra Small Mobile (very small phones) */
+/* Extra Small Mobile */
 @media (max-width: 360px) {
+  .section {
+    padding: 16px 10px;
+  }
+
   .productGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
-  
-  .section {
-    padding: 8px;
-  }
 
   .title {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .seeAllBtn {
-    padding: 5px 10px;
+    padding: 6px 12px;
     font-size: 10px;
   }
-}
-
-/* Make sure ProductCard takes full width of grid cell */
-.productGrid .productCard {
-  width: 100% !important;
-  max-width: 100% !important;
 }
 
 /* Ensure images and content fit properly */
@@ -127,31 +173,7 @@
   height: auto;
 }
 
-.productItem {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.5s ease forwards;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* If ProductCard has fixed width, override it */
 .productGrid > div {
   width: 100% !important;
   max-width: 100% !important;
-}
-
-/* Optional: Add smooth transition for grid changes */
-.productGrid {
-  transition: all 0.3s ease;
 }
