@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Trash2, Minus, Plus, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import {
   removeFromCart,
@@ -15,7 +15,9 @@ const Cart = () => {
   const { items, totalAmount, totalDiscountAmount } = useAppSelector(
     (state) => state.cart,
   );
-  
+  console.log("Cart items:", items);
+  console.log("Total amount:", totalAmount);
+  console.log("total Discount amount:", totalDiscountAmount);
   const subtotal = totalAmount;
   const discount = totalDiscountAmount;
   const finalTotal = subtotal - discount;
@@ -26,7 +28,10 @@ const Cart = () => {
         <ShoppingBag size={64} />
         <h2>Your cart is empty</h2>
         <p>Looks like you haven't added any items to your cart yet.</p>
-        <button onClick={() => navigate("/")} className={styles.shopBtn}>
+        <button
+          onClick={() => navigate("/")}
+          className={styles.shopBtn}
+        >
           Continue Shopping
         </button>
       </div>
@@ -36,27 +41,18 @@ const Cart = () => {
   return (
     <div className={styles.cartPage}>
       <div className={styles.container}>
-        <div className={styles.header}>
-          <button className={styles.backBtn} onClick={() => navigate(-1)}>
-            <ArrowLeft size={20} />
-            Back
-          </button>
-          <h1 className={styles.title}>Shopping Cart</h1>
-          <div className={styles.headerRight}></div>
-        </div>
+        <h1 className={styles.title}>Shopping Cart</h1>
 
         <div className={styles.cartContainer}>
           <div className={styles.cartItems}>
             {items.map((item) => (
               <div key={item.id} className={styles.cartItem}>
-                <div 
-                  className={styles.itemImage}
-                  onClick={() => navigate("/product/" + item.slug)}
-                >
+                <div className={styles.itemImage}onClick={()=>{navigate("/product/"+item.slug)}}>
                   <img 
-                    src={`${UPLOADS_URL}${item.image}`}                  
-                    alt={item.name}
-                  />
+                  // src={item.image}
+                  src={`${UPLOADS_URL}${item.image}`}                  
+                  alt={item.name}
+                 />
                 </div>
 
                 <div className={styles.itemDetails}>
@@ -65,17 +61,19 @@ const Cart = () => {
                     <span className={styles.sellingPrice}>
                       ₹{item.selling_price.toFixed(2)}
                     </span>
+
                     <span className={styles.mrpPrice}>
                       ₹{item.price.toFixed(2)}
                     </span>
+
                     <span className={styles.discountRate}>
                       {item.discount_rate}% OFF
                     </span>
                   </div>
-                  <p className={styles.savingsText}>
+                  <p>
                     You saved{" "}
                     <span className={styles.discountAmount}>
-                      ₹{Number(((item.price * item.discount_rate) / 100 * item.quantity) || 0).toLocaleString("en-IN")}
+                      ₹{Number(((item.price*item.discount_rate)/100*item.quantity) || 0).toLocaleString("en-IN")}
                     </span>{" "}
                     on this order.
                   </p>
@@ -107,6 +105,7 @@ const Cart = () => {
                         <Plus size={16} />
                       </button>
                     </div>
+
                     <button
                       className={styles.removeBtn}
                       onClick={() => dispatch(removeFromCart(item.id))}
@@ -127,7 +126,6 @@ const Cart = () => {
               className={styles.clearCartBtn}
               onClick={() => dispatch(clearCart())}
             >
-              <Trash2 size={16} />
               Clear Cart
             </button>
           </div>
@@ -141,9 +139,9 @@ const Cart = () => {
               </div>
               <div className={styles.summaryRow}>
                 <span>Discount Amount</span>
-                <span className={styles.discountText}>-₹{discount.toFixed(2)}</span>
+                <span>-₹{discount.toFixed(2)}</span>
               </div>
-              <div className={`${styles.summaryRow} ${styles.total}`}>
+              <div className={`${styles.summaryRow} ₹{styles.total}`}>
                 <span>Total</span>
                 <span>₹{finalTotal.toFixed(2)}</span>
               </div>

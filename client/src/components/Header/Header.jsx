@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Search, ShoppingCart, Menu, User, Home, Grid, Heart } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Search, ShoppingCart, Menu, User } from "lucide-react";
 import { useAppSelector } from "../../redux/hooks";
 import {
   selectIsAuthenticated,
@@ -10,13 +10,11 @@ import styles from "./Header.module.css";
 import MobileMenu from "./MobileMenu";
 import ProfileDropdown from "../../pages/Profile/ProfileDropdown";
 
-const Header = ({ onLoginClick, isLoading }) => {
+const Header = ({ onLoginClick }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
   const dropdownRef = useRef(null);
 
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -26,6 +24,7 @@ const Header = ({ onLoginClick, isLoading }) => {
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const getUserInitials = () => {
+    console.log("customer.....",customer)
     if (!customer) return "U";
     const first = customer.firstName?.charAt(0) || "";
     const last = customer.lastName?.charAt(0) || "";
@@ -35,14 +34,6 @@ const Header = ({ onLoginClick, isLoading }) => {
       "U"
     );
   };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -63,102 +54,58 @@ const Header = ({ onLoginClick, isLoading }) => {
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, []);
-
-  // Bottom nav items
-  const bottomNavItems = [
-    { path: "/", icon: Home, label: "Home" },
-    { path: "/search", icon: Search, label: "Search" },
-    { path: "/category", icon: Grid, label: "Categories" },
-    { path: "/cart", icon: ShoppingCart, label: "Cart", hasBadge: true },
-    { path: "/profile", icon: User, label: "Profile" },
-  ];
-
-  const isActive = (path) => {
-    if (path === "/") return location.pathname === "/";
-    return location.pathname.startsWith(path);
-  };
-
-  // Skeleton Loader
-  if (isLoading) {
-    return (
-      <header className={`${styles.header} ${styles.skeletonHeader}`}>
-        <div className={styles.container}>
-          <div className={styles.skeletonMenu} />
-          <div className={styles.skeletonLogo}>
-            <div className={styles.skeletonLine} />
-            <div className={styles.skeletonLineSmall} />
-          </div>
-          <div className={styles.skeletonNav}>
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className={styles.skeletonNavItem} />
-            ))}
-          </div>
-          <div className={styles.skeletonIcons}>
-            {[1, 2, 3].map((i) => (
-              <div key={i} className={styles.skeletonIcon} />
-            ))}
-          </div>
-        </div>
-      </header>
-    );
-  }
+  // console.log("custormer:",customer)
 
   return (
     <>
-      <header
-        className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}
-      >
+      <header className={styles.header}>
         <div className={styles.container}>
-          {/* Mobile Menu Button */}
           <button
             className={`${styles.iconBtn} ${styles.menuBtn}`}
             onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open menu"
           >
-            <Menu size={22} strokeWidth={1.5} />
+            <Menu size={20} />
           </button>
-
-          {/* Logo */}
+          {/* Left - Logo */}
           <div className={styles.logo}>
             <Link to="/">
               <h1>
-                BLACK<span className={styles.studioText}>STUDIO</span>
+                BLACK<span>STUDIO</span>
               </h1>
               <p>STYLE THAT SPEAKS</p>
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Center - Navigation (Desktop) */}
           <nav className={styles.nav}>
-            <Link to="/" className={location.pathname === "/" ? styles.activeLink : ""}>Home</Link>
-            <Link to="/category" className={location.pathname === "/category" ? styles.activeLink : ""}>Categories</Link>
-            <Link to="/search?isPopular=true">Popular</Link>
+            <Link to="/">Home</Link>
+            <Link to="/category">Categories</Link>
+            {/* <Link to="/search?isNewArrival=true">New Arrivals</Link> */}
+            <Link to="/search?isPopular=true">Popular Products</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
           </nav>
 
-          {/* Right Icons */}
+          {/* Right - Icons */}
           <div className={styles.icons}>
             <button
               onClick={() => navigate("/search")}
               className={styles.iconBtn}
-              aria-label="Search"
             >
-              <Search size={20} strokeWidth={1.5} />
+              <Search size={20} />
             </button>
 
             <button
               onClick={() => navigate("/cart")}
-              className={`${styles.iconBtn} ${styles.cartBtn}`}
-              aria-label="Cart"
+              className={styles.cartBtn}
             >
-              <ShoppingCart size={20} strokeWidth={1.5} />
+              <ShoppingCart size={20} />
               {cartCount > 0 && (
                 <span className={styles.badge}>{cartCount}</span>
               )}
             </button>
 
-            {/* Account */}
+            {/* Account Button */}
             <div className={styles.accountWrapper} ref={dropdownRef}>
               {isAuthenticated && customer ? (
                 <>
@@ -167,11 +114,10 @@ const Header = ({ onLoginClick, isLoading }) => {
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                     aria-label="Account menu"
                   >
-                    <div className={styles.userAvatar}>
-                      {getUserInitials()}
-                    </div>
+                    <div className={styles.userAvatar}>{getUserInitials()}</div>
                   </button>
 
+                  {/* Profile Dropdown */}
                   {isUserMenuOpen && (
                     <div className={styles.dropdownWrapper}>
                       <ProfileDropdown
@@ -186,33 +132,13 @@ const Header = ({ onLoginClick, isLoading }) => {
                   onClick={onLoginClick}
                   aria-label="Login"
                 >
-                  <User size={20} strokeWidth={1.5} />
+                  <User size={20} />
                 </button>
               )}
             </div>
           </div>
         </div>
       </header>
-
-      {/* Bottom Navigation - Mobile Only */}
-      <div className={styles.bottomNav}>
-        {bottomNavItems.map((item) => (
-          <button
-            key={item.path}
-            className={`${styles.bottomNavItem} ${isActive(item.path) ? styles.active : ""}`}
-            onClick={() => navigate(item.path)}
-            aria-label={item.label}
-          >
-            <div className={styles.bottomNavIcon}>
-              <item.icon size={22} strokeWidth={1.5} />
-              {item.hasBadge && cartCount > 0 && (
-                <span className={styles.bottomBadge}>{cartCount}</span>
-              )}
-            </div>
-            <span className={styles.bottomNavLabel}>{item.label}</span>
-          </button>
-        ))}
-      </div>
 
       <MobileMenu
         isOpen={isMobileMenuOpen}

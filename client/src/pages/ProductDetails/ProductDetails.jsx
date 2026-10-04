@@ -8,6 +8,7 @@ import {
   Share2,
   Truck,
   Shield,
+  RotateCcw,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -39,7 +40,9 @@ const ProductDetails = () => {
   const [checkingPincode, setCheckingPincode] = useState(false);
   const [deliveryError, setDeliveryError] = useState("");
 
-  const { getProductBySlug, getRelatedProducts, getProductById } = useProducts();
+
+  const { getProductBySlug, getRelatedProducts, getProductById } =
+    useProducts();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -70,6 +73,8 @@ const ProductDetails = () => {
       setLoading(false);
     }
   };
+
+  console.log("slug:",slug)
 
   useEffect(() => {
     if (slug) {
@@ -137,21 +142,42 @@ const ProductDetails = () => {
 
     try {
       setCheckingPincode(true);
+
       const res = await getServiceAbility(product, pincode, "Prepaid");
-      if (res.success) {
-        setServiceability(res.data);
-        setDeliveryError("");
-      } else {
-        setDeliveryError("Delivery not available for this pincode");
+      console.log("data:====================",res);
+      if(res.success){
+        setServiceability(res.data);  
+        setDeliveryError("")      
+      }else{
+        setDeliveryError("Delivery not available for this pincode")
       }
     } catch (error) {
       console.error(error);
-      setDeliveryError("Delivery not available for this pincode..");
+      setDeliveryError("Delivery not available for this pincode..")
       setServiceability(null);
     } finally {
       setCheckingPincode(false);
     }
   };
+
+  console.log("serviceabiltiy in product detials page:", serviceability);
+
+  // const handlePincodeChange = async (e) => {
+  //   const value = e.target.value.replace(/\D/g, "");
+
+  //   setPincode(value);
+
+  //   if (value.length === 6) {
+  //     try {
+  //       const data = await getServiceAbility(product, value, "Prepaid");
+
+  //       setServiceability(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setServiceability(null);
+  //     }
+  //   }
+  // };
 
   const handleBuyNow = () => {
     handleAddToCart();
@@ -175,7 +201,8 @@ const ProductDetails = () => {
     const images = getProductImages();
     setMainImageIndex((prev) => {
       if (direction === "next") return (prev + 1) % images.length;
-      if (direction === "prev") return prev === 0 ? images.length - 1 : prev - 1;
+      if (direction === "prev")
+        return prev === 0 ? images.length - 1 : prev - 1;
       return prev;
     });
   };
@@ -219,7 +246,10 @@ const ProductDetails = () => {
       <div className={styles.notFound}>
         <h2>Product Not Found</h2>
         <p>{error || "The product you are looking for does not exist."}</p>
-        <button className={styles.backBtn} onClick={() => navigate("/products")}>
+        <button
+          className={styles.backBtn}
+          onClick={() => navigate("/products")}
+        >
           Browse Products
         </button>
       </div>
@@ -240,6 +270,7 @@ const ProductDetails = () => {
         <div className={styles.productContainer}>
           <div className={styles.imageGallery}>
             <div className={styles.galleryWrapper}>
+              {/* Thumbnails - Left Side */}
               <div className={styles.thumbnailList}>
                 {productImages.map((img, idx) => (
                   <div
@@ -256,6 +287,7 @@ const ProductDetails = () => {
                 ))}
               </div>
 
+              {/* Main Image */}
               <div className={styles.mainImageWrapper}>
                 <div
                   className={styles.mainImageContainer}
@@ -263,7 +295,7 @@ const ProductDetails = () => {
                 >
                   <Zoom
                     zoomMargin={40}
-                    overlayBgColorEnd="rgba(0, 0, 0, 0.95)"
+                    overlayBgColorEnd="rgba(0, 0, 0, 0.85)"
                     transitionDuration={300}
                   >
                     <img
@@ -315,6 +347,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
+          {/* Product Info */}
           <div className={styles.productInfo}>
             <div className={styles.meta}>
               <span className={styles.category}>{product.category}</span>
@@ -365,7 +398,10 @@ const ProductDetails = () => {
 
             {sizes.length > 0 && (
               <div className={styles.section}>
-                <h3>Select Size</h3>
+                {/* <div className={styles.sectionHeader}>
+                  <h3>Select Size</h3>
+                  <button className={styles.sizeGuide}>Size Guide</button>
+                </div> */}
                 <div className={styles.sizes}>
                   {sizes.map((size, index) => (
                     <button
@@ -427,19 +463,27 @@ const ProductDetails = () => {
                 <Shield size={18} />
                 <span>Secure Payment</span>
               </div>
+              {/* <div className={styles.trustItem}>
+                <RotateCcw size={18} />
+                <span>7-Day Returns</span>
+              </div> */}
             </div>
 
             <div className={styles.pincodeSection}>
               <h3>Delivery Option</h3>
+
               <div className={styles.pincodeInputWrapper}>
                 <input
                   type="text"
                   maxLength={6}
                   value={pincode}
-                  onChange={(e) => setPincode(e.target.value.replace(/\D/g, ""))}
+                  onChange={(e) =>
+                    setPincode(e.target.value.replace(/\D/g, ""))
+                  }
                   placeholder="Enter Pincode"
                   className={styles.pincodeInput}
                 />
+
                 <button
                   onClick={handleCheckPincode}
                   disabled={checkingPincode}
@@ -448,13 +492,16 @@ const ProductDetails = () => {
                   {checkingPincode ? "Checking..." : "Check"}
                 </button>
               </div>
+
               {serviceability && pincode ? (
                 <p className={styles.available}>
-                  ✓ Delivery available in {serviceability.expectedDeliveryDays} days
+                  ✓ Delivery available in {serviceability.expectedDeliveryDays}{" "}
+                  days
                 </p>
               ) : (
                 <div></div>
               )}
+               {/* Error */}
               {deliveryError && <p className={styles.unavailable}>{deliveryError}</p>}
             </div>
           </div>
@@ -468,11 +515,15 @@ const ProductDetails = () => {
                 <div
                   key={related._id}
                   className={styles.relatedCard}
-                  onClick={() => navigate(`/product/${related.slug || related._id}`)}
+                  onClick={() =>
+                    navigate(`/product/${related.slug || related._id}`)
+                  }
                 >
                   <div className={styles.relatedImage}>
                     <img
-                      src={`${UPLOADS_URL}${related.coverImage}`}
+                      // src={related.coverImage ||"https://via.placeholder.com/300x300?text=No+Image"
+                      // }
+                      src={`${UPLOADS_URL}${related.coverImage}`}                      
                       alt={related.name}
                       loading="lazy"
                     />

@@ -1,28 +1,23 @@
-/* components/ProductCard/ProductCard.module.css - Full-Bleed Image Card */
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap");
-
+/* components/ProductCard/ProductCard.module.css */
 .card {
-  border-radius: 0;
+  background: white;
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
   position: relative;
-  font-family: "Inter", sans-serif;
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* ========== IMAGE FILLS ENTIRE CARD ========== */
 .imageContainer {
   position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  background: #0d0d0d;
+  padding-top: 100%;
+  background: #f8f9fa;
   overflow: hidden;
 }
 
@@ -33,181 +28,158 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s ease;
 }
 
 .card:hover .image {
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 
-/* ========== BOTTOM SHADOW - subtle black gradient rising from bottom ========== */
-.bottomShadow {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 55%;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.15) 40%,
-    rgba(0, 0, 0, 0.55) 100%
-  );
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* ========== BADGES ========== */
 .badgeContainer {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  z-index: 3;
+  gap: 5px;
 }
 
 .discountBadge {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: #0a0a0a;
-  padding: 5px 11px;
-  font-size: 11px;
+  background: #e74c3c;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.3px;
   display: inline-block;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .newBadge {
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: #ffffff;
-  padding: 5px 11px;
-  font-size: 11px;
+  background: #2ecc71;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.3px;
   display: inline-block;
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .popularBadge {
-  background: rgba(243, 156, 18, 0.9);
+  background: #f39c12;
   color: white;
-  padding: 5px 11px;
-  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 700;
   display: inline-block;
 }
 
 .featuredBadge {
-  background: rgba(142, 68, 173, 0.9);
+  background: #8e44ad;
   color: white;
-  padding: 5px 11px;
-  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: 700;
   display: inline-block;
 }
 
-/* ========== OUT OF STOCK ========== */
+.rating {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reviewCount {
+  font-weight: 400;
+  font-size: 11px;
+  color: #ccc;
+}
+
 .outOfStockOverlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 4;
-}
-
-.outOfStockOverlay span {
-  background: rgba(255, 255, 255, 0.95);
-  color: #0a0a0a;
-  padding: 8px 20px;
-  font-size: 12px;
+  color: white;
+  font-size: 18px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
 }
 
-/* ========== CONTENT OVERLAY - sits on the bottom shadow ========== */
 .info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 18px 16px 16px;
-  z-index: 2;
+  padding: 15px;
+}
+
+.category {
+  font-size: 12px;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
 .name {
-  font-family: "Inter", sans-serif;
-  margin: 0 0 6px;
-  font-size: 15px;
+  margin: 0 0 4px;
+  font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: #2c3e50;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.4;
-  letter-spacing: -0.1px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.brand {
+  font-size: 13px;
+  color: #95a5a6;
+  margin-bottom: 8px;
 }
 
 .price {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
 }
 
 .currentPrice {
-  font-family: "Poppins", sans-serif;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.2px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  color: #2c3e50;
 }
 
 .originalPrice {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  color: #95a5a6;
   text-decoration: line-through;
-  font-weight: 500;
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 480px) {
-  .info {
-    padding: 14px 12px 12px;
-  }
-  .name {
-    font-size: 13.5px;
-  }
-  .currentPrice {
-    font-size: 15px;
-  }
-  .originalPrice {
-    font-size: 12px;
-  }
-  .badgeContainer {
-    top: 8px;
-    left: 8px;
-  }
-  .discountBadge,
-  .newBadge,
-  .popularBadge,
-  .featuredBadge {
-    padding: 4px 9px;
-    font-size: 10px;
-  }
+.sizeInfo {
+  font-size: 12px;
+  color: #7f8c8d;
+  margin-top: 4px;
+}
+
+.sizes {
+  display: inline-block;
+  background: #f8f9fa;
+  padding: 2px 10px;
+  border-radius: 12px;
 }

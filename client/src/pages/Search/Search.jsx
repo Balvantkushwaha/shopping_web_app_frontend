@@ -1,13 +1,14 @@
 // Search.jsx
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Search as SearchIcon, X, Filter, ChevronDown, SlidersHorizontal } from "lucide-react";
+import {useSearchParams } from "react-router-dom";
+import { Search as SearchIcon, X, Filter, ChevronDown } from "lucide-react";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import useProducts from "../../hooks/useProducts";
 import styles from "./Search.module.css";
 import api from "../../api/axios";
 
 const Search = () => {
+  // const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // State
@@ -36,6 +37,7 @@ const Search = () => {
   } = useProducts();
 
   const searchTimeout = useRef(null);
+  // const isInitialMount = useRef(true);
 
   // Handle resize
   useEffect(() => {
@@ -52,7 +54,7 @@ const Search = () => {
           api.get("product/getCategories"),
           api.get("product/getBrands")
         ]);
-
+        
         if (categoriesRes.data.success) {
           setCategories(categoriesRes.data.data);
         }
@@ -98,12 +100,16 @@ const Search = () => {
       const hasSearchTerm = term && term.trim().length >= 2;
 
       if (hasSearchTerm && hasFilters) {
+        // Search with filters
         await getFilteredProducts({ ...filters, search: term }, page, 20);
       } else if (hasSearchTerm) {
+        // Simple search
         await searchProducts(term, page, 20);
       } else if (hasFilters) {
+        // Only filters, no search term
         await getFilteredProducts(filters, page, 20);
       } else {
+        // No filters, no search - show all
         await getAllProducts(page, 20);
       }
 
@@ -139,6 +145,7 @@ const Search = () => {
 
   // Initialize from URL params
   useEffect(() => {
+    console.log("Initializing search from URL params...");
     const query = searchParams.get("q") || "";
     const categoryParam = searchParams.get("category") || "";
     const brandParam = searchParams.get("brand") || "";
@@ -149,6 +156,16 @@ const Search = () => {
     const isPopular = searchParams.get("isPopular") === "true";
     const isNew = searchParams.get("isNewArrival") === "true";
 
+    console.log("Search term:", query);
+    console.log("Category:", categoryParam);
+    console.log("Brand:", brandParam);
+    console.log("Min price:", minPrice);
+    console.log("Max price:", maxPrice);
+    console.log("Sort:", sortParam);
+    console.log("In stock:", inStock);
+    console.log("Is popular:", isPopular);
+    console.log("Is new:", isNew);
+
     setSearchTerm(query);
     setSelectedCategory(categoryParam);
     setSelectedBrand(brandParam);
@@ -158,19 +175,24 @@ const Search = () => {
     setIsPopularProduct(isPopular);
     setIsNewArrival(isNew);
 
-    // Initial fetch
-    const hasParams = query || categoryParam || brandParam || sortParam ||
-      inStock || isPopular || isNew || minPrice || maxPrice;
-
-    if (hasParams) {
-      performSearch(query, 1);
-    } else {
-      getAllProducts(1, 20);
-    }
-  }, []);
+    // Only fetch on initial mount
+    // if (isInitialMount.current) {
+    //   isInitialMount.current = false;
+    //   const hasParams = query || categoryParam || brandParam || sortParam || 
+    //                     inStock || isPopular || isNew || minPrice || maxPrice;
+      
+    //   if (hasParams) {
+    //     performSearch(query, 1);
+    //   } else {
+    //     getAllProducts(1, 20);
+    //   }
+    // }
+  }, []); // Empty dependency array - only run once
 
   // Debounced search
   useEffect(() => {
+    // if (isInitialMount.current) return;
+
     if (searchTimeout.current) {
       clearTimeout(searchTimeout.current);
     }
@@ -317,7 +339,7 @@ const Search = () => {
               onClick={() => setShowFilters(true)}
               aria-label="Toggle filters"
             >
-              <SlidersHorizontal size={18} />
+              <Filter size={20} />
               Filters
               {getActiveFilterCount() > 0 && (
                 <span className={styles.filterCount}>
@@ -544,7 +566,7 @@ const Search = () => {
             {error && (
               <div className={styles.errorMessage}>
                 <span>⚠️ {error}</span>
-                <button onClick={() => { }} aria-label="Close error">
+                <button onClick={() => {}} aria-label="Close error">
                   ✕
                 </button>
               </div>
@@ -558,13 +580,13 @@ const Search = () => {
             ) : (
               <>
                 <div className={styles.productsGrid}>
-                  {products.length > 0 ? (
-                    products.map((product) => (
+                  {products.length > 0 ? (                   
+                    products.map((product) => (                       
                       <ProductCard
                         key={product._id || product.id}
                         product={product}
-                      />
-                    ))
+                      />                    
+                    ))                   
                   ) : (
                     <div className={styles.noResults}>
                       <p>No products found</p>
@@ -636,3 +658,4 @@ const Search = () => {
 };
 
 export default Search;
+
