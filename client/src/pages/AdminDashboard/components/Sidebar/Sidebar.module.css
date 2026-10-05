@@ -1,7 +1,7 @@
 .sidebar {
   width: 260px;
-  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  color: white;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fc 50%, #f1f4f9 100%);
+  color: #1f2937;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -9,7 +9,7 @@
   top: 0;
   overflow-y: auto;
   transition: all 0.3s ease;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.08);
 }
 
 /* Custom scrollbar */
@@ -18,17 +18,17 @@
 }
 
 .sidebar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
 
 .sidebarHeader {
   padding: 25px 25px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .logo {
@@ -66,21 +66,21 @@
   transition: all 0.3s ease;
   border-radius: 12px;
   position: relative;
-  color: rgba(255, 255, 255, 0.7);
+  color: #64748b;
   text-decoration: none;
   margin-bottom: 2px;
 }
 
 .navItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: rgba(102, 126, 234, 0.08);
+  color: #1f2937;
   transform: translateX(5px);
 }
 
 .navItem.active {
-  background: rgba(102, 126, 234, 0.2);
-  color: white;
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.1);
+  background: rgba(102, 126, 234, 0.12);
+  color: #1f2937;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.08);
 }
 
 .navItem.active .icon {
@@ -93,12 +93,12 @@
   align-items: center;
   justify-content: center;
   min-width: 24px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #94a3b8;
   transition: color 0.3s ease;
 }
 
 .navItem:hover .icon {
-  color: white;
+  color: #667eea;
 }
 
 .navItem .label {
@@ -121,16 +121,18 @@
   0% {
     box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
   }
+
   70% {
     box-shadow: 0 0 0 8px rgba(102, 126, 234, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
   }
 }
 
 .sidebarFooter {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   padding: 20px 20px;
 }
 
@@ -161,13 +163,13 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: white;
+  color: #1f2937;
 }
 
 .userRole {
   margin: 2px 0 0;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #94a3b8;
 }
 
 /* Responsive */

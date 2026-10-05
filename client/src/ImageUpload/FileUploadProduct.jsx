@@ -9,7 +9,7 @@ import PopupMessage from "../components/PopupMessage";
 const FileUploadProduct = ({
     name,
     onChange,
-    accept = ".jpg,.jpeg",
+    accept = ".jpg,.jpeg,.png,.webp",
     required,
     className,
     value,
@@ -41,15 +41,15 @@ const FileUploadProduct = ({
             return false;
         }
 
-        const allowedTypes = ["image/jpeg", "image/jpg"];
+        const allowedTypes = ["image/jpeg", "image/jpg","image/png","image/webp"];
         if (!allowedTypes.includes(file.type)) {
-            setError("Only JPG/JPEG files are allowed");
+            setError("Only JPG/JPEG/png/webp files are allowed");
             return false;
         }
 
-        const maxSize = 2 * 1024 * 1024;
+        const maxSize = 10 * 1024 * 1024;
         if (file.size > maxSize) {
-            setError("File size must be less than 2MB");
+            setError("File size must be less than 10MB");
             return false;
         }
 

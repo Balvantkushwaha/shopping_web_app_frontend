@@ -610,7 +610,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                     setFormData((prev) => ({ ...prev, coverImage: e.target.value }));
                   }}
                   onUploadSuccess={handleCoverImageUploadSuccess}
-                  folderName="cover-images"
+                  folderName="ProductImages"
                   accept=".jpg,.jpeg,.png,.webp"
                 />
                 {errors.coverImage && <span className={styles.errorText}>{errors.coverImage}</span>}
@@ -631,7 +631,7 @@ const ProductForm = ({ product = null, onSubmit, onClose, loading }) => {
                 <FileUploadProduct
                   name="additionalImage"
                   onUploadSuccess={handleImageUploadSuccess}
-                  folderName="product-images"
+                  folderName="ProductImages"
                   accept=".jpg,.jpeg,.png,.webp"
                 />
               </div>
